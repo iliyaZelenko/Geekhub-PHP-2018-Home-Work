@@ -1,3 +1,4 @@
-.idea
-docs-cache
-sami.phar
+/.idea
+/docs-cache
+/sami.phar
+/vendor

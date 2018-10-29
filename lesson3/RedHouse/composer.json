@@ -1,10 +1,10 @@
 {
   "name": "IlyaZelen/UserOauth2Services",
-  "description": "Get avatar by service",
+  "description": "Get user vie Oauth2",
   "keywords": ["oauth", "user"],
   "type": "package",
   "require": {
-    "php": ">=7.1",
+    "php": "^7.1",
     "ext-json": "*",
     "guzzlehttp/guzzle": "^6.3"
   },
