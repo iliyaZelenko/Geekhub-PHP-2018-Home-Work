@@ -145,7 +145,7 @@ $user = [
 
 Чтобы работало на Nginx [нужно настроить](https://github.com/skipperbent/simple-php-router#setting-up-nginx).
 
-## [Документация](https://iliyazelenko.github.io/Geekhub-PHP-2018-Home-Work-/).
+## [Документация](https://iliyazelenko.github.io/Geekhub-PHP-2018-Home-Work/index.html).
 
 Все задокументированно по стандарту PHPDoc (первый опыт), для рендиринга документации использовал инструмент Sami (как в Laravel).
 
