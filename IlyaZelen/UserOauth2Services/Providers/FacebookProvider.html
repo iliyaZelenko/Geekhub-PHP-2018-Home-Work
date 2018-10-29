@@ -1,0 +1,1322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="index, follow, all" />
+    <title>IlyaZelen\UserOauth2Services\Providers\FacebookProvider | RedHouse</title>
+
+            <link rel="stylesheet" type="text/css" href="../../../css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="../../../css/bootstrap-theme.min.css">
+        <link rel="stylesheet" type="text/css" href="../../../css/sami.css">
+        <script src="../../../js/jquery-1.11.1.min.js"></script>
+        <script src="../../../js/bootstrap.min.js"></script>
+        <script src="../../../js/typeahead.min.js"></script>
+        <script src="../../../sami.js"></script>
+        <meta name="MobileOptimized" content="width">
+        <meta name="HandheldFriendly" content="true">
+        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    
+    
+    </head>
+
+    <body id="class" data-name="class:IlyaZelen_UserOauth2Services_Providers_FacebookProvider" data-root-path="../../../">
+            <div id="content">
+        <div id="left-column">
+                <div id="control-panel">
+                <script>
+            $('option[data-version="'+window.projectVersion+'"]').prop('selected', true);
+        </script>
+        <form id="search-form" action="../../../search.html" method="GET">
+            <span class="glyphicon glyphicon-search"></span>
+            <input name="search"
+                   class="typeahead form-control"
+                   type="search"
+                   placeholder="Search">
+        </form>
+    </div>
+
+                <div id="api-tree"></div>
+
+        </div>
+        <div id="right-column">
+                <nav id="site-nav" class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-elements">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="../../../index.html">RedHouse</a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar-elements">
+                <ul class="nav navbar-nav">
+                    <li><a href="../../../classes.html">Classes</a></li>
+                                            <li><a href="../../../namespaces.html">Namespaces</a></li>
+                                        <li><a href="../../../interfaces.html">Interfaces</a></li>
+                    <li><a href="../../../traits.html">Traits</a></li>
+                    <li><a href="../../../doc-index.html">Index</a></li>
+                    <li><a href="../../../search.html">Search</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+                        <div class="namespace-breadcrumbs">
+            <ol class="breadcrumb">
+                <li><span class="label label-default">class</span></li>
+                        <li><a href="../../../IlyaZelen.html">IlyaZelen</a></li><li class="backslash">\</li><li><a href="../../../IlyaZelen/UserOauth2Services.html">UserOauth2Services</a></li><li class="backslash">\</li><li><a href="../../../IlyaZelen/UserOauth2Services/Providers.html">Providers</a></li><li class="backslash">\</li><li>FacebookProvider</li>
+            </ol>
+        </div>
+                <div id="page-content">
+                
+    <div class="page-header">
+        <h1>
+            FacebookProvider
+                
+        </h1>
+    </div>
+
+    <p>    class
+    <strong>FacebookProvider</strong>        extends <a href="../../../IlyaZelen/UserOauth2Services/Providers/AbstractProvider.html"><abbr title="IlyaZelen\UserOauth2Services\Providers\AbstractProvider">AbstractProvider</abbr></a>
+</p>
+
+        
+    
+
+    
+    
+            <h2>Constants</h2>
+
+            <table class="table table-condensed">
+                    <tr>
+                <td>ERROR_PROVIDER</td>
+                <td class="last">
+                    <p><em></em></p>
+                    <p></p>
+                </td>
+            </tr>
+                    <tr>
+                <td>ERROR_CODE</td>
+                <td class="last">
+                    <p><em></em></p>
+                    <p></p>
+                </td>
+            </tr>
+            </table>
+
+    
+            <h2>Properties</h2>
+
+            <table class="table table-condensed">
+                    <tr>
+                <td class="type" id="property_scopeSeparator">
+                    static                    protected                                        string
+                </td>
+                <td>$scopeSeparator</td>
+                <td class="last">Разделитель скопа требующийся в запросе.</td>
+                <td><small>from&nbsp;<a href="../../../IlyaZelen/UserOauth2Services/Providers/AbstractProvider.html#property_scopeSeparator"><abbr title="IlyaZelen\UserOauth2Services\Providers\AbstractProvider">AbstractProvider</abbr></a></small></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_providerConfig">
+                    static                    protected                                        array
+                </td>
+                <td>$providerConfig</td>
+                <td class="last">Конфиг провайдера.</td>
+                <td><small>from&nbsp;<a href="../../../IlyaZelen/UserOauth2Services/Providers/AbstractProvider.html#property_providerConfig"><abbr title="IlyaZelen\UserOauth2Services\Providers\AbstractProvider">AbstractProvider</abbr></a></small></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_providerSettings">
+                    static                    protected                                        array
+                </td>
+                <td>$providerSettings</td>
+                <td class="last">Настройки провайдера.</td>
+                <td><small>from&nbsp;<a href="../../../IlyaZelen/UserOauth2Services/Providers/AbstractProvider.html#property_providerSettings"><abbr title="IlyaZelen\UserOauth2Services\Providers\AbstractProvider">AbstractProvider</abbr></a></small></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_httpClient">
+                    static                    protected                                        <abbr title="GuzzleHttp\Client">Client</abbr>
+                </td>
+                <td>$httpClient</td>
+                <td class="last">Http клиент для запросов. Используется для получения токена и пользователя.</td>
+                <td><small>from&nbsp;<a href="../../../IlyaZelen/UserOauth2Services/Providers/AbstractProvider.html#property_httpClient"><abbr title="IlyaZelen\UserOauth2Services\Providers\AbstractProvider">AbstractProvider</abbr></a></small></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_additionalScopes">
+                    static                    protected                                        array
+                </td>
+                <td>$additionalScopes</td>
+                <td class="last">Дополнительные скопы доступа которые сливаются с базовыми.</td>
+                <td><small>from&nbsp;<a href="../../../IlyaZelen/UserOauth2Services/Providers/AbstractProvider.html#property_additionalScopes"><abbr title="IlyaZelen\UserOauth2Services\Providers\AbstractProvider">AbstractProvider</abbr></a></small></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_version">
+                    static                    protected                                        string
+                </td>
+                <td>$version</td>
+                <td class="last">Версия API.</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_APIBaseUrl">
+                    static                    protected                                        string
+                </td>
+                <td>$APIBaseUrl</td>
+                <td class="last">Базовый URL.</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_popup">
+                    static                    protected                                        bool
+                </td>
+                <td>$popup</td>
+                <td class="last">Отображать диалоговое меню в попап окне.</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_reRequest">
+                    static                    protected                                        bool
+                </td>
+                <td>$reRequest</td>
+                <td class="last">Повторный запрос если отклонено разрешение.</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_fields">
+                    static                    protected                                        array
+                </td>
+                <td>$fields</td>
+                <td class="last">Зарпашиваемые поля пользователя.</td>
+                <td></td>
+            </tr>
+            </table>
+
+    
+            <h2>Methods</h2>
+
+            <div class="container-fluid underlined">
+                    <div class="row">
+                <div class="col-md-2 type">
+                    static&nbsp;string
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_getAuthUrlBase">getAuthUrlBase</a>()
+        
+                                            <p>Возвращает базовый URL аутентификации провайдера. К нему будет добавлены GET параметры.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    static&nbsp;string
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_getAccessTokenUrl">getAccessTokenUrl</a>()
+        
+                                            <p>URL для получения токена доступа.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    static&nbsp;string
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_getUserUrl">getUserUrl</a>(string $accessToken)
+        
+                                            <p>URL для получения пользователя.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    static&nbsp;array
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_getScopes">getScopes</a>()
+        
+                                            <p>Скопы доступа (к чему будет иметь разрешение) провайдера.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    static&nbsp;<a href="../../../IlyaZelen/UserOauth2Services/Contracts/UserContract.html"><abbr title="IlyaZelen\UserOauth2Services\Contracts\UserContract">UserContract</abbr></a>
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_transformUserResponseToObject">transformUserResponseToObject</a>(array $user)
+        
+                                            <p>Трансформирует ответ запроса пользователя в объект.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    static&nbsp;void
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_init">init</a>(array $providerConfig, array $providerSettings = [])
+        
+                                            <p>Инициализация провайдера.</p>                </div>
+                <div class="col-md-2"><small>from&nbsp;<a href="../../../IlyaZelen/UserOauth2Services/Providers/AbstractProvider.html#method_init"><abbr title="IlyaZelen\UserOauth2Services\Providers\AbstractProvider">AbstractProvider</abbr></a></small></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    static&nbsp;void
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_redirect">redirect</a>()
+        
+                                            <p>Перенаправляет пользователя на страницу аутентификации провайдера.</p>                </div>
+                <div class="col-md-2"><small>from&nbsp;<a href="../../../IlyaZelen/UserOauth2Services/Providers/AbstractProvider.html#method_redirect"><abbr title="IlyaZelen\UserOauth2Services\Providers\AbstractProvider">AbstractProvider</abbr></a></small></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    static&nbsp;<a href="../../../IlyaZelen/UserOauth2Services/Contracts/UserContract.html"><abbr title="IlyaZelen\UserOauth2Services\Contracts\UserContract">UserContract</abbr></a>
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_user">user</a>()
+        
+                                            <p>Используя code получает данные токена, после чего получает пользователя по токену доступа.</p>                </div>
+                <div class="col-md-2"><small>from&nbsp;<a href="../../../IlyaZelen/UserOauth2Services/Providers/AbstractProvider.html#method_user"><abbr title="IlyaZelen\UserOauth2Services\Providers\AbstractProvider">AbstractProvider</abbr></a></small></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    static&nbsp;<a href="../../../IlyaZelen/UserOauth2Services/Contracts/UserContract.html"><abbr title="IlyaZelen\UserOauth2Services\Contracts\UserContract">UserContract</abbr></a>
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_getUserByToken">getUserByToken</a>(string $accessToken, null $refreshToken = null, null $expiresIn = null)
+        
+                                            <p>Получает пользователя по токену.</p>                </div>
+                <div class="col-md-2"><small>from&nbsp;<a href="../../../IlyaZelen/UserOauth2Services/Providers/AbstractProvider.html#method_getUserByToken"><abbr title="IlyaZelen\UserOauth2Services\Providers\AbstractProvider">AbstractProvider</abbr></a></small></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    static&nbsp;string
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_scopes">scopes</a>(array $additionalScopes)
+        
+                                            <p>Сливает скопы доступа с базовыми.</p>                </div>
+                <div class="col-md-2"><small>from&nbsp;<a href="../../../IlyaZelen/UserOauth2Services/Providers/AbstractProvider.html#method_scopes"><abbr title="IlyaZelen\UserOauth2Services\Providers\AbstractProvider">AbstractProvider</abbr></a></small></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    static&nbsp;array
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_getAccessTokenResponse">getAccessTokenResponse</a>(string $code)
+        
+                                            <p>Получает ответ запроса на токен доступа по коду $code.</p>                </div>
+                <div class="col-md-2"><small>from&nbsp;<a href="../../../IlyaZelen/UserOauth2Services/Providers/AbstractProvider.html#method_getAccessTokenResponse"><abbr title="IlyaZelen\UserOauth2Services\Providers\AbstractProvider">AbstractProvider</abbr></a></small></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    static&nbsp;string
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_getAuthUrl">getAuthUrl</a>()
+        
+                                            <p>Возвращает URL страница аутентификации для провайдера.</p>                </div>
+                <div class="col-md-2"><small>from&nbsp;<a href="../../../IlyaZelen/UserOauth2Services/Providers/AbstractProvider.html#method_getAuthUrl"><abbr title="IlyaZelen\UserOauth2Services\Providers\AbstractProvider">AbstractProvider</abbr></a></small></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    static&nbsp;array
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_getAccessTokenResponseRequestOptions">getAccessTokenResponseRequestOptions</a>(string $code)
+        
+                                            <p>Возвращает опции запроса получения токена доступа.</p>                </div>
+                <div class="col-md-2"><small>from&nbsp;<a href="../../../IlyaZelen/UserOauth2Services/Providers/AbstractProvider.html#method_getAccessTokenResponseRequestOptions"><abbr title="IlyaZelen\UserOauth2Services\Providers\AbstractProvider">AbstractProvider</abbr></a></small></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    static&nbsp;array
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_getUserByAccessTokenResponseRequestOptions">getUserByAccessTokenResponseRequestOptions</a>(string $accessToken)
+        
+                                            <p>Возвращает опции запроса получения пользователя по токену доступа.</p>                </div>
+                <div class="col-md-2"><small>from&nbsp;<a href="../../../IlyaZelen/UserOauth2Services/Providers/AbstractProvider.html#method_getUserByAccessTokenResponseRequestOptions"><abbr title="IlyaZelen\UserOauth2Services\Providers\AbstractProvider">AbstractProvider</abbr></a></small></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    static&nbsp;array
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_getUserByAccessTokenResponse">getUserByAccessTokenResponse</a>(string $accessToken)
+        
+                                            <p>Получает пользователю используя ответ запроса на получения токена доступа.</p>                </div>
+                <div class="col-md-2"><small>from&nbsp;<a href="../../../IlyaZelen/UserOauth2Services/Providers/AbstractProvider.html#method_getUserByAccessTokenResponse"><abbr title="IlyaZelen\UserOauth2Services\Providers\AbstractProvider">AbstractProvider</abbr></a></small></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    static&nbsp;array
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_getModifiedAccessTokenResponse">getModifiedAccessTokenResponse</a>(array $response)
+        
+                                            <p>Благодаря этому методу, провайдер может легко модифицировать ответ запроса на получение токена.</p>                </div>
+                <div class="col-md-2"><small>from&nbsp;<a href="../../../IlyaZelen/UserOauth2Services/Providers/AbstractProvider.html#method_getModifiedAccessTokenResponse"><abbr title="IlyaZelen\UserOauth2Services\Providers\AbstractProvider">AbstractProvider</abbr></a></small></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    static&nbsp;array
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_getModifiedUserByAccessTokenResponse">getModifiedUserByAccessTokenResponse</a>(array $response, string $accessToken)
+        
+                                            <p>Благодаря этому методу, провайдер может легко модифицировать ответ запроса на получение пользователя.</p>                </div>
+                <div class="col-md-2"><small>from&nbsp;<a href="../../../IlyaZelen/UserOauth2Services/Providers/AbstractProvider.html#method_getModifiedUserByAccessTokenResponse"><abbr title="IlyaZelen\UserOauth2Services\Providers\AbstractProvider">AbstractProvider</abbr></a></small></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    static&nbsp;string
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_getCode">getCode</a>()
+        
+                                            <p>Возвращает GET параметр code из запроса.</p>                </div>
+                <div class="col-md-2"><small>from&nbsp;<a href="../../../IlyaZelen/UserOauth2Services/Providers/AbstractProvider.html#method_getCode"><abbr title="IlyaZelen\UserOauth2Services\Providers\AbstractProvider">AbstractProvider</abbr></a></small></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    static&nbsp;array
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_getAuthUrlQueryParams">getAuthUrlQueryParams</a>()
+        
+                                            <p>Возвращает GET параметры для URL аутентификации.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    static&nbsp;string
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_formatScopes">formatScopes</a>()
+        
+                                            <p>Форматирует скопы по разделителю.</p>                </div>
+                <div class="col-md-2"><small>from&nbsp;<a href="../../../IlyaZelen/UserOauth2Services/Providers/AbstractProvider.html#method_formatScopes"><abbr title="IlyaZelen\UserOauth2Services\Providers\AbstractProvider">AbstractProvider</abbr></a></small></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    static&nbsp;array
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_getAccessTokenFields">getAccessTokenFields</a>(string $code)
+        
+                                            <p>Получить параметры для POST запроса на получения токена.</p>                </div>
+                <div class="col-md-2"><small>from&nbsp;<a href="../../../IlyaZelen/UserOauth2Services/Providers/AbstractProvider.html#method_getAccessTokenFields"><abbr title="IlyaZelen\UserOauth2Services\Providers\AbstractProvider">AbstractProvider</abbr></a></small></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    static&nbsp;<abbr title="GuzzleHttp\Client">Client</abbr>
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_getHttpClient">getHttpClient</a>()
+        
+                                            <p>Возвращает экземпляр Guzzle HTTP клиента.</p>                </div>
+                <div class="col-md-2"><small>from&nbsp;<a href="../../../IlyaZelen/UserOauth2Services/Providers/AbstractProvider.html#method_getHttpClient"><abbr title="IlyaZelen\UserOauth2Services\Providers\AbstractProvider">AbstractProvider</abbr></a></small></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    static&nbsp;array
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_getGuzzleOptions">getGuzzleOptions</a>()
+        
+                                            <p>Возвращает Guzzle опции (слияние глобальных пакета с локальными провайдера).</p>                </div>
+                <div class="col-md-2"><small>from&nbsp;<a href="../../../IlyaZelen/UserOauth2Services/Providers/AbstractProvider.html#method_getGuzzleOptions"><abbr title="IlyaZelen\UserOauth2Services\Providers\AbstractProvider">AbstractProvider</abbr></a></small></div>
+            </div>
+            </div>
+
+
+        <h2>Details</h2>
+
+            <div id="method-details">
+                    <div class="method-item">
+                    <h3 id="method_getAuthUrlBase">
+        <div class="location">at         line 54</div>
+        <code>        static    protected        string
+    <strong>getAuthUrlBase</strong>()
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Возвращает базовый URL аутентификации провайдера. К нему будет добавлены GET параметры.</p>                                                </div>
+                <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>string</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_getAccessTokenUrl">
+        <div class="location">at         line 78</div>
+        <code>        static    protected        string
+    <strong>getAccessTokenUrl</strong>()
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>URL для получения токена доступа.</p>                                                </div>
+                <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>string</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_getUserUrl">
+        <div class="location">at         line 62</div>
+        <code>        static    protected        string
+    <strong>getUserUrl</strong>(string $accessToken)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>URL для получения пользователя.</p>                                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>string</td>
+                <td>$accessToken</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>string</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_getScopes">
+        <div class="location">at         line 88</div>
+        <code>        static    protected        array
+    <strong>getScopes</strong>()
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Скопы доступа (к чему будет иметь разрешение) провайдера.</p>                                                </div>
+                <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>array</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                            <h4>See also</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>
+                                            <abbr title="IlyaZelen\UserOauth2Services\Providers\supported">supported</abbr>
+                                    </td>
+                <td>scopes: https://developers.facebook.com/docs/facebook-login/permissions/</td>
+            </tr>
+            </table>
+
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_transformUserResponseToObject">
+        <div class="location">at         line 99</div>
+        <code>        static    protected        <a href="../../../IlyaZelen/UserOauth2Services/Contracts/UserContract.html"><abbr title="IlyaZelen\UserOauth2Services\Contracts\UserContract">UserContract</abbr></a>
+    <strong>transformUserResponseToObject</strong>(array $user)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Трансформирует ответ запроса пользователя в объект.</p>                                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>array</td>
+                <td>$user</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td><a href="../../../IlyaZelen/UserOauth2Services/Contracts/UserContract.html"><abbr title="IlyaZelen\UserOauth2Services\Contracts\UserContract">UserContract</abbr></a></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_init">
+        <div class="location">in <a href="../../../IlyaZelen/UserOauth2Services/Providers/AbstractProvider.html#method_init"><abbr title="IlyaZelen\UserOauth2Services\Providers\AbstractProvider">AbstractProvider</abbr></a> at         line 110</div>
+        <code>        static            void
+    <strong>init</strong>(array $providerConfig, array $providerSettings = [])
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Инициализация провайдера.</p>                    <p>По желанию каждый провайдер может переопределить этот метод чтобы поставить свою логику на этапе инициализации.</p>                            </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>array</td>
+                <td>$providerConfig</td>
+                <td><ul>
+<li>'name' => (string) Имя провайдера.</li>
+<li>'clientId' => (string) Id клиента.</li>
+<li>'clientSecret' => (string) Секретный ключ клиента.</li>
+<li><p>'redirectUrl' => (string) Адрес перенаправления клиента.</p>
+
+<p>$providerConfig = [
+ 'name' => (string) Имя провайдера.
+ 'clientId' => (string) Id клиента.
+ 'clientSecret' => (string) Секретный ключ клиента.
+ 'redirectUrl' => (string) Адрес перенаправления клиента.
+]</p></li>
+</ul>
+</td>
+            </tr>
+                    <tr>
+                <td>array</td>
+                <td>$providerSettings</td>
+                <td><ul>
+<li>'guzzleOptions' => (array) Настройки guzzle клиента.</li>
+<li><p>'additionalAuthUrlQueryParams' => (array) Дополнительные GET параметры для URL аутентификации.</p>
+
+<p>$providerSettings = [
+ 'guzzleOptions' => (array) Настройки guzzle клиента.
+ 'additionalAuthUrlQueryParams' => (array) Дополнительные GET параметры для URL аутентификации.
+]</p></li>
+</ul>
+</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>void</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_redirect">
+        <div class="location">in <a href="../../../IlyaZelen/UserOauth2Services/Providers/AbstractProvider.html#method_redirect"><abbr title="IlyaZelen\UserOauth2Services\Providers\AbstractProvider">AbstractProvider</abbr></a> at         line 119</div>
+        <code>        static            void
+    <strong>redirect</strong>()
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Перенаправляет пользователя на страницу аутентификации провайдера.</p>                    <p>Использутся для stateful.</p>                            </div>
+                <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>void</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_user">
+        <div class="location">in <a href="../../../IlyaZelen/UserOauth2Services/Providers/AbstractProvider.html#method_user"><abbr title="IlyaZelen\UserOauth2Services\Providers\AbstractProvider">AbstractProvider</abbr></a> at         line 128</div>
+        <code>        static            <a href="../../../IlyaZelen/UserOauth2Services/Contracts/UserContract.html"><abbr title="IlyaZelen\UserOauth2Services\Contracts\UserContract">UserContract</abbr></a>
+    <strong>user</strong>()
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Используя code получает данные токена, после чего получает пользователя по токену доступа.</p>                                                </div>
+                <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td><a href="../../../IlyaZelen/UserOauth2Services/Contracts/UserContract.html"><abbr title="IlyaZelen\UserOauth2Services\Contracts\UserContract">UserContract</abbr></a></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_getUserByToken">
+        <div class="location">in <a href="../../../IlyaZelen/UserOauth2Services/Providers/AbstractProvider.html#method_getUserByToken"><abbr title="IlyaZelen\UserOauth2Services\Providers\AbstractProvider">AbstractProvider</abbr></a> at         line 144</div>
+        <code>        static            <a href="../../../IlyaZelen/UserOauth2Services/Contracts/UserContract.html"><abbr title="IlyaZelen\UserOauth2Services\Contracts\UserContract">UserContract</abbr></a>
+    <strong>getUserByToken</strong>(string $accessToken, null $refreshToken = null, null $expiresIn = null)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Получает пользователя по токену.</p>                                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>string</td>
+                <td>$accessToken</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td>null</td>
+                <td>$refreshToken</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td>null</td>
+                <td>$expiresIn</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td><a href="../../../IlyaZelen/UserOauth2Services/Contracts/UserContract.html"><abbr title="IlyaZelen\UserOauth2Services\Contracts\UserContract">UserContract</abbr></a></td>
+            <td>объект пользователя</td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_scopes">
+        <div class="location">in <a href="../../../IlyaZelen/UserOauth2Services/Providers/AbstractProvider.html#method_scopes"><abbr title="IlyaZelen\UserOauth2Services\Providers\AbstractProvider">AbstractProvider</abbr></a> at         line 158</div>
+        <code>        static            string
+    <strong>scopes</strong>(array $additionalScopes)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Сливает скопы доступа с базовыми.</p>                                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>array</td>
+                <td>$additionalScopes</td>
+                <td>нужные скопы.</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>string</td>
+            <td><strong>CLASS</strong></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_getAccessTokenResponse">
+        <div class="location">in <a href="../../../IlyaZelen/UserOauth2Services/Providers/AbstractProvider.html#method_getAccessTokenResponse"><abbr title="IlyaZelen\UserOauth2Services\Providers\AbstractProvider">AbstractProvider</abbr></a> at         line 168</div>
+        <code>        static            array
+    <strong>getAccessTokenResponse</strong>(string $code)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Получает ответ запроса на токен доступа по коду $code.</p>                                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>string</td>
+                <td>$code</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>array</td>
+            <td>json_decode ответа в виде ассоциативного массива</td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_getAuthUrl">
+        <div class="location">in <a href="../../../IlyaZelen/UserOauth2Services/Providers/AbstractProvider.html#method_getAuthUrl"><abbr title="IlyaZelen\UserOauth2Services\Providers\AbstractProvider">AbstractProvider</abbr></a> at         line 185</div>
+        <code>        static            string
+    <strong>getAuthUrl</strong>()
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Возвращает URL страница аутентификации для провайдера.</p>                    <p>Можно использовать на фронтеде получая через REST API.</p>                            </div>
+                <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>string</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_getAccessTokenResponseRequestOptions">
+        <div class="location">in <a href="../../../IlyaZelen/UserOauth2Services/Providers/AbstractProvider.html#method_getAccessTokenResponseRequestOptions"><abbr title="IlyaZelen\UserOauth2Services\Providers\AbstractProvider">AbstractProvider</abbr></a> at         line 198</div>
+        <code>        static    protected        array
+    <strong>getAccessTokenResponseRequestOptions</strong>(string $code)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Возвращает опции запроса получения токена доступа.</p>                                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>string</td>
+                <td>$code</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>array</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_getUserByAccessTokenResponseRequestOptions">
+        <div class="location">in <a href="../../../IlyaZelen/UserOauth2Services/Providers/AbstractProvider.html#method_getUserByAccessTokenResponseRequestOptions"><abbr title="IlyaZelen\UserOauth2Services\Providers\AbstractProvider">AbstractProvider</abbr></a> at         line 212</div>
+        <code>        static    protected        array
+    <strong>getUserByAccessTokenResponseRequestOptions</strong>(string $accessToken)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Возвращает опции запроса получения пользователя по токену доступа.</p>                                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>string</td>
+                <td>$accessToken</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>array</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_getUserByAccessTokenResponse">
+        <div class="location">in <a href="../../../IlyaZelen/UserOauth2Services/Providers/AbstractProvider.html#method_getUserByAccessTokenResponse"><abbr title="IlyaZelen\UserOauth2Services\Providers\AbstractProvider">AbstractProvider</abbr></a> at         line 226</div>
+        <code>        static    protected        array
+    <strong>getUserByAccessTokenResponse</strong>(string $accessToken)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Получает пользователю используя ответ запроса на получения токена доступа.</p>                                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>string</td>
+                <td>$accessToken</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>array</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_getModifiedAccessTokenResponse">
+        <div class="location">in <a href="../../../IlyaZelen/UserOauth2Services/Providers/AbstractProvider.html#method_getModifiedAccessTokenResponse"><abbr title="IlyaZelen\UserOauth2Services\Providers\AbstractProvider">AbstractProvider</abbr></a> at         line 243</div>
+        <code>        static    protected        array
+    <strong>getModifiedAccessTokenResponse</strong>(array $response)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Благодаря этому методу, провайдер может легко модифицировать ответ запроса на получение токена.</p>                                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>array</td>
+                <td>$response</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>array</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_getModifiedUserByAccessTokenResponse">
+        <div class="location">in <a href="../../../IlyaZelen/UserOauth2Services/Providers/AbstractProvider.html#method_getModifiedUserByAccessTokenResponse"><abbr title="IlyaZelen\UserOauth2Services\Providers\AbstractProvider">AbstractProvider</abbr></a> at         line 255</div>
+        <code>        static    protected        array
+    <strong>getModifiedUserByAccessTokenResponse</strong>(array $response, string $accessToken)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Благодаря этому методу, провайдер может легко модифицировать ответ запроса на получение пользователя.</p>                                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>array</td>
+                <td>$response</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td>string</td>
+                <td>$accessToken</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>array</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_getCode">
+        <div class="location">in <a href="../../../IlyaZelen/UserOauth2Services/Providers/AbstractProvider.html#method_getCode"><abbr title="IlyaZelen\UserOauth2Services\Providers\AbstractProvider">AbstractProvider</abbr></a> at         line 266</div>
+        <code>        static    protected        string
+    <strong>getCode</strong>()
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Возвращает GET параметр code из запроса.</p>                                                </div>
+                <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>string</td>
+            <td><ul>
+<li>параметр code</li>
+</ul>
+</td>
+        </tr>
+    </table>
+
+            
+                            <h4>Exceptions</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td><a href="../../../IlyaZelen/UserOauth2Services/Exceptions/RedHouseException.html"><abbr title="IlyaZelen\UserOauth2Services\Exceptions\RedHouseException">RedHouseException</abbr></a></td>
+                <td>если провайдер выдал ошибку или если нет параметра "code".</td>
+            </tr>
+            </table>
+
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_getAuthUrlQueryParams">
+        <div class="location">at         line 119</div>
+        <code>        static    protected        array
+    <strong>getAuthUrlQueryParams</strong>()
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Возвращает GET параметры для URL аутентификации.</p>                                                </div>
+                <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>array</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_formatScopes">
+        <div class="location">in <a href="../../../IlyaZelen/UserOauth2Services/Providers/AbstractProvider.html#method_formatScopes"><abbr title="IlyaZelen\UserOauth2Services\Providers\AbstractProvider">AbstractProvider</abbr></a> at         line 300</div>
+        <code>        static    protected        string
+    <strong>formatScopes</strong>()
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Форматирует скопы по разделителю.</p>                                                </div>
+                <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>string</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_getAccessTokenFields">
+        <div class="location">in <a href="../../../IlyaZelen/UserOauth2Services/Providers/AbstractProvider.html#method_getAccessTokenFields"><abbr title="IlyaZelen\UserOauth2Services\Providers\AbstractProvider">AbstractProvider</abbr></a> at         line 313</div>
+        <code>        static    protected        array
+    <strong>getAccessTokenFields</strong>(string $code)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Получить параметры для POST запроса на получения токена.</p>                                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>string</td>
+                <td>$code</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>array</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_getHttpClient">
+        <div class="location">in <a href="../../../IlyaZelen/UserOauth2Services/Providers/AbstractProvider.html#method_getHttpClient"><abbr title="IlyaZelen\UserOauth2Services\Providers\AbstractProvider">AbstractProvider</abbr></a> at         line 328</div>
+        <code>        static    protected        <abbr title="GuzzleHttp\Client">Client</abbr>
+    <strong>getHttpClient</strong>()
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Возвращает экземпляр Guzzle HTTP клиента.</p>                                                </div>
+                <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td><abbr title="GuzzleHttp\Client">Client</abbr></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_getGuzzleOptions">
+        <div class="location">in <a href="../../../IlyaZelen/UserOauth2Services/Providers/AbstractProvider.html#method_getGuzzleOptions"><abbr title="IlyaZelen\UserOauth2Services\Providers\AbstractProvider">AbstractProvider</abbr></a> at         line 341</div>
+        <code>        static    protected        array
+    <strong>getGuzzleOptions</strong>()
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Возвращает Guzzle опции (слияние глобальных пакета с локальными провайдера).</p>                                                </div>
+                <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>array</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+            </div>
+
+    
+            </div>
+                <div id="footer">
+        Generated by <a href="http://sami.sensiolabs.org/">Sami, the API Documentation Generator</a>.
+    </div>
+
+        </div>
+    </div>
+    </body>
+
+</html>
