@@ -66,4 +66,7 @@ trait FriendableTrait
 
         return array_unique($traits);
     }
+
+    // интересно, что в трейте можно использовать абстрактные методы
+    // abstract public function getWorld();
 }
