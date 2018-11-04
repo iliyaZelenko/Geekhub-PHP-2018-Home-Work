@@ -8,7 +8,7 @@ use IlyaZelen\UserOauth2Services\OauthProvidersManager;
 
 // пользователь будет записыватсья в сессию
 session_start();
-OauthProvidersManager::init([
+OauthProvidersManager::init([ // данные провайдеров
     [
         'name' => 'google',
         'clientId' => '418799322900-hk88fkv35a3igd2hi6qibo2ej64p9kua.apps.googleusercontent.com',
@@ -27,7 +27,7 @@ OauthProvidersManager::init([
         'clientSecret' => 'fc7c4c93573912a66bb3c7e0fd3cc36f',
         'redirectUrl' => 'http://localhost:8080/oauth/redirect/facebook'
     ]
-], [
+], [ // настройки библиотеки
     'guzzleOptions' => [
         'timeout' => 3.14
     ]

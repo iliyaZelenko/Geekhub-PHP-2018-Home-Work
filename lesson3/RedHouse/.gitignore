@@ -2,5 +2,6 @@
 /.idea
 
 /docs-cache
+/docs-build
 /sami.phar
 /vendor

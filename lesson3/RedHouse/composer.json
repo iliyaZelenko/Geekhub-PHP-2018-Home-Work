@@ -1,6 +1,6 @@
 {
-  "name": "IlyaZelen/UserOauth2Services",
-  "description": "Get user vie Oauth2",
+  "name": "ilyazelen/oauth2",
+  "description": "Get user via Oauth2",
   "keywords": ["oauth", "user"],
   "type": "package",
   "require": {
