@@ -11,10 +11,10 @@ SuperImages::init('GD', [ // ImageMagick
     'driverSettings' => [
         'fonts' => [
             'mySuperFontAlias' => [
-                'path' => './fonts/font.ttf'
+                'path' => __DIR__ . './fonts/font.ttf'
             ],
             'myFont' => [
-                'path' => './fonts/BlackCasperFont.ttf'
+                'path' => __DIR__ . './fonts/BlackCasperFont.ttf'
             ]
         ]
     ]
