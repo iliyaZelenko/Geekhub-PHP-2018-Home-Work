@@ -16,8 +16,7 @@
     }
   },
   "scripts": {
-    "server": "IlyaZelen\\ConsoleServeCommand::myCallback",
-    "serve": "@php -S localhost:8000 -t src/"
+    "serve": "IlyaZelen\\ConsoleServeCommand::myCallback"
   },
   "config": {
     "process-timeout": 0

@@ -13,7 +13,7 @@
 Если команда имеет возвращаемое значение, то оно возвращается, иначе вернет `$this`:
 
 ```php
-$command->hasOutput() ? $command->getOutput() : $this;`
+$command->hasOutput() ? $command->getOutput() : $this;
 ```
 
 - теперь посмотрим на метод 
@@ -33,5 +33,5 @@ $command->hasOutput() ? $command->getOutput() : $this;`
 Код `return $command;` дает объект в котором `__call` проверяет (уже писал):
 
 ```php
-$command->hasOutput() ? $command->getOutput() : $this;`
+$command->hasOutput() ? $command->getOutput() : $this;
 ```
