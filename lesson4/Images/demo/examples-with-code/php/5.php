@@ -2,14 +2,14 @@
 
 require '../../../vendor/autoload.php';
 header('Content-Type: image/png');
-use App\SuperImages;
+use IlyaZelen\SuperImagesStatic as SuperImages;
 
 
 
-SuperImages::init('ImageMagick'); // GD
+SuperImages::init('GD'); // ImageMagick
 
 
-$color = \App\Clasess\Color\UniversalColor::getColorInstanceByValue('rgba(0, 128, 0, 0)');
+$color = \IlyaZelen\Colors\UniversalColor::getColorInstanceByValue('rgba(0, 128, 0, 0)');
 var_dump($color);
 var_dump($color->convertToHex());
 var_dump($color->convertToRGB());

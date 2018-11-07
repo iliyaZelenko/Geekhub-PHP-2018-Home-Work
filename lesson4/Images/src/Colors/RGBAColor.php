@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Clasess\Color;
+namespace IlyaZelen\Colors;
 
 // В этой библиотеке (SuperImages), принято обозначать RGBA в формата как в CSS: rgba(<red>, <green>, <blue>, <alpha>)
 class RGBAColor extends ColorAbstract

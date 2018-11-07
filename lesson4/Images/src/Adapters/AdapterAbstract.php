@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Adapters;
+namespace IlyaZelen\Adapters;
 
-use App\SuperImages;
+use IlyaZelen\SuperImages;
 
 abstract class AdapterAbstract implements AdapterInterface
 {

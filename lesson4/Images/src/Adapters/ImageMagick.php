@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Adapters;
+namespace IlyaZelen\Adapters;
 
-use App\Clasess\Color\RGBAColor;
-use App\Clasess\FontMetric;
-use App\Clasess\Size;
-use function App\{getFont};
+use IlyaZelen\Colors\RGBAColor;
+use IlyaZelen\Clasess\FontMetric;
+use IlyaZelen\Clasess\Size;
+use function IlyaZelen\{getFont};
 
 class ImageMagick extends AdapterAbstract
 {
@@ -62,7 +62,6 @@ class ImageMagick extends AdapterAbstract
         return $this;
     }
 
-    // TODO $format Abstract
     public function output(string $format, int $compression = 65): string
     {
         $this->checkFormatSupport($format);

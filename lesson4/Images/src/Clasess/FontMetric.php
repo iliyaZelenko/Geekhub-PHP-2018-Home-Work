@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Clasess;
+namespace IlyaZelen\Clasess;
 
-// TODO сделать чтобы возвращало меипику криорая
 class FontMetric
 {
     /**

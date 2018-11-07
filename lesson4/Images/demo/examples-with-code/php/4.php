@@ -2,11 +2,11 @@
 
 require '../../../vendor/autoload.php';
 //header('Content-Type: image/png');
-use App\SuperImages;
+use IlyaZelen\SuperImagesStatic as SuperImages;
 
 
 
-SuperImages::init('ImageMagick', [ // ImageMagick
+SuperImages::init('GD', [ // ImageMagick
     'driverSettings' => [
         'fonts' => [
             'mySuperFontAlias' => [
@@ -22,11 +22,11 @@ echo SuperImages::open(__DIR__ . './img/3.png')
     ->rotate(45)
     ->text(
         'SuperImages',
-        0,
-        20,
+        15,
+        400,
         'rgba(255, 0, 0, 0.5)',
         'mySuperFontAlias',
-        90,
+        70,
         15
     )
     ->fit(600, 400)

@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Adapters;
+namespace IlyaZelen\Adapters;
 
-use App\Clasess\Color\ColorAbstract;
-use App\Clasess\Color\RGBAColor;
-use App\Clasess\Color\UniversalColor;
-use App\Clasess\FontMetric;
-use App\Clasess\Size;
-use function App\{getBoundaryDimension, getSuffixByFormat, getFont};
+use IlyaZelen\Colors\ColorAbstract;
+use IlyaZelen\Colors\RGBAColor;
+use IlyaZelen\Colors\UniversalColor;
+use IlyaZelen\Clasess\FontMetric;
+use IlyaZelen\Clasess\Size;
+use function IlyaZelen\{getBoundaryDimension, getSuffixByFormat, getFont};
 
 class GD extends AdapterAbstract
 {

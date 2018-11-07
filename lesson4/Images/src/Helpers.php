@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace IlyaZelen;
 
 // возвращает размер который помещается в рамку (boundary)
 function getBoundaryDimension ($boundaryWidth, $boundaryHeight, $originalWidth, $originalHeight) {
@@ -11,8 +11,8 @@ function getBoundaryDimension ($boundaryWidth, $boundaryHeight, $originalWidth, 
     if ($originalWidth > $boundaryWidth) {
         // маштабирует ширину чтобы поместилось
         $newWidth = $boundaryWidth;
-        // маштабирует высоту для поддержания пропорции
-        $newHeight = ($newWidth * $originalHeight) / $originalWidth;
+        // маштабирует высоту для поддержания пропорции, вычисление зависит от соотношения новой высоты к старой
+        $newHeight = $originalHeight * ($newWidth / $originalWidth);
     }
 
     // проверяет нужно ли масштабировать даже с новой высотой
@@ -20,7 +20,7 @@ function getBoundaryDimension ($boundaryWidth, $boundaryHeight, $originalWidth, 
         // маштабирует высоту чтобы поместилось вместо этого
         $newHeight = $boundaryHeight;
         // маштабирует ширину для поддержания пропорции
-        $newWidth = ($newHeight * $originalWidth) / $originalHeight;
+        $newWidth = $originalWidth * ($newHeight / $originalHeight);
     }
 
     return [$newWidth, $newHeight];

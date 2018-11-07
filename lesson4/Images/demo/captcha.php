@@ -2,45 +2,23 @@
 
 require '../vendor/autoload.php';
 
-//header('Content-Type: image/png');
-
-
-use App\SuperImages;
-
-SuperImages::init('GD', [ // ImageMagick
-    'driverSettings' => [
-        'fonts' => [
-            'mySuperFontAlias' => [
-                'path' => __DIR__ . './fonts/font.ttf'
-            ],
-            'myFont' => [
-                'path' => __DIR__ . './fonts/BlackCasperFont.ttf'
-            ]
-        ]
-    ]
-]);
-
-
-
-
-//echo SuperImages::new(500, 500) // rgba(0, 128, 0, 127)
-////    ->crop(20, 40, 300, 200)
-//    ->fit(null, 200)
-//    ->border('yellow', 2)
-//    ->rotate(25, 'rgba(128, 0, 0, 0.5)')
-//    ->border('blue', 2)
-//    ->save('./img/aaa.png')
-//    ->output('png', 100);
-//    ->crop(120, 20, 300, 200)
-//    ->crop(0, 0, 400, 120)
-//    ->fit(400, 200)
-//    ->rotate(45, 'rgba(128, 0, 0, 0.1)', true)
-//    ->resize(800, 600)
-//    ->flip('both')
-//    ->fit(800, 600) // 800, 600
+use IlyaZelen\SuperImages;
 
 
 function captcha (array $options = []) {
+    $superImages = new SuperImages('GD', [ // ImageMagick
+        'driverSettings' => [
+            'fonts' => [
+                'mySuperFontAlias' => [
+                    'path' => __DIR__ . './fonts/font.ttf'
+                ],
+                'myFont' => [
+                    'path' => __DIR__ . './fonts/BlackCasperFont.ttf'
+                ]
+            ]
+        ]
+    ]);
+
     // сколько будет символов
     $letters = $options['letters'] ?? 8;
     $background = $options['background'] ?? 'white';
@@ -73,19 +51,19 @@ function captcha (array $options = []) {
     if ($text[$lastLetterIndex] === ' ') $text[$lastLetterIndex] = '.';
 
     // метрики шрифта
-    $metrics = SuperImages::queryFontMetrics($text, $fontSize);
+    $metrics = $superImages->queryFontMetrics($text, $fontSize);
     [$textWidth, $textHeight] = $metrics->getSizeCompact();
     $originalFontMetrics = $metrics->getOriginal();
 
     // печально что вот это в GD нельзя получить отступ между символами, приходится таким способом угадывать
-    $lettersMargin = $originalFontMetrics['maxHorizontalAdvance'] ?? round($fontSize * .85); // 30
+    $lettersMargin = $originalFontMetrics['maxHorizontalAdvance'] ?? $options['lettersMargin'] ?? round($fontSize * .85);
     $xStart = $xPaddings;
     $yStart = $yPaddings + $fontSize;
     $imageWidth = $textWidth + $xPaddings * 2;
-    $imageHeight = $textHeight + $yPaddings * 2 + ($lettersTurning < 5 ?: 15);
+    $imageHeight = $textHeight + $yPaddings * 2 + ($lettersTurning < 5 ? 0 : 15);
 
 
-    $image = SuperImages::new($imageWidth, $imageHeight, $background);
+    $image = $superImages->new($imageWidth, $imageHeight, $background);
 
     for ($i = 0; $i < $letters; $i++) {
         // случайные значения

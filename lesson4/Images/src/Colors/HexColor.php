@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Clasess\Color;
+namespace IlyaZelen\Colors;
 
 class HexColor extends ColorAbstract
 {

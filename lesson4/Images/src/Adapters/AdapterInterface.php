@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Adapters;
+namespace IlyaZelen\Adapters;
 
-use App\Clasess\FontMetric;
-use App\Clasess\Size;
+use IlyaZelen\Clasess\FontMetric;
+use IlyaZelen\Clasess\Size;
 
 // не уверен что стоит выносить в интерфейс когда можно написать в абстрактном классе
 interface AdapterInterface
@@ -40,6 +40,7 @@ interface AdapterInterface
     /*
      * Делает поворот изображения. При повороте по умолчанию изображение не обрезается, обрезка включается через $crop парметр.
      * Вообще хотел сделать такую обрезку: https://i.imgur.com/gpQchqH.png --> https://i.imgur.com/vwqn7QF.png, но там много нюансов.
+     * Вот ее алгоритм (что хотел сделать): https://stackoverflow.com/questions/5789239/calculate-largest-rectangle-in-a-rotated-rectangle/22511805#22511805
      */
     public function rotate($angle, $backgroundColor = null, $crop = false): AdapterAbstract;
 

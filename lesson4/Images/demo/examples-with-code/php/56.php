@@ -1,11 +1,8 @@
 <?php
 
+header('Content-Type: image/png');
 require '../../../vendor/autoload.php';
-
-//header('Content-Type: image/png');
-
-
-use App\SuperImages;
+use IlyaZelen\SuperImagesStatic as SuperImages;
 
 SuperImages::init('ImageMagick'); // ImageMagick
 
@@ -49,7 +46,7 @@ echo SuperImages::open(__DIR__ . './img/3.png')
 //;
 
 
-//$color = \App\Clasess\Color\UniversalColor::getColorInstanceByValue('rgba(0, 128, 0, 0)');
+//$color = \IlyaZelen\Colors\UniversalColor::getColorInstanceByValue('rgba(0, 128, 0, 0)');
 //var_dump($color);
 //var_dump($color->convertToHex());
 //var_dump($color->convertToRGB());

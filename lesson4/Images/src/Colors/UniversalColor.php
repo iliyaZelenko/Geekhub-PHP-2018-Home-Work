@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Clasess\Color;
+namespace IlyaZelen\Colors;
 
 // TODO возможно функционал из этого класса можно вынести в SuperImages или по другому сделать
 class UniversalColor
 {
-    protected const ERROR_CONVERT_SAME_FORMATS = 'Этот формат не поддерживается';
+    protected const ERROR_NO_SUPPORT_FORMAT = 'Библиотека не поддерживает данный формат цвета.';
 
     public static function getColorInstanceByValue($value)
     {
@@ -28,6 +28,6 @@ class UniversalColor
                 return NameColor::class;
         }
 
-        throw new \LogicException(static::ERROR_CONVERT_SAME_FORMATS);
+        throw new \LogicException(static::ERROR_NO_SUPPORT_FORMAT);
     }
 }

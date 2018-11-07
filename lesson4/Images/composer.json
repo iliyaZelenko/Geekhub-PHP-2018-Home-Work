@@ -1,8 +1,11 @@
 {
   "name": "ilyazelen/images",
   "require": {
-    "php": "^7.1",
-    "ext-gd": "*"
+    "php": "^7.1"
+  },
+  "suggest": {
+    "ext-gd": "to use GD library based image processing.",
+    "ext-imagick": "to use Imagick based image processing."
   },
   "license": "MIT",
   "authors": [
@@ -13,7 +16,7 @@
   ],
   "autoload": {
     "psr-4": {
-      "App\\": "src"
+      "IlyaZelen\\": "src"
     },
     "files": [
       "src/Helpers.php"
