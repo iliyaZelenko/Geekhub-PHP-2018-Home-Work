@@ -1,0 +1,25 @@
+{
+  "name": "ilyazelen/images",
+  "require": {
+    "php": "^7.1"
+  },
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Ilya Zelenko",
+      "email": "iliyazelenkog@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "IlyaZelen\\": "src"
+    }
+  },
+  "scripts": {
+    "server": "IlyaZelen\\ConsoleServeCommand::myCallback",
+    "serve": "@php -S localhost:8000 -t src/"
+  },
+  "config": {
+    "process-timeout": 0
+  }
+}
