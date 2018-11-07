@@ -11,10 +11,6 @@ class ConsoleServeCommand
     public static function myCallback(Event $event) {
         $patternName = $event->getArguments()[0];
 
-        var_dump(321);
-
         echo shell_exec('php -S localhost:8000 -t src/' . $patternName);
-
-        var_dump(123);
     }
 }
