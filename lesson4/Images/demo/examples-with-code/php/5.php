@@ -1,7 +1,7 @@
 <?php
 
 require '../../../vendor/autoload.php';
-header('Content-Type: image/png');
+//header('Content-Type: image/png');
 use IlyaZelen\SuperImagesStatic as SuperImages;
 
 

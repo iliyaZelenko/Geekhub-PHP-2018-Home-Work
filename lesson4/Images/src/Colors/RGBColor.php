@@ -2,7 +2,7 @@
 
 namespace IlyaZelen\Colors;
 
-class RGBColor extends ColorAbstract
+class RGBColor extends AbstractColor
 {
     public function getFormat(): string
     {

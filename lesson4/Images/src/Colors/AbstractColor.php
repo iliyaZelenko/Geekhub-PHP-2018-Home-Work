@@ -2,7 +2,7 @@
 
 namespace IlyaZelen\Colors;
 
-abstract class ColorAbstract
+abstract class AbstractColor
 {
     public const HEX_FORMAT = 'hex';
     public const NAME_FORMAT = 'name';
@@ -47,9 +47,6 @@ abstract class ColorAbstract
             throw new \LogicException(static::ERROR_CONVERT_SAME_FORMATS);
 //            return $this;
         }
-//        if ($convertFormat === static::NAME_FORMAT) {
-//            return $this->convertFromFormatToName($currentFormat);
-//        }
 
         switch ($convertFormat) {
             case static::HEX_FORMAT:
@@ -61,6 +58,7 @@ abstract class ColorAbstract
             case static::RGBA_FORMAT:
                 return $this->convertToRGBA();
 
+            // TODO check
             case static::NAME_FORMAT:
                 return $this->convertFromFormatToName($currentFormat);
         }

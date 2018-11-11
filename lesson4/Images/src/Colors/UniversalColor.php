@@ -9,7 +9,7 @@ class UniversalColor
 
     public static function getColorInstanceByValue($value)
     {
-        $format = ColorAbstract::getFormatByValue($value);
+        $format = AbstractColor::getFormatByValue($value);
         $instanceClass = static::getClassByFormat($format);
 
         return new $instanceClass($value);
@@ -18,13 +18,13 @@ class UniversalColor
     public static function getClassByFormat($format): string
     {
         switch ($format) {
-            case ColorAbstract::HEX_FORMAT:
+            case AbstractColor::HEX_FORMAT:
                 return HexColor::class;
-            case ColorAbstract::RGB_FORMAT:
+            case AbstractColor::RGB_FORMAT:
                 return RGBColor::class;
-            case ColorAbstract::RGBA_FORMAT:
+            case AbstractColor::RGBA_FORMAT:
                 return RGBAColor::class;
-            case ColorAbstract::NAME_FORMAT:
+            case AbstractColor::NAME_FORMAT:
                 return NameColor::class;
         }
 

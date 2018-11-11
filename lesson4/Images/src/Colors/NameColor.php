@@ -2,7 +2,7 @@
 
 namespace IlyaZelen\Colors;
 
-class NameColor extends ColorAbstract
+class NameColor extends AbstractColor
 {
     public function getFormat(): string
     {
@@ -68,7 +68,7 @@ class NameColor extends ColorAbstract
         return static::getNames()[$this->value][$format];
     }
 
-    protected function getOtherFormatInstance($class): ColorAbstract
+    protected function getOtherFormatInstance($class): AbstractColor
     {
         $value = static::getNames()[$this->value][$class::getFormat()];
 

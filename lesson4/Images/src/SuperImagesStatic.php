@@ -2,8 +2,8 @@
 
 namespace IlyaZelen;
 
-use IlyaZelen\Adapters\{AdapterAbstract};
-use IlyaZelen\Clasess\FontMetric;
+use IlyaZelen\Adapters\{AbstractAdapter};
+use IlyaZelen\FontMetric;
 
 class SuperImagesStatic
 {
@@ -18,11 +18,11 @@ class SuperImagesStatic
     }
 
     // Варианты взаимодействия с адаптерами через которые создаются объекты адаптеров и дальше уже с ними  можно работать.
-    public static function new(...$arg): AdapterAbstract
+    public static function new(...$arg): AbstractAdapter
     {
         return static::$driver->{__FUNCTION__}(...$arg);
     }
-    public static function open(...$arg): AdapterAbstract
+    public static function open(...$arg): AbstractAdapter
     {
         return static::$driver->{__FUNCTION__}(...$arg);
     }

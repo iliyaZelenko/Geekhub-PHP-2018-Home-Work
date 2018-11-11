@@ -1,6 +1,6 @@
 <?php
 
-namespace IlyaZelen\Clasess;
+namespace IlyaZelen;
 
 class FontMetric
 {

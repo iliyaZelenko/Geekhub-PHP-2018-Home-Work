@@ -1,12 +1,12 @@
 <?php
 
 require '../../../vendor/autoload.php';
-header('Content-Type: image/png');
+//header('Content-Type: image/png');
 use IlyaZelen\SuperImagesStatic as SuperImages;
 
 
 
-SuperImages::init('GD', [ // ImageMagick
+SuperImages::init('ImageMagick', [ // ImageMagick
     'driverSettings' => [
         'fonts' => [
             'mySuperFontAlias' => [
@@ -16,18 +16,19 @@ SuperImages::init('GD', [ // ImageMagick
     ]
 ]);
 
-echo SuperImages::open(__DIR__ . './img/3.png')
-    ->resize(600)
-    ->border('blue', 25)
-    ->rotate(45)
+SuperImages::open(__DIR__ . './img/3.png')
+    ->resize(450, 460)
+    ->fit(250, 250)
+    ->rotate(50, 'yellow', true)
+    ->border('red', 5)
+    ->flip()
     ->text(
         'SuperImages',
-        15,
-        400,
+        20,
+        160,
         'rgba(255, 0, 0, 0.5)',
         'mySuperFontAlias',
         70,
         15
     )
-    ->fit(600, 400)
-    ->output('png');
+    ->save(__DIR__ . './img/111.png');

@@ -23,7 +23,10 @@ function getBoundaryDimension ($boundaryWidth, $boundaryHeight, $originalWidth, 
         $newWidth = $originalWidth * ($newHeight / $originalHeight);
     }
 
-    return [$newWidth, $newHeight];
+    return [
+        floor($newWidth),
+        floor($newHeight)
+    ];
 }
 
 // суфикс вызваемой функции по формату

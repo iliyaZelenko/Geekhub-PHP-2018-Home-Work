@@ -2,7 +2,7 @@
 
 namespace IlyaZelen\Colors;
 
-class HexColor extends ColorAbstract
+class HexColor extends AbstractColor
 {
     public function getFormat(): string
     {
