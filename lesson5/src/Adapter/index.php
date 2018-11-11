@@ -1,10 +1,7 @@
 <?php
 
-namespace IlyaZelen\Proxy;
-
-
+namespace IlyaZelen\Adapter;
 //require '../../vendor/autoload.php';
-
 ?><pre><?php
 
 // интерфейс к которому будет обращатся Client (Target)
