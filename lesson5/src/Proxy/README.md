@@ -1,7 +1,7 @@
 Предстваляет объект, который контролирует доступ к другому объекту, перехватывая все вызовы 
 (выполняет функцию [контейнера](https://goo.gl/gkDbPh)).
 
-<nice-picture src="https://goo.gl/6FvqUX" close no-border>Диаграмма</nice-picture>
+![]("https://goo.gl/6FvqUX")
 
 #### Проблема
 
