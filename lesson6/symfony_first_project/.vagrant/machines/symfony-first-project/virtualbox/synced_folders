@@ -1,0 +1,1 @@
+{"virtualbox":{"/home/vagrant/code":{"type":null,"mount_options":["uid=1000","gid=1000"],"guestpath":"/home/vagrant/code","hostpath":"D:/Projects/geekhub_HM/lesson6/symfony_first_project","disabled":false,"__vagrantfile":true},"/vagrant":{"guestpath":"/vagrant","hostpath":"D:/Projects/geekhub_HM/lesson6/symfony_first_project","disabled":false,"__vagrantfile":true}}}
