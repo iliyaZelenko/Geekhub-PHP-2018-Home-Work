@@ -1,0 +1,21 @@
+{
+  "defaultSeverity": "warning",
+  "extends": ["tslint:latest", "tslint-config-standard"],
+  "linterOptions": {
+    "exclude": [
+      "node_modules/**"
+    ]
+  },
+  "rules": {
+    "prefer-const": true,
+    "ordered-imports": [false],
+    "object-literal-sort-keys": [false],
+    "no-implicit-dependencies": [true, "dev"],
+    "quotemark": [true, "single"],
+    "semicolon": [true, "never"],
+    "trailing-comma": [true, {
+      "multiline": "never",
+      "singleline": "never"
+    }]
+  }
+}
