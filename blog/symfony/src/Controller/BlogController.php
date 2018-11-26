@@ -67,14 +67,14 @@ class BlogController extends AbstractController
         return $this->render('blog/index.html.twig', [
             'controller_name' => 'BlogController',
             'page' => $page,
-            'route' => $this->routerGenerator->generate('blog_show', [
-                'slug' => 'Symfony',
+            'route' => $this->routerGenerator->generate('posts', [
+                'page' => 1337,
                 'category' => '123',
             ]),
             'absoluteRoute' => $this->generateUrl(
-                'blog_show',
+                'posts',
                 [
-                    'slug' => 'my-blog-post'
+                    'page' => 1337
                 ],
                 UrlGeneratorInterface::ABSOLUTE_URL
             )
