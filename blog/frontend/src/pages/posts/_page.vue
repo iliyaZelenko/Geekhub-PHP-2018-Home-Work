@@ -77,12 +77,16 @@ const BackendRoutesModule = namespace(BackendRoutes.NAME)
   }
 })
 class Posts extends Vue {
-  async asyncData ({ app, params: { page } }) {
+  async asyncData ({ app, params: { page }, error }) {
     page = +page
 
-    return {
-      ...await getByPage(page, app),
-      page
+    try {
+      return {
+        ...await getByPage(page, app),
+        page
+      }
+    } catch (e) {
+      error({ statusCode: 404, message: 'Страница не найдена' })
     }
   }
 
@@ -100,6 +104,17 @@ class Posts extends Vue {
 
   @Watch('page')
   async onPageChange (page: number) {
+    // {{ $router.resolve({ name: 'posts-page', params: { page: 1 } }) }}
+    // this.$router.push(
+    //
+    //   // this.$router.res
+    //   // @ts-ignore
+    //   // this.localePath()
+    // )
+
+    // @ts-ignore
+    this.$router.push(this.localePath({ name: 'posts-page', params: { page } }))
+
     // TODO ActionWithLoading
     this.loading = true
     const { posts } = await getByPage(page, this)

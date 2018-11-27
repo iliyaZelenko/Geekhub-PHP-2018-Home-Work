@@ -41,7 +41,7 @@ export const state = (): State => ({
 // }
 //
 export const mutations: MutationTree<State> = {
-  [TYPES.SET](state, routes: Route[]) {
+  [TYPES.SET] (state, routes: Route[]) {
     state.routes = routes
   }
 }

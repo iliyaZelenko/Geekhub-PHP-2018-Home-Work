@@ -1,6 +1,6 @@
 import Vue from 'vue'
 
-type Locale = {name: string}
+// type Locale = {name: string}
 
 export const vp = Vue.prototype
 
