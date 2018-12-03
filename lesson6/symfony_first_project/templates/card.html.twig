@@ -1,0 +1,9 @@
+{% extends 'card-base.html.twig' %}
+
+{% block content %}
+    Hello, {{ user.name | default('Guest') }}!
+{#    Оказывается значение по умолчанию можно и так давать
+    Hello, {{ user.name ?? 'Guest' }}!#}
+{% endblock %}
+
+{% block footer %}{% endblock %}

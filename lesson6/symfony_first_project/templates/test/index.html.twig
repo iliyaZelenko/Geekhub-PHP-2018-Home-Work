@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{#Если удалить или убрать содержимое, то
+{% if block('title') %} ... {% endif %}
+работает#}
+{% block title %}Hello!{% endblock %}
+
+{% block body %}
+    {% include 'card.html.twig' with {'user': users[0] } only %}
+    {#Тот же include но можно указывать тут же контент блокам#}
+    {% embed 'card.html.twig' %}
+        {% block footer %}
+            Footer content
+        {% endblock %}
+    {% endembed %}
+
+    fromController: {{ fromController }}
+    varFromViewComposer: {{ varFromViewComposer }}
+
+    <h4>extension</h4>
+
+    Price: {{ functionPrice(25) }}
+    Name: {{ 'Vasya' | filterName }}
+    globalFromExt: {{ globalFromExt }}
+
+    <h4>if</h4>
+
+    {% if ifVariable %}
+        if content
+    {% endif %}
+
+    {% if false %}
+        if content
+    {% elseif false %}
+        elseif content
+    {% else %}
+        else content
+    {% endif %}
+
+    {% if true and false %}
+    {% endif %}
+
+    <h4>for</h4>
+
+    {% for num in numbers %}
+        - {{ num }}
+    {% endfor %}
+
+    {% for user in users %}
+        - [{{ loop.index }}] {{ user.name | filterName }}
+    {% endfor %}
+
+    {#Много фильтров:#}
+    {% for key in users | merge(users) | keys | slice(0, 3) %}
+        - key: {{ key }}
+    {% endfor %}
+
+    {% include 'tree.html.twig' with {'tree': treeVar } %}
+
+    <h4>Сырой HTML (raw HTML)</h4>
+    {#HTML будет как текст#}
+    {{ htmlVar }}
+    {{ htmlVar | escape }}
+    {{ htmlVar | e }}
+
+    {#HTML пройдет#}
+    {{ htmlVar | raw }}
+    {#Если прото передать строку то она пройдет как есть#}
+    {{ '<i>Content</i>' }}
+
+    <h4>Встроенные функции</h4>
+
+    path: <a href="{{ path('index') }}">Index page</a>
+{% endblock %}
