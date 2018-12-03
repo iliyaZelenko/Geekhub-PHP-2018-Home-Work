@@ -5,7 +5,7 @@
       v-if="locale.code !== $i18n.locale"
       :key="locale.code"
       :to="switchLocalePath(locale.code)"
-      color="indigo lighten-1"
+      color="primary lighten-1"
       size="mini"
       nuxt
     >

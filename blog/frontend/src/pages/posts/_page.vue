@@ -1,5 +1,5 @@
 <template>
-  <section class="w-100 h-100">
+  <div class="w-100 h-100">
     <v-layout
       justify-center
       class="ma-auto"
@@ -8,7 +8,6 @@
       <v-pagination
         v-model="page"
         :length="pages"
-        color="blue"
       />
     </v-layout>
 
@@ -53,10 +52,9 @@
       <v-pagination
         v-model="page"
         :length="pages"
-        color="blue"
       />
     </v-layout>
-  </section>
+  </div>
 </template>
 
 <script lang="ts">
@@ -76,7 +74,7 @@ const BackendRoutesModule = namespace(BackendRoutes.NAME)
     Post
   }
 })
-class Posts extends Vue {
+export default class Posts extends Vue {
   async asyncData ({ app, params: { page }, error }) {
     page = +page
 
@@ -98,6 +96,13 @@ class Posts extends Vue {
   loading = false
   page = null
   pages = null
+  counter = 0
+
+  mounted () {
+    setTimeout(() => {
+      this.counter++
+    })
+  }
 
   // (people.name)
   @BackendRoutesModule.State routes
@@ -129,6 +134,4 @@ async function getByPage (page: number = 1, context = this) {
 
   return { posts, pages }
 }
-
-export default Posts
 </script>

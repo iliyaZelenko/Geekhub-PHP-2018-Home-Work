@@ -54,7 +54,8 @@ Vue.prototype.$breakpoint = new Vue({
   }
 })
 
-export default async function ({ app }) {
+// async
+export default function ({ app }) {
   if (!app.mixins) {
     app.mixins = []
   }

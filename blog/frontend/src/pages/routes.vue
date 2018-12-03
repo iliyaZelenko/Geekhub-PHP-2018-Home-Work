@@ -4,7 +4,6 @@
     <v-switch
       v-model="hideInternalRoutes"
       label="Скрыть внутренние роуты"
-      color="blue"
     />
 
     <div>
