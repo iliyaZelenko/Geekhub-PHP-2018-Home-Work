@@ -6,6 +6,7 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "nelmio/cors-bundle": "^1.5",
+        "overblog/graphql-bundle": "^0.11.9",
         "sensio/framework-extra-bundle": "^5.1",
         "symfony/asset": "4.1.*",
         "symfony/console": "4.1.*",
@@ -27,6 +28,7 @@
     },
     "require-dev": {
         "laravel/homestead": "^7.19",
+        "overblog/graphiql-bundle": "^0.1.1",
         "symfony/debug-pack": "*",
         "symfony/dotenv": "4.1.*",
         "symfony/maker-bundle": "^1.0",

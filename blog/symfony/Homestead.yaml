@@ -17,3 +17,7 @@ databases:
     - blog-symfony
 name: blog-symfony
 hostname: blog-symfony
+
+#ports:
+#- send: 8443
+#  to: 8443
