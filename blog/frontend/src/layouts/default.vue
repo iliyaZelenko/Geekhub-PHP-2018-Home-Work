@@ -42,7 +42,7 @@ import TheNavigationDrawer from '~/components/layouts/main/TheNavigationDrawer.v
     TheToolbar, TheNavigationDrawer
   }
 })
-class MainLayout extends Vue {
+export default class MainLayout extends Vue {
   navigationDrawer = false
 
   mounted () {
@@ -62,6 +62,4 @@ class MainLayout extends Vue {
     }
   }
 }
-
-export default MainLayout
 </script>

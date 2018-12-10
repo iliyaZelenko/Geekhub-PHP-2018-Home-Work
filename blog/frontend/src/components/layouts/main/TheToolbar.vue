@@ -1,7 +1,7 @@
 <template>
   <!--fixed-->
   <v-toolbar
-    color="indigo"
+    color="primary"
     height="64px"
     clipped-left
     dark

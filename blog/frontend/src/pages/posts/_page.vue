@@ -1,5 +1,5 @@
 <template>
-  <section class="w-100 h-100">
+  <div class="w-100 h-100">
     <v-layout
       justify-center
       class="ma-auto"
@@ -8,7 +8,6 @@
       <v-pagination
         v-model="page"
         :length="pages"
-        color="blue"
       />
     </v-layout>
 
@@ -53,10 +52,9 @@
       <v-pagination
         v-model="page"
         :length="pages"
-        color="blue"
       />
     </v-layout>
-  </section>
+  </div>
 </template>
 
 <script lang="ts">
@@ -76,13 +74,17 @@ const BackendRoutesModule = namespace(BackendRoutes.NAME)
     Post
   }
 })
-class Posts extends Vue {
-  async asyncData ({ app, params: { page } }) {
+export default class Posts extends Vue {
+  async asyncData ({ app, params: { page }, error }) {
     page = +page
 
-    return {
-      ...await getByPage(page, app),
-      page
+    try {
+      return {
+        ...await getByPage(page, app),
+        page
+      }
+    } catch (e) {
+      error({ statusCode: 404, message: 'Страница не найдена' })
     }
   }
 
@@ -94,12 +96,30 @@ class Posts extends Vue {
   loading = false
   page = null
   pages = null
+  counter = 0
+
+  mounted () {
+    setTimeout(() => {
+      this.counter++
+    })
+  }
 
   // (people.name)
   @BackendRoutesModule.State routes
 
   @Watch('page')
   async onPageChange (page: number) {
+    // {{ $router.resolve({ name: 'posts-page', params: { page: 1 } }) }}
+    // this.$router.push(
+    //
+    //   // this.$router.res
+    //   // @ts-ignore
+    //   // this.localePath()
+    // )
+
+    // @ts-ignore
+    this.$router.push(this.localePath({ name: 'posts-page', params: { page } }))
+
     // TODO ActionWithLoading
     this.loading = true
     const { posts } = await getByPage(page, this)
@@ -114,6 +134,4 @@ async function getByPage (page: number = 1, context = this) {
 
   return { posts, pages }
 }
-
-export default Posts
 </script>
