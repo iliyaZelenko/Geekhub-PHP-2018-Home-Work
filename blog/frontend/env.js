@@ -8,8 +8,8 @@ export const STYLES_DIR = join(SRC_DIR, 'styles')
 
 /* URL */
 export const BASE_URL = process.env.BASE_URL || 'http://localhost:3000'
-export const BASE_API_URL = 'http://blog-symfony.test' // 'http://localhost:8000'
-export const FULL_API_URL = BASE_API_URL // + '/api/'
+export const BASE_API_URL = 'http://localhost:8000' // 'http://blog-symfony.test' // 'http://localhost:8000'
+export const FULL_API_URL = BASE_API_URL + '/graphql/' // + '/api/'
 
 /* Locales */
 export const DEFAULT_LOCALE = 'ru'

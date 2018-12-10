@@ -4,7 +4,7 @@
   >
     <v-card>
       <v-img
-        src="https://cdn.vuetifyjs.com/images/cards/desert.jpg"
+        :src="'https://picsum.photos/200/300?image=' + post.id"
         aspect-ratio="2.75"
       />
 
@@ -20,17 +20,13 @@
       </v-card-title>
 
       <v-card-actions>
+        <v-spacer />
+
         <v-btn
           flat
           color="orange"
         >
-          Поделится
-        </v-btn>
-        <v-btn
-          flat
-          color="orange"
-        >
-          Открыть
+          {{ $t('posts_page_read_more_btn') }}
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -43,15 +39,8 @@ import Component from 'nuxt-class-component'
 import { Prop } from 'vue-property-decorator'
 
 @Component
-class Post extends Vue {
-  @Prop({}) post!: {}
-  // @Prop(String) title!: string
-  // @Prop({
-  //   type: String,
-  //   default: 'default value'
-  // }) text!: string
-  // @Prop([String, Boolean]) propC: string | boolean
+export default class Post extends Vue {
+  @Prop() post!: {}
+  // @Prop({}) post!: {}
 }
-
-export default Post
 </script>

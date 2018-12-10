@@ -1,55 +1,49 @@
 <template>
   <div class="w-100 h-100">
     <v-layout
-      justify-center
+      column
+      align-center
       class="ma-auto"
-      style="max-width: 500px;"
     >
       <v-pagination
         v-model="page"
         :length="pages"
       />
-    </v-layout>
 
-    <v-layout
-      v-if="loading"
-      class="ma-5"
-      justify-center
-    >
       <v-progress-circular
+        v-if="loading"
         :size="50"
         color="blue"
+        class="ma-5"
         indeterminate
       />
-    </v-layout>
 
-    <v-container
-      v-if="!loading"
-      fluid
-      grid-list-xl
-    >
-      <v-layout
-        row
-        wrap
-        justify-center
+      <v-container
+        v-if="!loading"
+        fluid
+        grid-list-xl
       >
-        <v-flex
-          v-for="post in posts"
-          :key="post.id"
-          sm3
+        <v-layout
+          row
+          wrap
+          justify-center
         >
-          <post
-            :post="post"
-          />
-        </v-flex>
-      </v-layout>
-    </v-container>
+          <v-flex
+            v-for="post in posts"
+            :key="post.id"
+            xs12
+            sm6
+            lg3
+          >
+            <post
+              :post="post"
+            />
+          </v-flex>
+        </v-layout>
+      </v-container>
 
-    <v-layout
-      v-if="!loading"
-      justify-center
-    >
       <v-pagination
+        v-if="!loading"
         v-model="page"
         :length="pages"
       />
@@ -59,13 +53,12 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import Component from 'nuxt-class-component'
-import * as BackendRoutes from '../../store/modules/BackendRoutes'
-import Post from '../../components/Post.vue'
-// , State, Getter
 import { namespace } from 'vuex-class'
 import { Watch } from 'vue-property-decorator'
-// import * as people from '~/store/modules/people'
+import Component from '~/plugins/nuxt-class-component'
+import * as BackendRoutes from '~/store/modules/BackendRoutes'
+import Post from '~/components/Post'
+import { GET_POSTS_QUERY } from '~/apollo/queries/getPosts'
 
 const BackendRoutesModule = namespace(BackendRoutes.NAME)
 
@@ -84,41 +77,27 @@ export default class Posts extends Vue {
         page
       }
     } catch (e) {
-      error({ statusCode: 404, message: 'Страница не найдена' })
+      if (e.response && e.response.status === 404) {
+        error({ statusCode: 404, message: app.i18n.t('posts_page_error_404') })
+      }
     }
   }
 
-  posts = [{
-    title: 'Заголовок',
-    text: 'Описание'
-  }]
+  public posts: any[] = []
+  public loading: boolean = false
+  public page: number | null = null
+  public pages: number | null = null
 
-  loading = false
-  page = null
-  pages = null
-  counter = 0
-
-  mounted () {
-    setTimeout(() => {
-      this.counter++
-    })
-  }
-
-  // (people.name)
   @BackendRoutesModule.State routes
 
   @Watch('page')
   async onPageChange (page: number) {
-    // {{ $router.resolve({ name: 'posts-page', params: { page: 1 } }) }}
-    // this.$router.push(
-    //
-    //   // this.$router.res
-    //   // @ts-ignore
-    //   // this.localePath()
-    // )
-
-    // @ts-ignore
-    this.$router.push(this.localePath({ name: 'posts-page', params: { page } }))
+    this.$router.push(
+      this.localePath({
+        name: 'posts-page',
+        params: { page: page.toString() }
+      })
+    )
 
     // TODO ActionWithLoading
     this.loading = true
@@ -130,7 +109,19 @@ export default class Posts extends Vue {
 }
 
 async function getByPage (page: number = 1, context = this) {
-  const { posts, pages } = await context.$get('posts/' + page)
+  const {
+    data: {
+      paginatedPosts: {
+        posts,
+        pageInfo: { pagesCount: pages }
+      }
+    }
+  } = await context.$apollo.query({
+    query: GET_POSTS_QUERY,
+    variables: {
+      page
+    }
+  })
 
   return { posts, pages }
 }

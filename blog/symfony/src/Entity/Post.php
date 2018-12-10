@@ -2,32 +2,24 @@
 
 namespace App\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
-/**
- * @ORM\Entity(repositoryClass="App\Repository\PostsRepository")
- */
-class Posts
+class Post
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
+     * @Assert\Length(min=3)
      */
     private $title;
 
     /**
-     * @ORM\Column(type="text")
+     * @Assert\NotBlank
      */
     private $text_short;
 
     /**
-     * @ORM\Column(type="text")
+     * @Assert\NotBlank
+     * @Assert\Length(min=3)
      */
     private $text;
 

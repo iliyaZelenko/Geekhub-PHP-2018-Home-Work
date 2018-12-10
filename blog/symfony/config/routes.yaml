@@ -3,17 +3,17 @@
 #    controller: App\Controller\DefaultController::index
 
 index:
-  path:     /
-  controller: App\Controller\BlogController::index
+    path: /b
+    controller: App\Controller\BlogController::index
 
 routes:
-  path:     /routes/
-  controller: App\Controller\BlogController::routes
+    path: /routes/
+    controller: App\Controller\BlogController::routes
 
 posts:
-  path:     /posts/{page}
-  controller: App\Controller\BlogController::posts
-  requirements:
-    page: '\d+'
-  defaults:
-    page: 1
+    path: /posts/{page}
+    controller: App\Controller\BlogController::posts
+    requirements:
+        page: '\d+'
+    defaults:
+        page: 1
