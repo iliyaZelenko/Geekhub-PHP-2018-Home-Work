@@ -142,7 +142,6 @@ module.exports = {
    */
   build: {
     extractCSS: true,
-
     // настройки postcss (игнорируются если есть postcss.config.js)
     // postcss: {},
 
