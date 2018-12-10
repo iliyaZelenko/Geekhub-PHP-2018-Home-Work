@@ -1,0 +1,6 @@
+{
+  "license": "MIT",
+  "devDependencies": {
+    "symfony-server-dump-live": "^1.0.0"
+  }
+}
