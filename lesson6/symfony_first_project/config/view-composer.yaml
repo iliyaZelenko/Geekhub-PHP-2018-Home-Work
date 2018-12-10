@@ -1,0 +1,7 @@
+test/index:
+  varFromViewComposer: 'view-composer'
+
+# для темплейтов которые расширяются не работает,
+# связано с тем что надо уже переопределять Twig\Template (Twig_Template), смотрел stack вызовов
+base:
+  baseVar: '4455'

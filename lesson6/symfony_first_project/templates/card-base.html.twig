@@ -1,0 +1,19 @@
+<div class="header">
+    <h4>Header</h4>
+    {% block content %}{% endblock %}
+
+    {#Если блок объявлен#}
+    {% if block('footer') %} <hr> {% endif %}
+    {#{% if block('footer') is defined %} <hr> {% endif %}#}
+
+    {% block footer %}123{% endblock %}
+</div>
+
+{% block stylesheets %}
+    <style>
+        .header {
+            background: #5eb5e0;
+            white-space: normal;
+        }
+    </style>
+{% endblock %}

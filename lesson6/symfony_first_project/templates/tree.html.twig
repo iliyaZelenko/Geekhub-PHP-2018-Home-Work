@@ -1,0 +1,17 @@
+<ul>
+{% for item in tree %}
+    <li>
+        {% if item is iterable %}
+            {% include 'tree.html.twig' with {'tree': item } %}
+        {% else %}
+            {{ item }}
+        {% endif %}
+    </li>
+
+    {#{% embed 'header.html.twig' %}#}
+        {#Как же было бы удобно если бы были доступны встроенные функции, например is_arraym#}
+        {#чтобы не гуглить постонно как что делать для каждой функции и не создавать функции через расширения#}
+
+    {#{% endembed %}#}
+{% endfor %}
+</ul>

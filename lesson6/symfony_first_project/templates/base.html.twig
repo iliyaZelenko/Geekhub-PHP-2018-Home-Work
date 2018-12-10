@@ -1,12 +1,60 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
-    </body>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    {% block stylesheets %}{% endblock %}
+    <style>section { text-align: center; white-space: pre-line; } ul { text-align: initial; width: 100%; margin: 0 auto;}</style>
+</head>
+<body>
+    <section>
+        {#Это работает, но если убрать контентр у title (в текущем файле)#}
+        Вариант 1: производный класс
+        {% if block('title') %}
+            использует блок
+        {% else %}
+            {#будет выведено если использует блок но в нем нет контента#}
+            не использует блок
+        {% endif %}
+
+        {#Это вообще не работает#}
+        Вариаент2: производный класс
+        {% if block('title') is defined %}
+            использует блок
+        {% else %}
+            не использует блок
+        {% endif %}
+
+
+        {#
+            Если определен контент то
+            {% if block('title') %} ... {% endif %}
+            не работает даже если производный класс объявил контент
+        #}
+        {#{% block title %}Welcome!{% endblock %}#}
+
+        {#Выше или ниже чем if это не имеет значения#}
+        {% block title %}{% endblock %}
+
+        {#
+        Как проверить что блок используется не зависимо от того какой контент?
+        Как проверить что блок используется с контентом?
+        #}
+
+
+
+
+
+        {#View composer: {{ baseVar }}#}
+        Базовый шаблон получил значение от родительского (fromController): {{ fromController }}
+        globalVariable: {{ globalVariable }}
+
+        <h2 style="width: 100%;">Body</h2>
+
+        {% block body %}
+            Default value
+        {% endblock %}
+    </section>
+    {% block javascripts %}{% endblock %}
+</body>
 </html>
