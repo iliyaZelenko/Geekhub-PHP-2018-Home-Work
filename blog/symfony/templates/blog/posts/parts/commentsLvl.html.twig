@@ -1,0 +1,28 @@
+<div class="comments-wrap ml-5 my-2">
+  {% for comment in comments %}
+      {#<b-card class="comments ml-4 mb-2">#}
+      {{ blogDate(comment.getCreatedAt()) }}
+
+      <p class="card-text">
+        {{ comment.text }}
+        <br>
+        <b-button
+          size="sm"
+          variant="secondary"
+        >
+          Reply
+        </b-button>
+      </p>
+
+      <hr>
+
+      {#не хотел два раза вызывать, не знаю плохо ли тут set юзать#}
+      {% set comments = comment.getChildrenComments() %}
+
+      {% if comments | length > 0 %}
+        {% include 'blog/posts/parts/commentsLvl.html.twig' with { comments: comments, isRoot: false } only %}
+      {% endif %}
+
+      {#</b-card>#}
+  {% endfor %}
+</div>

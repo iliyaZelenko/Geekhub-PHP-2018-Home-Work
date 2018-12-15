@@ -9,7 +9,9 @@ doctrine:
     dbal:
         # configure these for your database server
         driver: 'pdo_mysql'
+        # 5.7.22-log - MySQL Community Server (GPL)
         server_version: '5.7'
+        # utf8mb4_general_ci
         charset: utf8mb4
         default_table_options:
             charset: utf8mb4
@@ -27,3 +29,15 @@ doctrine:
                 dir: '%kernel.project_dir%/src/Entity'
                 prefix: 'App\Entity'
                 alias: App
+            gedmo_tree:
+              type: annotation
+              prefix: Gedmo\Tree\Entity
+              dir: "%kernel.root_dir%/../vendor/gedmo/doctrine-extensions/lib/Gedmo/Tree/Entity"
+              alias: GedmoTree # (optional) it will default to the name set for the mapping
+              is_bundle: false
+        # хотел получать рандомный экземляр Entity
+#        dql:
+#          numeric_functions:
+#            rand: DoctrineExtensions\Query\Mysql\Rand
+
+

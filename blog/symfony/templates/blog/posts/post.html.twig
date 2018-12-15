@@ -1,0 +1,36 @@
+{% extends 'layouts/main/index.html.twig' %}
+
+{% block title %}Post{% endblock %}
+
+{% block content %}
+  <h1>{{ post.title }}</h1>
+
+  {{ blogDate(post.getCreatedAt()) }}
+
+  <p>
+    {{ post.text }}
+  </p>
+
+  <hr>
+
+  {{ form(form) }}
+
+  <h4 class="mb-4">
+    Comments
+
+    <b-button
+      variant="primary"
+      class="ml-4"
+    >
+      Add comment
+    </b-button>
+  </h4>
+
+  {% include 'blog/posts/parts/commentsLvl.html.twig' with { comments: post.getComments(), isRoot: true } only %}
+
+  {#{% for comment in post.getComments() %}#}
+    {#<div>#}
+      {#{{ comment.text }}#}
+    {#</div>#}
+  {#{% endfor %}#}
+{% endblock %}

@@ -9,10 +9,18 @@ use GraphQL\Utils;
 use Overblog\GraphQLBundle\Definition\Argument;
 use Overblog\GraphQLBundle\Resolver\ResolverMap;
 use Overblog\GraphQLBundle\Upload\Type\GraphQLUploadType;
-use App\GraphQL\Mutation\TestMutation;
+use App\GraphQL\Mutation\CreatePostMutation;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class MyResolverMap extends ResolverMap
 {
+    private $container;
+
+    public function __construct(ContainerInterface $container)
+    {
+        $this->container = $container;
+    }
+
     protected function map()
     {
         return [
@@ -47,7 +55,7 @@ class MyResolverMap extends ResolverMap
                 'paginatedPosts' => [PostsResolver::class, 'getPosts']
             ],
             'Mutation' => [
-                'createPost' => [TestMutation::class, 'createPost']
+                'createPost' => [new CreatePostMutation($this->container), 'createPost']
             ]
         ];
     }

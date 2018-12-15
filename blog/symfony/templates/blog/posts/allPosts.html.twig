@@ -1,0 +1,51 @@
+{% extends 'layouts/main/index.html.twig' %}
+
+{% block title %}Posts{% endblock %}
+
+{% block content %}
+  Total posts: {{ posts.getTotalItemCount }}.
+
+  <div class="d-flex justify-content-center mb-5">
+    <b-pagination-nav
+      :number-of-pages="{{ pages }}"
+      v-model="currentPage"
+    ></b-pagination-nav>
+  </div>
+
+  <b-card-group columns>
+    {% for post in posts %}
+      <b-card
+        img-src="https://picsum.photos/350/250?image={{ post.id }}"
+        img-fluid
+        img-alt="image"
+        img-top
+      >
+        <h3>
+          {#<b-link to="{{ path('post', { slug: post.slug, id: post.id }) }}" exact>{{ post.title }}</b-link>#}
+          <b-link to="{{ postLink(post) }}" exact>{{ post.title }}</b-link>
+
+        </h3>
+        <p class="card-text">
+          {#TODO выводить в UTC, но с помощью js выводить в формате и таймзоне пользователя #}
+          {#через new Date().toLocaleDateString()#}
+          {#{{ post.getCreatedAt() | date("d.m.Y") }}#}
+          {#{{ post.getCreatedAt() | date('U') }}#}
+
+          <br>
+
+          {{ post.textShort }}
+        </p>
+        <div slot="footer">
+          {{ blogDate(post.getCreatedAt()) }}
+        </div>
+      </b-card>
+    {% endfor %}
+  </b-card-group>
+
+  <div class="d-flex justify-content-center mt-5">
+    <b-pagination-nav
+      :number-of-pages="{{ pages }}"
+      v-model="currentPage"
+    ></b-pagination-nav>
+  </div>
+{% endblock %}

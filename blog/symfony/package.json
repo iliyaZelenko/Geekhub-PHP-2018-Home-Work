@@ -1,6 +1,23 @@
 {
   "license": "MIT",
+  "browserslist": [
+    "last 1 version",
+    "not dead",
+    "> 0.2%"
+  ],
   "devDependencies": {
-    "symfony-server-dump-live": "^1.0.0"
+    "@symfony/webpack-encore": "^0.22.2",
+    "symfony-cli-make": "^1.0.3",
+    "symfony-server-dump-live": "^1.0.0",
+    "ts-loader": "^5.3.1",
+    "typescript": "^3.2.2",
+    "vue-loader": "^15.4.2",
+    "vue-template-compiler": "^2.5.21",
+    "webpack-notifier": "^1.7.0"
+  },
+  "dependencies": {
+    "bootstrap-vue": "^2.0.0-rc.11",
+    "tiptap": "^1.4.0",
+    "vue": "^2.5.21"
   }
 }

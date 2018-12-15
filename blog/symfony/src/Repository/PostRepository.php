@@ -19,8 +19,31 @@ class PostRepository extends ServiceEntityRepository
         parent::__construct($registry, Post::class);
     }
 
+    public function paginated()
+    {
+        // TODO
+    }
+
+    public function getWithRootComments($id)
+    {
+        return $this->createQueryBuilder('post')
+            ->innerJoin('post.comments', 'post_comments')
+//            ->innerJoin('post_comments.childrenComments', 'post_comments_comments')
+            ->andWhere('post.id = :id')
+            ->andWhere('post_comments.parent_id is NULL')
+            ->setParameters([
+                'id' => $id
+            ])
+            ->addSelect('post_comments')
+            ->orderBy('post_comments.id', 'ASC')
+            ->getQuery()
+            ->getOneOrNullResult()
+//            ->getResult()
+        ;
+    }
+
     // /**
-    //  * @return Posts[] Returns an array of Posts objects
+    //  * @return Post[] Returns an array of Post objects
     //  */
     /*
     public function findByExampleField($value)
@@ -37,7 +60,7 @@ class PostRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?Posts
+    public function findOneBySomeField($value): ?Post
     {
         return $this->createQueryBuilder('p')
             ->andWhere('p.exampleField = :val')

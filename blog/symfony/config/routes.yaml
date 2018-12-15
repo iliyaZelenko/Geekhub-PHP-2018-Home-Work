@@ -3,17 +3,45 @@
 #    controller: App\Controller\DefaultController::index
 
 index:
-    path: /b
-    controller: App\Controller\BlogController::index
+    path: /{page}
+    controller: App\Controller\PostsController::allPosts
+    requirements:
+        page: '\d+'
+    defaults:
+        page: 1
+
+post:
+  # такой адрес чтобы можно было менять slug (менялся вместе с заголовком, думаю хорошая идея для seo)
+  path: /{slug}-{id}
+  controller: App\Controller\PostsController::post
+  requirements:
+    slug: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+    id:  '\d+'
 
 routes:
     path: /routes/
     controller: App\Controller\BlogController::routes
 
-posts:
-    path: /posts/{page}
-    controller: App\Controller\BlogController::posts
-    requirements:
-        page: '\d+'
-    defaults:
-        page: 1
+api_login_check:
+  path: /api/login_check
+
+register:
+  path: /api/register
+  controller: App\Controller\RESTful\Auth\AuthController::register
+  methods: POST
+
+res:
+  path: /api/res
+  controller: App\Controller\RESTful\Auth\AuthController::res
+
+api:
+  path: /api
+  controller: App\Controller\RESTful\Auth\AuthController::api
+
+#posts:
+#    path: /posts/{page}
+#    controller: App\Controller\BlogController::posts
+#    requirements:
+#        page: '\d+'
+#    defaults:
+#        page: 1
