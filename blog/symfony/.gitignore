@@ -1,4 +1,5 @@
-.vagrant
+/node_modules
+/.vagrant
 ###> symfony/framework-bundle ###
 /.env.local
 /.env.*.local

@@ -1,7 +1,5 @@
 import i18nMessages from './src/i18n/messages'
 import * as env from './env'
-// import { join } from 'path'
-// import webpack from 'webpack'
 
 const {
   /* Paths */
@@ -10,7 +8,7 @@ const {
   /* URL */
   BASE_URL,
   // BASE_API_URL,
-  // FULL_API_URL,
+  FULL_API_URL,
   /* Locales */
   DEFAULT_LOCALE,
   FALLBACK_LOCALE,
@@ -56,13 +54,15 @@ module.exports = {
    * Плагины (интеграция библиотек в Nuxt.js)
    */
   plugins: [
+    { src: '~/plugins/notifications', ssr: false },
+    '~/plugins/nuxt-class-component',
     '~/plugins/vuetify.js',
     '~/plugins/vue-plugin-axios/vue-plugin-axios.js',
     // '~/plugins/vuex-persistedstate.js',
     '~/plugins/auth.js',
     '~/plugins/actionWithLoading',
-    { src: '~/plugins/notifications', ssr: false },
-    '~/plugins/validator'
+    '~/plugins/validator',
+    '~/plugins/vue-apollo'
   ],
 
   /**
@@ -70,6 +70,7 @@ module.exports = {
    */
   modules: [
     '~/modules/typescript.js',
+    '@nuxtjs/apollo',
     '@nuxtjs/style-resources',
     'cookie-universal-nuxt',
     ['nuxt-i18n', {
@@ -85,6 +86,24 @@ module.exports = {
       }
     }]
   ],
+
+  // Give apollo module options
+  apollo: {
+    // optional
+    errorHandler (error) {
+      console.log('%cError', 'background: red; color: white; padding: 2px 4px; border-radius: 3px; font-weight: bold;', error.message)
+    },
+    // required
+    clientConfigs: {
+      default: {
+        // required
+        httpEndpoint: FULL_API_URL,
+        // You can use `wss` for secure connection (recommended in production)
+        // Use `null` to disable subscriptions
+        wsEndpoint: null // 'ws://localhost:4000', // optional
+      }
+    }
+  },
 
   /**
    * Глобальный доступ к стилям из других файлов
@@ -123,41 +142,6 @@ module.exports = {
    */
   build: {
     extractCSS: true,
-
-    // plugins: [
-    //   new webpack.LoaderOptionsPlugin({
-    //     options: {
-    //       stylus: {
-    //         use: [
-    //           // poststylus([
-    //             // autoprefixer({ browsers: ['last 1 version', 'not dead', '> 0.2%'] })
-    //             // postcssPresetEnv({
-    //             //   browsers: BROWSERS_SUPPORT,
-    //             //
-    //             //   // 2 is default
-    //             //   stage: 2,
-    //             //
-    //             //   features: {
-    //             //     'nesting-rules': true
-    //             //   }
-    //             // })
-    //             // postcssReporter({
-    //             //   clearReportedMessages: true
-    //             // })
-    //           // ])
-    //         ]
-    //       },
-    //       context: __dirname
-    //     }
-    //   })
-    // ],
-
-    // loaders: {
-    //   stylus: {
-    //
-    //   }
-    // },
-
     // настройки postcss (игнорируются если есть postcss.config.js)
     // postcss: {},
 

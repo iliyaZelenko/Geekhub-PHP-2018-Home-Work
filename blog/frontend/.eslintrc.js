@@ -12,7 +12,7 @@ module.exports = {
     'standard',
     // TODO возможно не нужен
     'plugin:promise/recommended',
-    // TODO вызывает ошибку в root элемента templete
+    // TODO вызывает ошибку в root элемента templete (конфликтует с vue)
     // 'typescript'
   ],
   // required to lint *.vue files
@@ -27,7 +27,13 @@ module.exports = {
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
   },
   parserOptions: {
-    // parser: 'babel-eslint'
-    parser: 'typescript-eslint-parser'
+    parser: 'typescript-eslint-parser',
+    // parser: 'babel-eslint',
+    sourceType: 'module',
+    ecmaFeature: {
+      jsx: false
+    },
+    // 9 это 2018
+    ecmaVersion: 9
   }
 }

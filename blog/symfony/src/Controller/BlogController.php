@@ -64,6 +64,22 @@ class BlogController extends AbstractController
 
     public function index(int $page = 1)
     {
+        dump([
+            [
+                'name' => 'Vasya'
+            ],
+            [
+                'name' => 'Petya'
+            ],
+            [
+                'name' => 'Andrey'
+            ]
+        ]);
+
+        dump(123, 321, 555);
+        dump(777);
+
+
         return $this->render('blog/index.html.twig', [
             'controller_name' => 'BlogController',
             'page' => $page,
