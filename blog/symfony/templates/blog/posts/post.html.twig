@@ -13,7 +13,6 @@
 
   <hr>
 
-  {{ form(form) }}
 
   <h4 class="mb-4">
     Comments
@@ -26,7 +25,9 @@
     </b-button>
   </h4>
 
-  {% include 'blog/posts/parts/commentsLvl.html.twig' with { comments: post.getComments(), isRoot: true } only %}
+  <editor></editor>
+
+  {% include 'blog/posts/parts/commentsLvl.html.twig' with { comments: post.getComments(), isRoot: true, form: form } only %}
 
   {#{% for comment in post.getComments() %}#}
     {#<div>#}

@@ -95,7 +95,19 @@ class PostsController extends AbstractController
 
         return $this->render('blog/posts/post.html.twig', [
             'post' => $post,
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'vue_data' => [
+                'formComment' => json_encode([
+                    'text' => 'Form text'
+                ], JSON_FORCE_OBJECT)
+            ],
+            'vue_methods' => [
+                'onSubmit' => [
+                    'body' => '
+                    alert(123)
+                    '
+                ]
+            ]
         ]);
     }
 }

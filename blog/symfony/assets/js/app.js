@@ -4,6 +4,11 @@ import '../css/app.css'
 
 import Vue from 'vue'
 import BootstrapVue from 'bootstrap-vue'
+import Editor from './components/Editor.vue'
+// import svgSpriteLoader from './helpers/svg-sprite-loader'
+
+// const __svg__ = { path: '../images/icons/*.svg', name: 'images/[hash].sprite.svg' }
+// svgSpriteLoader(__svg__.path)
 
 const delimiters = ['${', '}']
 
@@ -16,6 +21,8 @@ function init () {
   const addComponent = (name, params) => {
     Vue.component(name, params)
   }
+
+  addComponent('editor', Editor)
 
   addComponent('blog-date', {
     delimiters: ['${', '}'],
@@ -43,6 +50,12 @@ function initVue () {
     data: () => ({
       ...vueExtend.data
     }),
+    methods: {
+      ...vueExtend.methods
+    },
+    watch: {
+      ...vueExtend.watch
+    },
     created () {
       vueExtend.created()
     }

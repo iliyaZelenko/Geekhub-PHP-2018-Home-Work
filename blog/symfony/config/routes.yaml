@@ -11,8 +11,7 @@ index:
         page: 1
 
 post:
-  # такой адрес чтобы можно было менять slug (менялся вместе с заголовком, думаю хорошая идея для seo)
-  path: /{slug}-{id}
+  path: /{id}/{slug}
   controller: App\Controller\PostsController::post
   requirements:
     slug: '^[a-z0-9]+(?:-[a-z0-9]+)*$'

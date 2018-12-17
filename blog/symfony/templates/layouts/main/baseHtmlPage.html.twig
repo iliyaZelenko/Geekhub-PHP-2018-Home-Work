@@ -25,14 +25,26 @@
   <script>
     // создает объект из ассоциативного масства
     const data = {
+      // key: value
       {% for key, value in vue_data | default([]) %}
-        {{ key }}: {{ value }},
+        {{ key }}: JSON.parse('{{ value | raw }}'),
+      {% endfor %}
+    }
+    const methods = {
+      // funcName (params) {
+      //   body
+      // }
+      {% for key, value in vue_methods | default([]) %}
+        {{ key }} ({{ value.params | default([]) | join(',') }}) {
+          {{ value.body }}
+        },
       {% endfor %}
     }
 
     // данные от сюда сливаются с Vue
     window.vueExtend = {
       data,
+      methods,
       created () {
         // console.log('hi')
       }

@@ -63,6 +63,12 @@ class Comment
      */
     private $parent;
 
+    // TODO сразу тут ставить $post и $author_id
+    public function __construct()
+    {
+
+    }
+
     /* Getters / Setters */
 
     public function getId(): ?int
@@ -141,7 +147,7 @@ class Comment
     {
         if (!$this->childrenComments->contains($comment)) {
             $this->childrenComments[] = $comment;
-            $comment->getParent($this);
+            $comment->setParent($this);
         }
 
         return $this;
