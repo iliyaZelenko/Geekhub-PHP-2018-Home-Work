@@ -1,9 +1,0 @@
-/node_modules
-/.nuxt
-/dist
-
-# все в /src кроме /src/styles
-/src/*
-!/src/styles/
-
-

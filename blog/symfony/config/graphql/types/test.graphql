@@ -3,18 +3,26 @@ type Query {
     car: String
     player(id: ID!): String!
     paginatedPosts(page: Int!, perPage: Int = 8, order: LinkOrderByInput = id_ASC): PostsPaginated! # [Post!]!
-#    posts(page: Int!, perPage: Int = 4) {
-#        nodes: [Post!]!
-#    }
 }
 
 type Mutation {
-    createPost(input: CreatePostMutationInput!): Post!
+    createPost(input: CreatePostMutationInput!): CreatePostMutationResult!
+#    errors: [Error]!
+}
+
+type Error {
+    key: String!
+    message: String!
 }
 
 input CreatePostMutationInput {
     title: String!
     text: String!
+}
+
+type CreatePostMutationResult {
+    post: Post!
+    errors: [Error]!
 }
 
 #type PageInfo {
@@ -60,59 +68,3 @@ enum LinkOrderByInput {
 #    createdAt_ASC
 #    createdAt_DESC
 }
-
-
-#type Character {
-#    name: String!
-#    appearsIn: [Episode!]!
-#}
-#
-#type Starship {
-#    id: ID!
-#    name: String!
-#    length(unit: LengthUnit = METER): Float
-#}
-#
-##schema {
-##    query: Query
-##    mutation: Mutation
-##}
-#
-#type Query {
-#    hero(episode: Episode): Character
-#    droid(id: ID!): Droid
-#}
-
-#type Mutation {
-#    # The id of the object.
-#    id: ID!
-#}
-#
-## An object with an ID
-#interface Node {
-#    # The id of the object.
-#    id: ID!
-#}
-#
-## Information about pagination in a connection.
-#type PageInfo {
-#    # When paginating forwards, are there more items?
-#    hasNextPage: Boolean!
-#
-#    # When paginating backwards, are there more items?
-#    hasPreviousPage: Boolean!
-#
-#    # When paginating backwards, the cursor to continue.
-#    startCursor: String
-#
-#    # When paginating forwards, the cursor to continue.
-#    endCursor: String
-#}
-#
-#type Query {
-#    # Fetches an object given its ID
-#    node(
-#        # The ID of an object
-#        id: ID!
-#    ): Node
-#}

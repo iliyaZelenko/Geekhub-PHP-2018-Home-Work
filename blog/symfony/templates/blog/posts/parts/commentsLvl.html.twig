@@ -1,0 +1,60 @@
+<div class="comments-wrap ml-5 my-2">
+  {% for comment in comments %}
+      {#<b-card class="comments ml-4 mb-2">#}
+      {{ blogDate(comment.getCreatedAt()) }}
+
+      <p class="card-text">
+        {{ comment.text }}
+        <br>
+        {#<b-button#}
+          {#size="sm"#}
+          {#variant="secondary"#}
+        {#>#}
+          {#Reply#}
+        {#</b-button>#}
+
+        <b-btn
+          v-b-toggle.collapse-for-comment{{ comment.id }}
+          size="sm"
+          variant="secondary"
+        >
+          Reply
+        </b-btn>
+        <b-collapse id="collapse-for-comment{{ comment.id }}" class="mt-2">
+          <b-form @submit="onSubmit">
+            <b-form-group
+              id="exampleInputGroup1"
+              label="Email address:"
+              label-for="exampleInput1"
+              description="We'll never share your email with anyone else."
+            >
+              ${ formComment.text }
+              <b-form-input
+                v-model="formComment.text"
+                id="exampleInput1"
+                type="text"
+                placeholder="Enter text"
+                required
+              >
+              </b-form-input>
+            </b-form-group>
+
+            <b-button type="submit" variant="primary">
+              Submit
+            </b-button>
+          </b-form>
+        </b-collapse>
+      </p>
+
+      <hr>
+
+      {#не хотел два раза вызывать, не знаю плохо ли тут set юзать#}
+      {% set comments = comment.getChildrenComments() %}
+
+      {% if comments | length > 0 %}
+        {% include 'blog/posts/parts/commentsLvl.html.twig' with { comments: comments, isRoot: false, form: form } only %}
+      {% endif %}
+
+      {#</b-card>#}
+  {% endfor %}
+</div>
