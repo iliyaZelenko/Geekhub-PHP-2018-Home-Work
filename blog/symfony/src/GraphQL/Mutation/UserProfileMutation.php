@@ -17,7 +17,7 @@ class UserProfileMutation implements MutationInterface, AliasedInterface
         // This matches what we defined in UpdateUserProfilePayload.type.yaml
         // but this is just some "random" data for the example here
         return [
-            'name'     => $name,
+            'name' => $name,
             'filename' => $pictureFile->getClientOriginalName(),
         ];
     }

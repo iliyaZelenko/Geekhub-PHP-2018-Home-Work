@@ -24,7 +24,12 @@ class PostRepository extends ServiceEntityRepository
         // TODO
     }
 
-    public function getWithRootComments($id)
+    /**
+     * @param int $id
+     * @return Post|null
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function getWithRootComments(int $id): ?Post
     {
         return $this->createQueryBuilder('post')
             ->innerJoin('post.comments', 'post_comments')
@@ -32,42 +37,12 @@ class PostRepository extends ServiceEntityRepository
             ->andWhere('post.id = :id')
             ->andWhere('post_comments.parent_id is NULL')
             ->setParameters([
-                'id' => $id
+                'id' => $id,
             ])
             ->addSelect('post_comments')
             ->orderBy('post_comments.id', 'ASC')
             ->getQuery()
             ->getOneOrNullResult()
-//            ->getResult()
         ;
     }
-
-    // /**
-    //  * @return Post[] Returns an array of Post objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Post
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

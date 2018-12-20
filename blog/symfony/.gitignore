@@ -1,3 +1,5 @@
+# странно что по дефолту не в игноре
+/.env
 /dump.html
 /node_modules
 /.vagrant

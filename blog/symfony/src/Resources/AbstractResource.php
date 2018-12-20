@@ -2,9 +2,9 @@
 
 namespace App\Resources;
 
-use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 // что-то типа ApiResource как в Laravel (https://laravel.com/docs/5.7/eloquent-resources)
 abstract class AbstractResource
@@ -17,35 +17,9 @@ abstract class AbstractResource
     public $resource;
 
     /**
-     * Transform the resource into an array.
-     *
-     * @return array
-     */
-    public function toArray(): array
-    {
-        // https://symfony.com/doc/4.0/serializer/encoders.html
-        $encoders = [new JsonEncoder()];
-        $normalizers = [
-            $normalizer = new ObjectNormalizer()
-        ];
-
-        $normalizer->setCircularReferenceHandler(function ($object) {
-            return $object->getUsername(); // Change this to a valid method of your object
-        });
-
-        $serializer = new Serializer($normalizers, $encoders);
-
-        return json_decode(
-            // возвращает в json, сразу массив вернуть не может
-            $serializer->serialize($this->resource, 'json')
-        , true);
-    }
-
-    /**
      * Create a new resource instance.
      *
      * @param  mixed  $resource
-     * @return void
      */
     public function __construct($resource)
     {
@@ -62,16 +36,17 @@ abstract class AbstractResource
     {
         return isset($this->resource->{$key});
     }
+
     /**
      * Unset an attribute on the resource.
      *
      * @param  string  $key
-     * @return void
      */
     public function __unset($key)
     {
         unset($this->resource->{$key});
     }
+
     /**
      * Dynamically get properties from the underlying resource.
      *
@@ -82,6 +57,7 @@ abstract class AbstractResource
     {
         return $this->resource->{$key};
     }
+
     /**
      * Dynamically pass method calls to the underlying resource.
      *
@@ -92,5 +68,29 @@ abstract class AbstractResource
     public function __call($method, $parameters)
     {
         return $this->resource->{$method}(...$parameters);
+    }
+
+    /**
+     * Transform the resource into an array.
+     *
+     * @return array
+     */
+    public function toArray(): array
+    {
+        // https://symfony.com/doc/4.0/serializer/encoders.html
+        $encoders = [new JsonEncoder()];
+        $normalizers = [
+            $normalizer = new ObjectNormalizer(),
+        ];
+
+        $normalizer->setCircularReferenceHandler(function ($object) {
+            return $object->getUsername(); // Change this to a valid method of your object
+        });
+
+        $serializer = new Serializer($normalizers, $encoders);
+
+        return json_decode(
+            // возвращает в json, сразу массив вернуть не может
+            $serializer->serialize($this->resource, 'json'), true);
     }
 }

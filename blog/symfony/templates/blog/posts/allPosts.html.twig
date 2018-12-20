@@ -3,14 +3,13 @@
 {% block title %}Posts{% endblock %}
 
 {% block content %}
-  Total posts: {{ posts.getTotalItemCount }}.
+  Total posts: {{ totalPosts }}.
 
-  <div class="d-flex justify-content-center mb-5">
-    <b-pagination-nav
-      :number-of-pages="{{ pages }}"
-      v-model="currentPage"
-    ></b-pagination-nav>
-  </div>
+  <b-pagination-nav
+    v-model="currentPage"
+    :number-of-pages="{{ pagesCount }}"
+    align="center"
+  ></b-pagination-nav>
 
   <b-card-group columns>
     {% for post in posts %}
@@ -26,26 +25,24 @@
 
         </h3>
         <p class="card-text">
-          {#TODO выводить в UTC, но с помощью js выводить в формате и таймзоне пользователя #}
-          {#через new Date().toLocaleDateString()#}
-          {#{{ post.getCreatedAt() | date("d.m.Y") }}#}
-          {#{{ post.getCreatedAt() | date('U') }}#}
 
           <br>
 
           {{ post.textShort }}
         </p>
         <div slot="footer">
+          By {{ post.author.username }}
+          <br>
           {{ blogDate(post.getCreatedAt()) }}
         </div>
       </b-card>
     {% endfor %}
   </b-card-group>
 
-  <div class="d-flex justify-content-center mt-5">
-    <b-pagination-nav
-      :number-of-pages="{{ pages }}"
-      v-model="currentPage"
-    ></b-pagination-nav>
-  </div>
+  <b-pagination-nav
+    v-model="currentPage"
+    :number-of-pages="{{ pagesCount }}"
+    base-url="/blog/"
+    align="center"
+  ></b-pagination-nav>
 {% endblock %}

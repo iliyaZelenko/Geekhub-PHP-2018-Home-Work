@@ -3,13 +3,12 @@
 namespace App\GraphQL\Mutation;
 
 use App\Entity\Post;
-use Overblog\GraphQLBundle\Definition\Resolver\AliasedInterface;
-use Overblog\GraphQLBundle\Definition\Resolver\MutationInterface;
-use Symfony\Component\Validator\Validation;
-
 use GraphQL\Type\Definition\ResolveInfo;
 use Overblog\GraphQLBundle\Definition\Argument;
+use Overblog\GraphQLBundle\Definition\Resolver\AliasedInterface;
+use Overblog\GraphQLBundle\Definition\Resolver\MutationInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Validator\Validation;
 
 //use Symfony\Component\Validator\Validator\ValidatorInterface;
 //, AliasedInterface
@@ -52,7 +51,7 @@ class CreatePostMutation implements MutationInterface
             foreach ($errors as $error) {
                 $errorsResponse[] = [
                     'key' => $error->getPropertyPath(),
-                    'message' => $error->getMessage()
+                    'message' => $error->getMessage(),
                 ];
             }
 
@@ -70,7 +69,7 @@ class CreatePostMutation implements MutationInterface
                 'title' => $title,
                 'text' => $text,
             ],
-            'errors' => $errorsResponse
+            'errors' => $errorsResponse,
         ];
     }
 

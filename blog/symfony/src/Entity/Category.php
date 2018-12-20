@@ -2,8 +2,8 @@
 
 namespace App\Entity;
 
-use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 //* @ORM\Entity(repositoryClass="Gedmo\Tree\Entity\Repository\NestedTreeRepository")
 /**
@@ -15,8 +15,8 @@ class Category
 {
     /**
      * @ORM\Column(type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue
+     * @ORM\Id()
+     * @ORM\GeneratedValue()
      */
     private $id;
 
@@ -26,32 +26,32 @@ class Category
     private $title;
 
     /**
-     * @Gedmo\TreeLeft
+     * @Gedmo\TreeLeft()
      * @ORM\Column(type="integer")
      */
     private $left;
 
     /**
-     * @Gedmo\TreeLevel
+     * @Gedmo\TreeLevel()
      * @ORM\Column(type="integer")
      */
     private $level;
 
     /**
-     * @Gedmo\TreeRight
+     * @Gedmo\TreeRight()
      * @ORM\Column(type="integer")
      */
     private $right;
 
     /**
-     * @Gedmo\TreeRoot
+     * @Gedmo\TreeRoot()
      * @ORM\ManyToOne(targetEntity="Category")
      * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
      */
     private $root;
 
     /**
-     * @Gedmo\TreeParent
+     * @Gedmo\TreeParent()
      * @ORM\ManyToOne(targetEntity="Category", inversedBy="children")
      * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
      */
@@ -83,7 +83,7 @@ class Category
         return $this->root;
     }
 
-    public function setParent(Category $parent = null)
+    public function setParent(self $parent = null)
     {
         $this->parent = $parent;
     }

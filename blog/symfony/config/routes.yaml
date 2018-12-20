@@ -1,9 +1,5 @@
-#index:
-#    path: /
-#    controller: App\Controller\DefaultController::index
-
 index:
-    path: /{page}
+    path: /blog/{page}
     controller: App\Controller\PostsController::allPosts
     requirements:
         page: '\d+'
@@ -36,11 +32,3 @@ res:
 api:
   path: /api
   controller: App\Controller\RESTful\Auth\AuthController::api
-
-#posts:
-#    path: /posts/{page}
-#    controller: App\Controller\BlogController::posts
-#    requirements:
-#        page: '\d+'
-#    defaults:
-#        page: 1

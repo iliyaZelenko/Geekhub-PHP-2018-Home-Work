@@ -2,22 +2,25 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\TimestampableTrait;
+use App\Helpers;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use App\Helpers;
-use App\Entity\Traits\TimestampableTrait;
+// use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
+// @UniqueEntity("slug")
 /**
  * @ORM\Table(name="posts")
  * @ORM\Entity(repositoryClass="App\Repository\PostRepository")
- * @UniqueEntity("slug")
- * @ORM\HasLifecycleCallbacks
+ * @ORM\HasLifecycleCallbacks()
  */
+// TODO user relation
 class Post
 {
     use TimestampableTrait;
+
+    /* Columns */
 
     /**
      * @ORM\Id()
@@ -39,21 +42,39 @@ class Post
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $text_short;
+    private $textShort;
+
+    // было unique=true, но пост ищется по id, поэтому конфликта не будет, ничего страшного думаю не будет
+    // если одинаковый слуг, он же относится к контенту, не нужно будет делать проверку уникальнсоти слугов и для
+    // сохранения уникальности добавлять число на конец слуга, которое только будет мешать seo(не относится к заголовку)
+    // Например, допустим посты начали писать разные пользователи, один сделал пост со слугом "kak-rabotat-s-symfony-4"
+    // (Как работать с Symfony 4), потом второй сделал такой же заголовок, но слуг уже будет "kak-rabotat-s-symfony-42"
+    // (добавилось 2 для уникальности слуга), получилось что версия не 4, а 42, как по мне, это меняет смысл поста,
+    // из-за чего плохо для сео.
+    /**
+     * @ORM\Column(name="slug", type="string", length=255)
+     */
+    private $slug;
+
+    /* Relations */
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="post", orphanRemoval=true)
+     * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
      */
     private $comments;
 
     /**
-     * @ORM\Column(name="slug", type="string", length=255, unique=true)
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="posts")
+     * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
      */
-    private $slug;
+    private $author;
 
-    public function __construct()
+    public function __construct(User $author)
     {
         $this->comments = new ArrayCollection();
+
+        $author->addPost($this);
     }
 
     /* Getters / Setters */
@@ -90,12 +111,12 @@ class Post
 
     public function getTextShort(): ?string
     {
-        return $this->text_short;
+        return $this->textShort;
     }
 
-    public function setTextShort(string $text_short): self
+    public function setTextShort(string $textShort): self
     {
-        $this->text_short = $text_short;
+        $this->textShort = $textShort;
 
         return $this;
     }
@@ -114,9 +135,6 @@ class Post
 
     /* Relations */
 
-    /**
-     * @return Collection|Comment[]
-     */
     public function getComments(): Collection
     {
         return $this->comments;
@@ -141,6 +159,18 @@ class Post
                 $comment->setPost(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getAuthor(): User
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(User $author): self
+    {
+        $this->author = $author;
 
         return $this;
     }

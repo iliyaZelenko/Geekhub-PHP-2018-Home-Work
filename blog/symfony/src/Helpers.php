@@ -7,7 +7,8 @@ namespace App;
 //    // ...
 //}
 
-class Helpers {
+class Helpers
+{
     public static function slugify($str)
     {
         $str = strtolower(trim($str));

@@ -3,9 +3,9 @@
 namespace App\Twig;
 
 use App\Entity\Post;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class PostLinkExtension extends AbstractExtension
 {
@@ -24,7 +24,7 @@ class PostLinkExtension extends AbstractExtension
             new TwigFunction('postLink', function (Post $post) {
                 return $this->routerGenerator->generate('post', [
                     'slug' => $post->getSlug(),
-                    'id' => $post->getId()
+                    'id' => $post->getId(),
                 ]);
             }),
         ];

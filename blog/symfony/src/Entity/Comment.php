@@ -2,18 +2,22 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\TimestampableTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use App\Entity\Traits\TimestampableTrait;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 /**
  * @ORM\Table(name="comments")
  * @ORM\Entity(repositoryClass="App\Repository\CommentRepository")
- * @ORM\HasLifecycleCallbacks
+ * @ORM\HasLifecycleCallbacks()
  */
 class Comment
 {
     use TimestampableTrait;
+
+    /* Columns */
 
     /**
      * @ORM\Id()
@@ -23,33 +27,32 @@ class Comment
     private $id;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    private $parent_id;
-
-    /**
-     * TODO если используется отношение то вроде это не нужно
-     * @ORM\Column(type="integer")
-     */
-    private $author_id;
-
-    /**
      * @ORM\Column(type="text")
-     * @Assert\NotBlank
-     * @Assert\NotNull
+     * @Assert\NotBlank()
+     * @Assert\NotNull()
      * @Assert\Type("string")
      * @Assert\Length(
-     *      min = 5,
-     *      max = 100
+     *     min=5,
+     *     max=100
      * )
      */
     private $text;
 
+    /* Relations */
+
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Post", inversedBy="comments")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $post;
+
+    // TODO не пойму, можно ли указывать onDelete="CASCADE" с каждой стороны и обязательно ли во всех сторонах указывать.
+    // TODO почему тут нельзя сделать OneToOne, а нужно ManyToOne?
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="comments")
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
+     */
+    private $author;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="parent", orphanRemoval=true)
@@ -64,9 +67,12 @@ class Comment
     private $parent;
 
     // TODO сразу тут ставить $post и $author_id
-    public function __construct()
+    public function __construct(User $author, Post $post)
     {
+        $this->childrenComments = new ArrayCollection();
 
+        $author->addComment($this);
+        $post->addComment($this);
     }
 
     /* Getters / Setters */
@@ -74,30 +80,6 @@ class Comment
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getParentId(): ?int
-    {
-        return $this->parent_id;
-    }
-
-    public function setParentId(?int $parent_id): self
-    {
-        $this->parent_id = $parent_id;
-
-        return $this;
-    }
-
-    public function getAuthorId(): ?int
-    {
-        return $this->author_id;
-    }
-
-    public function setAuthorId(int $author_id): self
-    {
-        $this->author_id = $author_id;
-
-        return $this;
     }
 
     public function getText(): ?string
@@ -138,7 +120,7 @@ class Comment
         return $this;
     }
 
-    public function getChildrenComments()
+    public function getChildrenComments(): Collection
     {
         return $this->childrenComments;
     }
@@ -149,6 +131,18 @@ class Comment
             $this->childrenComments[] = $comment;
             $comment->setParent($this);
         }
+
+        return $this;
+    }
+
+    public function getAuthor(): User
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(User $author): self
+    {
+        $this->author = $author;
 
         return $this;
     }

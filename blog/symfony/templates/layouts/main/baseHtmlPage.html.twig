@@ -27,7 +27,7 @@
     const data = {
       // key: value
       {% for key, value in vue_data | default([]) %}
-        {{ key }}: JSON.parse('{{ value | raw }}'),
+        {{ key }}: getParsed({{ value | raw }}),
       {% endfor %}
     }
     const methods = {
@@ -47,6 +47,18 @@
       methods,
       created () {
         // console.log('hi')
+      }
+    }
+
+    function getParsed (val) {
+      if (typeof val !== 'string') {
+        return val
+      }
+
+      try {
+        return JSON.parse(val)
+      } catch (e) {
+        return val
       }
     }
   </script>

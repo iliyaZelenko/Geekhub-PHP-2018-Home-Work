@@ -5,13 +5,15 @@
 {% block content %}
   <h1>{{ post.title }}</h1>
 
-  {{ blogDate(post.getCreatedAt()) }}
+  {{ blogDate(post.createdAt) }}
 
   <p>
     {{ post.text }}
   </p>
 
   <hr>
+
+  {{ form(form) }}
 
 
   <h4 class="mb-4">
@@ -27,7 +29,7 @@
 
   <editor></editor>
 
-  {% include 'blog/posts/parts/commentsLvl.html.twig' with { comments: post.getComments(), isRoot: true, form: form } only %}
+  {% include 'blog/posts/parts/commentsLvl.html.twig' with { commentsPost: post, comments: rootComments, form: form } only %}
 
   {#{% for comment in post.getComments() %}#}
     {#<div>#}
