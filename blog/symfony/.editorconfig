@@ -16,7 +16,7 @@ indent_size = 2
 # 2 space indentation
 indent_size = 2
 
-[*.{php,yml}]
+[*.{php,yml,yaml}]
 indent_size = 4
 
 [*.md]

@@ -23,28 +23,23 @@ class CreatePostMutation implements MutationInterface
 
     public function createPost($value, Argument $args, \ArrayObject $context, ResolveInfo $info)
     {
-//        $container;
         [
             'title' => $title,
             'text' => $text
             // TODO попробовать так: $args['input']
         ] = $args->offsetGet('input');
 
-        // Do something with `$shipName` and `$factionId` ...
         $post = new Post();
         $post->setTitle($title);
         $post->setText($text);
         // $post->setTextShort();
         // ...
 
-//        dump($post);
-
+        // TODO обращатся к контейнеру плохая практика, хоть и пробывал тут делать через ValidatorInterface и не работало,
+        // но всеравно попробовать по другому
         $validator = $this->container->get('validator'); // Validation::createValidator(); // $container->get('valdiator'); // Validation::createValidator();
         $errors = $validator->validate($post);
-//        \Symfony\Component\DependencyInjection\ContainerInterface
-//        dump($post, $errors);
 
-//        dump($errors);
         $errorsResponse = [];
 
         if (\count($errors)) {
@@ -63,7 +58,6 @@ class CreatePostMutation implements MutationInterface
 //            throw new \Error($errorsString);
         }
 
-        // Then returns our payload, it should fits `IntroduceShipPayload` type
         return [
             'post' => [
                 'title' => $title,

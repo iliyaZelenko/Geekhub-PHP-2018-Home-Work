@@ -4,10 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Comment;
 use App\Entity\Post;
+use App\Entity\User;
 use App\Form\CommentType;
-use App\Repository\PostRepository;
 use Doctrine\Common\Persistence\ObjectManager;
-use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -15,25 +14,18 @@ use Symfony\Component\HttpFoundation\Response;
 
 class PostsController extends AbstractController
 {
-    public const PER_PAGE = 3;
+    public const POSTS_PER_PAGE = 3;
+    public const COMMENTS_PER_PAGE = 6;
 
-    public function allPosts(Request $request, PaginatorInterface $paginator, $page = 1): Response
+    public function allPosts($page = 1): Response
     {
         $repo = $this
             ->getDoctrine()
             ->getRepository(Post::class);
-        $query = $repo
-            ->createQueryBuilder('p')
-            ->getQuery();
 
-        // Возвращается экземпляр: https://github.com/KnpLabs/KnpPaginatorBundle/blob/master/Pagination/SlidingPagination.php
-        $posts = $paginator->paginate(
-            $query,
-            $page,
-            static::PER_PAGE
-        );
+        $posts = $repo->getPaginated($page, static::POSTS_PER_PAGE);
 
-        return $this->render('blog/posts/allPosts.html.twig', [
+        return $this->render('blog/posts/all_posts.html.twig', [
             'posts' => $posts,
             'pagesCount' => $posts->getPageCount(),
             'totalPosts' => $posts->getTotalItemCount(),
@@ -64,19 +56,8 @@ class PostsController extends AbstractController
      */
     public function post(Request $request, ObjectManager $manager, Post $post, $slug, $id): Response
     {
-//        $repoPost = $this
-//            ->getDoctrine()
-//            ->getRepository(Post::class);
-
-//        $post = $repoPost
-//            ->getWithRootComments($id);
-        $rootComments = $post->getComments();
-
-//        if (!$post) {
-//            throw $this->createNotFoundException(
-//                'No post found for id ' . $id
-//            );
-//        }
+        $repoUser = $this->getDoctrine()->getRepository(User::class);
+        $repoComment = $this->getDoctrine()->getRepository(Comment::class);
 
         // если slug из url не совпадает со slug в посте, то редирект на слуг поста
         // таким образом: если была ссылка с slug который поменялся (вместе с title), то такая ссылка будет работать
@@ -91,32 +72,34 @@ class PostsController extends AbstractController
             );
         }
 
-        // TODO вот этот кусок кода нужно вынести в сервис, очень важно подумать хорошо о том
-        // как писать не жирные контроллеры, даже если текущий контроллер пока не жирный
-        // TODO сразу добавляется в post, поэтому нет createdAt
-//        $comment = new Comment(new \App\Entity\User('b', 'b', 'b'), $post);
-//
-//        TODO , $comment
-        $form = $this->createForm(CommentType::class);
-//        $form->handleRequest($request);
-//
-//        if ($form->isSubmitted() && $form->isValid()) {
-//            // я так понимаю это ссылка на тот же $comment
-//            // $commentRequest = $form->getData();
-//
-//            $comment->setPost($post);
-//            $comment->setAuthorId(1);
-//
-//            $manager->persist($comment);
-//            $manager->flush();
-//
+        // TODO Security
+        $authUser = $repoUser->getFirst();
+        $comment = new Comment($authUser, $post);
+
+        $form = $this->createForm(CommentType::class, $comment);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $manager->persist($comment);
+            $manager->flush();
+
+            // если ASC: $rootComments[] = $comment;
+            // array_unshift($rootComments, $comment);
 //            $rootComments->add($comment);
-//
-//            $this->addFlash(
-//                'success',
-//                'Comment saved!'
-//            );
-//        }
+
+            $this->addFlash(
+                'success',
+                'Comment saved!'
+            );
+        }
+
+        // $repoComment->getCommentsByPostId($id);
+        $rootComments = $repoComment->getPaginatedByPostId(
+            $id,
+            // берется из query ?page=2 (так сделано на stackoverflow)
+            $request->query->getInt('page', 1),
+            static::COMMENTS_PER_PAGE
+        );
 
         return $this->render('blog/posts/post.html.twig', [
             'post' => $post,
@@ -130,9 +113,9 @@ class PostsController extends AbstractController
             // TODO убрать
             'vue_methods' => [
                 'onSubmit' => [
-                    'body' => '',
-                ],
-            ],
+                    'body' => ''
+                ]
+            ]
         ]);
     }
 }

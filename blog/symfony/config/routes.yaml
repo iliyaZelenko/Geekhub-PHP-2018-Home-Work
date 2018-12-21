@@ -1,4 +1,8 @@
 index:
+  path: /
+  controller: App\Controller\HomeController::index
+
+blog:
     path: /blog/{page}
     controller: App\Controller\PostsController::allPosts
     requirements:

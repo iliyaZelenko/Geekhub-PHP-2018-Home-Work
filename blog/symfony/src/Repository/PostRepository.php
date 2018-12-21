@@ -5,6 +5,8 @@ namespace App\Repository;
 use App\Entity\Post;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use Knp\Component\Pager\PaginatorInterface;
+use \Knp\Component\Pager\Pagination\PaginationInterface as PaginationInterfaceReturn;
 
 /**
  * @method Post|null find($id, $lockMode = null, $lockVersion = null)
@@ -14,35 +16,31 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class PostRepository extends ServiceEntityRepository
 {
-    public function __construct(RegistryInterface $registry)
+    /**
+     * @var PaginatorInterface
+     */
+    private $paginator;
+
+    public function __construct(RegistryInterface $registry, PaginatorInterface $paginator)
     {
         parent::__construct($registry, Post::class);
+
+        $this->paginator = $paginator;
     }
 
-    public function paginated()
+    public function getPaginated($page, $perPage): PaginationInterfaceReturn
     {
-        // TODO
-    }
-
-    /**
-     * @param int $id
-     * @return Post|null
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     */
-    public function getWithRootComments(int $id): ?Post
-    {
-        return $this->createQueryBuilder('post')
-            ->innerJoin('post.comments', 'post_comments')
-//            ->innerJoin('post_comments.childrenComments', 'post_comments_comments')
-            ->andWhere('post.id = :id')
-            ->andWhere('post_comments.parent_id is NULL')
-            ->setParameters([
-                'id' => $id,
-            ])
-            ->addSelect('post_comments')
-            ->orderBy('post_comments.id', 'ASC')
+        $query = $this
+            ->createQueryBuilder('p')
+            ->orderBy('p.id', 'DESC')
             ->getQuery()
-            ->getOneOrNullResult()
         ;
+
+        // Возвращается экземпляр: https://github.com/KnpLabs/KnpPaginatorBundle/blob/master/Pagination/SlidingPagination.php
+        return $this->paginator->paginate(
+            $query,
+            $page,
+            $perPage
+        );
     }
 }

@@ -3,10 +3,10 @@
 namespace App\Entity;
 
 use App\Entity\Traits\TimestampableTrait;
-use App\Helpers;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+//use Doctrine\Common\Collections\ArrayCollection;
+//use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Utils\Slugger\Slugger;
 // use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 // @UniqueEntity("slug")
@@ -15,7 +15,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="App\Repository\PostRepository")
  * @ORM\HasLifecycleCallbacks()
  */
-// TODO user relation
 class Post
 {
     use TimestampableTrait;
@@ -62,7 +61,7 @@ class Post
      * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="post", orphanRemoval=true)
      * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
      */
-    private $comments;
+//    private $comments;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="posts")
@@ -72,19 +71,20 @@ class Post
 
     public function __construct(User $author)
     {
-        $this->comments = new ArrayCollection();
+//        $this->comments = new ArrayCollection();
 
-        $author->addPost($this);
+//        $author->addPost($this);
+        $this->setAuthor($author);
     }
 
     /* Getters / Setters */
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function getTitle(): ?string
+    public function getTitle(): string
     {
         return $this->title;
     }
@@ -92,12 +92,14 @@ class Post
     public function setTitle(string $title): self
     {
         $this->title = $title;
-        $this->setSlug(Helpers::slugify($title));
+        $this->setSlug(
+            Slugger::slugify($title)
+        );
 
         return $this;
     }
 
-    public function getText(): ?string
+    public function getText(): string
     {
         return $this->text;
     }
@@ -109,7 +111,7 @@ class Post
         return $this;
     }
 
-    public function getTextShort(): ?string
+    public function getTextShort(): string
     {
         return $this->textShort;
     }
@@ -135,33 +137,33 @@ class Post
 
     /* Relations */
 
-    public function getComments(): Collection
-    {
-        return $this->comments;
-    }
-
-    public function addComment(Comment $comment): self
-    {
-        if (!$this->comments->contains($comment)) {
-            $this->comments[] = $comment;
-            $comment->setPost($this);
-        }
-
-        return $this;
-    }
-
-    public function removeComment(Comment $comment): self
-    {
-        if ($this->comments->contains($comment)) {
-            $this->comments->removeElement($comment);
-            // set the owning side to null (unless already changed)
-            if ($comment->getPost() === $this) {
-                $comment->setPost(null);
-            }
-        }
-
-        return $this;
-    }
+//    public function getComments(): Collection
+//    {
+//        return $this->comments;
+//    }
+//
+//    public function addComment(Comment $comment): self
+//    {
+//        if (!$this->comments->contains($comment)) {
+//            $this->comments[] = $comment;
+//            $comment->setPost($this);
+//        }
+//
+//        return $this;
+//    }
+//
+//    public function removeComment(Comment $comment): self
+//    {
+//        if ($this->comments->contains($comment)) {
+//            $this->comments->removeElement($comment);
+//            // set the owning side to null (unless already changed)
+//            if ($comment->getPost() === $this) {
+//                $comment->setPost(null);
+//            }
+//        }
+//
+//        return $this;
+//    }
 
     public function getAuthor(): User
     {

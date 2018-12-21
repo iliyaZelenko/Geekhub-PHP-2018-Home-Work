@@ -36,7 +36,8 @@ class Comment
      *     max=100
      * )
      */
-    private $text;
+    // TODO не уверен что правильно, но без этого форма плохо инициализируется если в getText возвращает ?string
+    private $text = '';
 
     /* Relations */
 
@@ -47,7 +48,6 @@ class Comment
     private $post;
 
     // TODO не пойму, можно ли указывать onDelete="CASCADE" с каждой стороны и обязательно ли во всех сторонах указывать.
-    // TODO почему тут нельзя сделать OneToOne, а нужно ManyToOne?
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="comments")
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
@@ -66,23 +66,25 @@ class Comment
      */
     private $parent;
 
-    // TODO сразу тут ставить $post и $author_id
     public function __construct(User $author, Post $post)
     {
         $this->childrenComments = new ArrayCollection();
 
-        $author->addComment($this);
-        $post->addComment($this);
+        $this->setAuthor($author);
+        $this->setPost($post);
+
+//        $author->addComment($this);
+//        $post->addComment($this);
     }
 
     /* Getters / Setters */
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function getText(): ?string
+    public function getText(): string
     {
         return $this->text;
     }
@@ -108,7 +110,7 @@ class Comment
         return $this;
     }
 
-    public function getParent(): Comment
+    public function getParent(): ?Comment
     {
         return $this->parent;
     }

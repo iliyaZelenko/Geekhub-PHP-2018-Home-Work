@@ -29,7 +29,11 @@
 
   <editor></editor>
 
-  {% include 'blog/posts/parts/commentsLvl.html.twig' with { commentsPost: post, comments: rootComments, form: form } only %}
+  {% include 'blog/posts/parts/comments_tree.html.twig' with { commentsPost: post, comments: rootComments, form: form } only %}
+
+  <div class="d-flex justify-content-center mt-4">
+    {{ knp_pagination_render(rootComments) }}
+  </div>
 
   {#{% for comment in post.getComments() %}#}
     {#<div>#}

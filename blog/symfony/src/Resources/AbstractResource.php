@@ -27,50 +27,6 @@ abstract class AbstractResource
     }
 
     /**
-     * Determine if an attribute exists on the resource.
-     *
-     * @param  string  $key
-     * @return bool
-     */
-    public function __isset($key)
-    {
-        return isset($this->resource->{$key});
-    }
-
-    /**
-     * Unset an attribute on the resource.
-     *
-     * @param  string  $key
-     */
-    public function __unset($key)
-    {
-        unset($this->resource->{$key});
-    }
-
-    /**
-     * Dynamically get properties from the underlying resource.
-     *
-     * @param  string  $key
-     * @return mixed
-     */
-    public function __get($key)
-    {
-        return $this->resource->{$key};
-    }
-
-    /**
-     * Dynamically pass method calls to the underlying resource.
-     *
-     * @param  string  $method
-     * @param  array  $parameters
-     * @return mixed
-     */
-    public function __call($method, $parameters)
-    {
-        return $this->resource->{$method}(...$parameters);
-    }
-
-    /**
      * Transform the resource into an array.
      *
      * @return array
@@ -84,13 +40,14 @@ abstract class AbstractResource
         ];
 
         $normalizer->setCircularReferenceHandler(function ($object) {
-            return $object->getUsername(); // Change this to a valid method of your object
+            return $object->getUsername();
         });
 
         $serializer = new Serializer($normalizers, $encoders);
 
         return json_decode(
-            // возвращает в json, сразу массив вернуть не может
-            $serializer->serialize($this->resource, 'json'), true);
+            $serializer->serialize($this->resource, 'json'),
+            true
+        );
     }
 }
