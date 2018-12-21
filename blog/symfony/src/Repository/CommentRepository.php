@@ -4,9 +4,9 @@ namespace App\Repository;
 
 use App\Entity\Comment;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Symfony\Bridge\Doctrine\RegistryInterface;
+use Knp\Component\Pager\Pagination\PaginationInterface as PaginationInterfaceReturn;
 use Knp\Component\Pager\PaginatorInterface;
-use \Knp\Component\Pager\Pagination\PaginationInterface as PaginationInterfaceReturn;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
  * @method Comment|null find($id, $lockMode = null, $lockVersion = null)
@@ -29,10 +29,10 @@ class CommentRepository extends ServiceEntityRepository
     }
 
     /**
-     * Возвращает первый комментарий
+     * Возвращает первый комментарий.
      *
-     * @return Comment|null
      * @throws \Doctrine\ORM\NonUniqueResultException
+     * @return Comment|null
      */
     public function getFirst(): ?Comment
     {
@@ -46,7 +46,7 @@ class CommentRepository extends ServiceEntityRepository
     }
 
     /**
-     * Возвращает все пагинированные комменты по id поста
+     * Возвращает все пагинированные комменты по id поста.
      *
      * @param int $postId
      * @param int $page

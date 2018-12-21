@@ -5,8 +5,9 @@ namespace App\Entity;
 use App\Entity\Traits\TimestampableTrait;
 //use Doctrine\Common\Collections\ArrayCollection;
 //use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM;
 use App\Utils\Slugger\Slugger;
+use Doctrine\ORM\Mapping as ORM;
+
 // use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 // @UniqueEntity("slug")
@@ -128,13 +129,6 @@ class Post
         return $this->slug;
     }
 
-    private function setSlug(string $slug): self
-    {
-        $this->slug = $slug;
-
-        return $this;
-    }
-
     /* Relations */
 
 //    public function getComments(): Collection
@@ -173,6 +167,13 @@ class Post
     public function setAuthor(User $author): self
     {
         $this->author = $author;
+
+        return $this;
+    }
+
+    private function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
 
         return $this;
     }

@@ -4,9 +4,9 @@ namespace App\Repository;
 
 use App\Entity\Post;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Symfony\Bridge\Doctrine\RegistryInterface;
+use Knp\Component\Pager\Pagination\PaginationInterface as PaginationInterfaceReturn;
 use Knp\Component\Pager\PaginatorInterface;
-use \Knp\Component\Pager\Pagination\PaginationInterface as PaginationInterfaceReturn;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
  * @method Post|null find($id, $lockMode = null, $lockVersion = null)

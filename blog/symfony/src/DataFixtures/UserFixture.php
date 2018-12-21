@@ -2,12 +2,10 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Post;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use Psr\Container\ContainerInterface;
 
 class UserFixture extends Fixture implements OrderedFixtureInterface
 {

@@ -3,9 +3,10 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+
 //use Doctrine\Common\Collections\ArrayCollection;
 //use Doctrine\Common\Collections\Collection;
 
@@ -58,6 +59,9 @@ class User implements UserInterface, \Serializable
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Post", mappedBy="author", orphanRemoval=true)
      * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
+     * @param string $username
+     * @param string $email
+     * @param string $password
      */
 //    private $posts;
 

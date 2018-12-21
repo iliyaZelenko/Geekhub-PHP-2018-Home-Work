@@ -57,7 +57,7 @@ class CommentFixture extends Fixture implements OrderedFixtureInterface
     }
 
     /**
-     * Возвращает id первого коммента
+     * Возвращает id первого коммента.
      *
      * @param CommentRepository $repo
      * @return int|null
@@ -74,13 +74,13 @@ class CommentFixture extends Fixture implements OrderedFixtureInterface
     }
 
     /**
-     * Возвращает случайный коммент из текущего поста (с индксом $currentPostIndex)
+     * Возвращает случайный коммент из текущего поста (с индксом $currentPostIndex).
      *
      * @param $repo
      * @param $currentPostIndex
      * @param $currentCommentIndex
-     * @return Comment|null
      * @throws \Exception
+     * @return Comment|null
      */
     private function getRandomCommentFromCurrentPost($repo, $currentPostIndex, $currentCommentIndex): ?Comment
     {

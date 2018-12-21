@@ -3,10 +3,10 @@
 namespace App\Entity;
 
 use App\Entity\Traits\TimestampableTrait;
-use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Table(name="comments")
@@ -110,12 +110,12 @@ class Comment
         return $this;
     }
 
-    public function getParent(): ?Comment
+    public function getParent(): ?self
     {
         return $this->parent;
     }
 
-    public function setParent(Comment $comment): self
+    public function setParent(self $comment): self
     {
         $this->parent = $comment;
 
@@ -127,7 +127,7 @@ class Comment
         return $this->childrenComments;
     }
 
-    public function addChildrenComment(Comment $comment): self
+    public function addChildrenComment(self $comment): self
     {
         if (!$this->childrenComments->contains($comment)) {
             $this->childrenComments[] = $comment;

@@ -7,9 +7,9 @@ use App\Entity\Post;
 use App\Entity\User;
 use App\Form\CommentType;
 use Doctrine\Common\Persistence\ObjectManager;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Response;
 
 class PostsController extends AbstractController
@@ -45,8 +45,9 @@ class PostsController extends AbstractController
         С mapping со slug будет делатся 2 запроса: WHERE slug "post-title-1" и WHERE id 16
         Скрин: https://i.imgur.com/cYjSI2f.png
     */
+
     /**
-     * @ParamConverter("post", options={"mapping"={"slug"="slug"}})
+     * @ParamConverter("post", options={"mapping" = {"slug" = "slug"}})
      * @param Request $request
      * @param ObjectManager $manager
      * @param Post $post

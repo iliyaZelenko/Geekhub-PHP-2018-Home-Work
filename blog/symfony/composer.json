@@ -93,12 +93,6 @@
         "symfony": {
             "allow-contrib": false,
             "require": "4.1.*"
-        },
-      "hooks": {
-        "pre-commit": [
-          "echo committing as $(git config user.name)",
-          "php-cs-fixer fix ."
-        ]
-      }
+        }
     }
 }
