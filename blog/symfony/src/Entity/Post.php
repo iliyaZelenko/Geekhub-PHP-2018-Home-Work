@@ -3,10 +3,11 @@
 namespace App\Entity;
 
 use App\Entity\Traits\TimestampableTrait;
+use App\Utils\Slugger\Slugger;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use App\Utils\Slugger\Slugger;
 use Doctrine\ORM\Mapping as ORM;
+
 //use Symfony\Component\Validator\Constraints\Collection;
 
 // use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -68,13 +69,13 @@ class Post
     /**
      * @ORM\ManyToMany(targetEntity="Tag")
      * @ORM\JoinTable(name="posts_tags",
-     *      joinColumns={@ORM\JoinColumn(name="post_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="group_id", referencedColumnName="id")}
-     *      )
+     *     joinColumns={@ORM\JoinColumn(name="post_id", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="group_id", referencedColumnName="id")}
+     * )
      */
     private $tags;
 
-//, inversedBy="posts"
+    //, inversedBy="posts"
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")

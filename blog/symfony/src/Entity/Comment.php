@@ -40,14 +40,14 @@ class Comment
 
     /* Relations */
 
-//, inversedBy="comments"
+    //, inversedBy="comments"
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Post")
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $post;
 
-//, inversedBy="comments"
+    //, inversedBy="comments"
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")

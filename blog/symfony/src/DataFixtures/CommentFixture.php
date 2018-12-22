@@ -61,8 +61,8 @@ class CommentFixture extends Fixture implements OrderedFixtureInterface
      * Возвращает id первого коммента.
      *
      * @param CommentRepository $repo
-     * @return int|null
      * @throws \Doctrine\ORM\NonUniqueResultException
+     * @return int|null
      */
     private function getFirstCommentId(CommentRepository $repo): ?int
     {

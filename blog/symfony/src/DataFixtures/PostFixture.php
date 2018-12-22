@@ -46,8 +46,8 @@ class PostFixture extends Fixture implements OrderedFixtureInterface
     }
 
     /**
-     * @return Tag[]
      * @throws \Exception
+     * @return Tag[]
      */
     private function getRandomTags(): array
     {
