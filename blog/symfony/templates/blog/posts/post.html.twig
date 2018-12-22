@@ -7,6 +7,15 @@
 
   {{ blogDate(post.createdAt) }}
 
+  {# Теги #}
+  <div>
+    {% for tag in post.tags %}
+      <b-badge variant="secondary">
+        {{ tag.name }}
+      </b-badge>
+    {% endfor %}
+  </div>
+
   <p>
     {{ post.text }}
   </p>

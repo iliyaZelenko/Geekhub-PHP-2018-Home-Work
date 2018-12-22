@@ -3,10 +3,11 @@
 namespace App\Entity;
 
 use App\Entity\Traits\TimestampableTrait;
-//use Doctrine\Common\Collections\ArrayCollection;
-//use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use App\Utils\Slugger\Slugger;
 use Doctrine\ORM\Mapping as ORM;
+//use Symfony\Component\Validator\Constraints\Collection;
 
 // use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
@@ -65,17 +66,44 @@ class Post
 //    private $comments;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="posts")
+     * @ORM\ManyToMany(targetEntity="Tag")
+     * @ORM\JoinTable(name="posts_tags",
+     *      joinColumns={@ORM\JoinColumn(name="post_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="group_id", referencedColumnName="id")}
+     *      )
+     */
+    private $tags;
+
+//, inversedBy="posts"
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
      */
     private $author;
 
-    public function __construct(User $author)
+    /**
+     * Post constructor.
+     * @param User $author
+     * @param string $title
+     * @param string $text
+     * @param string $textShort
+     * @param Tag[] $tags
+     */
+    public function __construct(User $author, string $title, string $text, string $textShort, $tags = [])
     {
 //        $this->comments = new ArrayCollection();
+        $this->tags = new ArrayCollection();
+
+        foreach ($tags as $tag) {
+            $this->addTag($tag);
+        }
 
 //        $author->addPost($this);
-        $this->setAuthor($author);
+        $this
+            ->setAuthor($author)
+            ->setTitle($title)
+            ->setText($text)
+            ->setTextShort($textShort);
     }
 
     /* Getters / Setters */
@@ -158,6 +186,20 @@ class Post
 //
 //        return $this;
 //    }
+
+    public function getTags(): Collection
+    {
+        return $this->tags;
+    }
+
+    public function addTag(Tag $tag): self
+    {
+        if (!$this->tags->contains($tag)) {
+            $this->tags[] = $tag;
+        }
+
+        return $this;
+    }
 
     public function getAuthor(): User
     {

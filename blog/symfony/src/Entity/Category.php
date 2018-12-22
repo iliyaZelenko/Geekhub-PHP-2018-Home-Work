@@ -58,7 +58,7 @@ class Category
     private $parent;
 
     /**
-     * @ORM\OneToMany(targetEntity="Category", mappedBy="parent")
+     * @ORM\OneToMany(targetEntity="Category", mappedBy="parent", orphanRemoval=true)
      * @ORM\OrderBy({"lft" = "ASC"})
      */
     private $children;

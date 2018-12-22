@@ -13,7 +13,7 @@ class CommentFixture extends Fixture implements OrderedFixtureInterface
     // для каждого поста создать столько комментов
     public const COMMENT_REFERENCE_EACH_COUNT = 10;
     // вероятность поставить комменту родителя из текущего поста (но из текущего поста может и не быть коммента)
-    public const PROBABILITY_SET_PARENT = 1 / 3;
+    public const PROBABILITY_SET_PARENT = 1 / 1.5;
 
     public function load(ObjectManager $manager): void
     {
@@ -31,11 +31,12 @@ class CommentFixture extends Fixture implements OrderedFixtureInterface
             $postRef = PostFixture::REFERENCE_PREFIX . $currentPostIndex;
             $post = $this->getReference($postRef);
 
-            $comment = new Comment($user, $post);
-            $comment->setText('Comment text ' . $i);
+            $text = 'Comment text ' . $i;
+
+            $comment = new Comment($user, $post, $text);
 
             // ставит коммент-родителя с долей вероятности
-            if (static::PROBABILITY_SET_PARENT <= random_int(1, 10) / 10) {
+            if (random_int(1, 10) / 10 <= static::PROBABILITY_SET_PARENT) {
                 $randomComment = $this->getRandomCommentFromCurrentPost($repo, $currentPostIndex, $i);
 
                 $randomComment && $comment->setParent($randomComment);
@@ -61,6 +62,7 @@ class CommentFixture extends Fixture implements OrderedFixtureInterface
      *
      * @param CommentRepository $repo
      * @return int|null
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     private function getFirstCommentId(CommentRepository $repo): ?int
     {

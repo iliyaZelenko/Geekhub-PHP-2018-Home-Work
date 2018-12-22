@@ -54,7 +54,12 @@ return PhpCsFixer\Config::create()
         'void_return' => false,
         'pre_increment' => false,
         'yoda_style' => false,
-        // это я ставил
+
+        /* это я ставил */
+
+        // это правило не отлючается походу, продолжает ставить заяпятые
         'trailing_comma_in_multiline_array' => false
+        // странное правило, в наглую заменяет все инкременты на pre форму, может так и код сломать.
+        'increment_style' => false
     ])
 ;

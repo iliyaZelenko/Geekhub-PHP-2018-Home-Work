@@ -36,20 +36,20 @@ class Comment
      *     max=100
      * )
      */
-    // TODO не уверен что правильно, но без этого форма плохо инициализируется если в getText возвращает ?string
-    private $text = '';
+    private $text;
 
     /* Relations */
 
+//, inversedBy="comments"
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Post", inversedBy="comments")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Post")
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $post;
 
-    // TODO не пойму, можно ли указывать onDelete="CASCADE" с каждой стороны и обязательно ли во всех сторонах указывать.
+//, inversedBy="comments"
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="comments")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $author;
@@ -66,12 +66,14 @@ class Comment
      */
     private $parent;
 
-    public function __construct(User $author, Post $post)
+    public function __construct(User $author, Post $post, string $text = '')
     {
         $this->childrenComments = new ArrayCollection();
 
-        $this->setAuthor($author);
-        $this->setPost($post);
+        $this
+            ->setAuthor($author)
+            ->setPost($post)
+            ->setText($text);
 
 //        $author->addComment($this);
 //        $post->addComment($this);
@@ -84,6 +86,8 @@ class Comment
         return $this->id;
     }
 
+    // хотел возвращаеть просто ": string" так как поле text не nullable, но если ": ?string", то форма инициализируется с ошибкой
+    // update: Поставил в конструкторе $text = '', может уже не актуально
     public function getText(): string
     {
         return $this->text;
