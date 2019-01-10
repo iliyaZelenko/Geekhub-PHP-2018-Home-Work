@@ -34,6 +34,7 @@
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.0",
+        "friendsofphp/php-cs-fixer": "^2.14",
         "laravel/homestead": "^7.19",
         "overblog/graphiql-bundle": "^0.1.1",
         "symfony/debug-pack": "*",
@@ -72,9 +73,9 @@
         "c": "@php ./bin/console",
         "serve": "@php ./bin/console server:run 8080",
         "dump": "@php ./bin/console server:dump",
-        "dump-h": "@php ./bin/console server:dump --format=html > dump.html",
-        "lint": "@php php-cs-fixer-v2.phar fix --dry-run --verbose",
-        "cs-fix": "@php php-cs-fixer-v2.phar fix --verbose",
+        "dump-html": "@php ./bin/console server:dump --format=html > dump.html",
+        "cs-check": "@php ./bin/php-cs-fixer-v2.phar fix --dry-run --verbose",
+        "cs-fix": "@php ./bin/php-cs-fixer-v2.phar fix --verbose",
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
             "assets:install %PUBLIC_DIR%": "symfony-cmd"

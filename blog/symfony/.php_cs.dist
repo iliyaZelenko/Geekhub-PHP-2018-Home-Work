@@ -4,17 +4,20 @@ $finder = PhpCsFixer\Finder::create()
     ->in(__DIR__ . '/src')
 ;
 return PhpCsFixer\Config::create()
-    ->setRiskyAllowed(true)
     ->setFinder($finder)
     ->setCacheFile(__DIR__ . '/.php_cs.cache')
+    /*
+    ->setRiskyAllowed(true)
+    '@Symfony:risky' => true,
+    '@PHP70Migration:risky' => true,
+    '@PHP71Migration:risky' => true,
+    */
     ->setRules([
         '@Symfony' => true,
-        '@Symfony:risky' => true,
         '@PHP56Migration' => true,
         '@PHP70Migration' => true,
         '@PHP71Migration' => true,
-        '@PHP70Migration:risky' => true,
-        '@PHP71Migration:risky' => true,
+
         'combine_consecutive_unsets' => true,
         'array_syntax' => [
             'syntax' => 'short'

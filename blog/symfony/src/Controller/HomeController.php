@@ -3,12 +3,17 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class HomeController extends AbstractController
 {
-    public function index(int $page = 1)
+    public function index(TranslatorInterface $translator, int $page = 1)
     {
-        return $this->render('blog/main_page.html.twig');
+        return $this->render('blog/main_page.html.twig', [
+            // TODO не зависит от _locale роута
+            'hello_translated' => $translator->trans('Hello!'),
+            'count' => 1
+        ]);
     }
 
     /*

@@ -71,7 +71,7 @@ class User implements UserInterface, \Serializable
      */
 //    private $comments;
 
-    public function __construct(string $username, string $email, string $password)
+    public function __construct(string $username, string $email)
     {
 //        $this->comments = new ArrayCollection();
 //        $this->posts = new ArrayCollection();
@@ -79,7 +79,6 @@ class User implements UserInterface, \Serializable
         $this->isActive = true;
         $this->username = $username;
         $this->email = $email;
-        $this->password = $password;
     }
 
     /* Getters / Setters */

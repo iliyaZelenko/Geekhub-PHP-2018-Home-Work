@@ -6,6 +6,7 @@ use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserFixture extends Fixture implements OrderedFixtureInterface
 {
@@ -25,6 +26,12 @@ class UserFixture extends Fixture implements OrderedFixtureInterface
             'email' => 'obezyana@example.com'
         ]
     ];
+    private $passwordEncoder;
+
+    public function __construct(UserPasswordEncoderInterface $passwordEncoder)
+    {
+        $this->passwordEncoder = $passwordEncoder;
+    }
 
     public function load(ObjectManager $manager): void
     {
@@ -33,14 +40,14 @@ class UserFixture extends Fixture implements OrderedFixtureInterface
                'username' => $username,
                'email' => $email
             ] = static::USERS[$i - 1];
-//            $username = $userData['username'];
-//            $email = $userData['email'];
-            $password = bin2hex(random_bytes(10));
+            // random string
+            $plainPassword = 'just text ' . bin2hex(random_bytes(10));
+            $user = new User($username, $email);
 
-            $user = new User($username, $email, $password);
-
+            $user->setPassword(
+                $password = $this->passwordEncoder->encodePassword($user, $plainPassword)
+            );
             $this->addReference(self::REFERENCE_PREFIX . $i, $user);
-
             $manager->persist($user);
         }
 

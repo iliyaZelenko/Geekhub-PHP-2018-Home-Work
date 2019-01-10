@@ -1,6 +1,11 @@
+# TODO для локали очень не хватает вложенных маршрутов / префикса для роутов (удивляет почему их нет в symfony)
 index:
-  path: /
-  controller: App\Controller\HomeController::index
+    path: /{_locale}
+    controller: App\Controller\HomeController::index
+    requirements:
+        _locale: en|ru
+    defaults:
+        _locale: en
 
 blog:
     path: /blog/{page}
@@ -11,28 +16,32 @@ blog:
         page: 1
 
 post:
-  path: /{id}/{slug}
-  controller: App\Controller\PostsController::post
-  requirements:
-    slug: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
-    id:  '\d+'
+    path: /{id}/{slug}
+    controller: App\Controller\PostsController::post
+    requirements:
+        slug: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+        id:  '\d+'
+
+profile:
+    path: /profile
+    controller: App\Controller\HomeController::index
 
 routes:
     path: /routes/
     controller: App\Controller\BlogController::routes
 
-api_login_check:
-  path: /api/login_check
-
-register:
-  path: /api/register
-  controller: App\Controller\RESTful\Auth\AuthController::register
-  methods: POST
-
-res:
-  path: /api/res
-  controller: App\Controller\RESTful\Auth\AuthController::res
-
-api:
-  path: /api
-  controller: App\Controller\RESTful\Auth\AuthController::api
+#api_login_check:
+#  path: /api/login_check
+#
+#register:
+#  path: /api/register
+#  controller: App\Controller\RESTful\Auth\AuthController::register
+#  methods: POST
+#
+#res:
+#  path: /api/res
+#  controller: App\Controller\RESTful\Auth\AuthController::res
+#
+#api:
+#  path: /api
+#  controller: App\Controller\RESTful\Auth\AuthController::api

@@ -6,9 +6,14 @@
 
 {% block content %}
   <b-alert show>
-    Hello!
+    {{ hello_translated }}
     <b-link to="/blog">
       Visit blog.
     </b-link>
   </b-alert>
+
+  {# TODO для русского языка не подходит, например, для 101 будет яблок (Pluralization) #}
+  {% transchoice count %}
+    {0} There are no apples|{1} There is one apple|]1,Inf[ There are %count% apples
+  {% endtranschoice %}
 {% endblock %}
