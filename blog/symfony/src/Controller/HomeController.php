@@ -4,14 +4,11 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class BlogController extends AbstractController
+class HomeController extends AbstractController
 {
     public function index(int $page = 1)
     {
-        return $this->render('blog/mainPage.html.twig', [
-            'controller_name' => 'BlogController',
-            'page' => $page
-        ]);
+        return $this->render('blog/main_page.html.twig');
     }
 
     /*

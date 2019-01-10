@@ -2,9 +2,9 @@
 
 namespace App\Twig;
 
+use App\Helpers;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
-use App\Helpers;
 
 class SlugifyExtension extends AbstractExtension
 {
@@ -16,5 +16,3 @@ class SlugifyExtension extends AbstractExtension
         ];
     }
 }
-
-

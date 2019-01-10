@@ -25,7 +25,7 @@
       fixAlign: {
         default: true,
       },
-    },
+    }
   }
 </script>
 

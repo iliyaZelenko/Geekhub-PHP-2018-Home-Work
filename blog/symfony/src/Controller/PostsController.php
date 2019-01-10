@@ -2,110 +2,119 @@
 
 namespace App\Controller;
 
-use App\Entity\Post;
 use App\Entity\Comment;
+use App\Entity\Post;
+use App\Entity\User;
 use App\Form\CommentType;
+use Doctrine\Common\Persistence\ObjectManager;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Knp\Component\Pager\PaginatorInterface;
-use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\HttpFoundation\Response;
 
 class PostsController extends AbstractController
 {
-    public function allPosts(Request $request, PaginatorInterface $paginator, $page = 1)
-    {
-        $perPage = 3;
+    public const POSTS_PER_PAGE = 3;
+    public const COMMENTS_PER_PAGE = 6;
 
+    public function allPosts($page = 1): Response
+    {
         $repo = $this
             ->getDoctrine()
             ->getRepository(Post::class);
-        $query = $repo
-            ->createQueryBuilder('p')
-            ->getQuery();
 
+        $posts = $repo->getPaginated($page, static::POSTS_PER_PAGE);
 
-        // $posts = $repo->findAll();
-        // Возвращается экземпляр: https://github.com/KnpLabs/KnpPaginatorBundle/blob/master/Pagination/SlidingPagination.php
-        $posts = $paginator->paginate(
-            $query,
-            $page,
-            $perPage
-        );
-
-        return $this->render('blog/posts/allPosts.html.twig', [
+        return $this->render('blog/posts/all_posts.html.twig', [
             'posts' => $posts,
-            'pages' => $posts->getPageCount(),
+            'pagesCount' => $posts->getPageCount(),
+            'totalPosts' => $posts->getTotalItemCount(),
             'vue_data' => [
                 'currentPage' => $page
             ]
         ]);
     }
 
-    // в хороших практиках по symfony написано что лучше совмещать дейсвие обработки формы и рендеринга
-    public function post(Request $request, ObjectManager $manager, $slug, $id)
+    /*
+     ParamConverter:
+     1) если использовать параметр "Post $post" без анотации ParamConverter,
+        то Symfony сама будет использовать ParamConverter
+     2) изначально ParamConverter ищет по id, чтобы осуществлялся поиск по другим полям, их нужно добавить в mapping.
+     3) без mapping поиск будет только по id, будет делатся 2 запроса где WHERE id (на примере 16) будет "16" и 16
+        Скрин: https://i.imgur.com/0VtcTDc.png
+        С mapping со slug будет делатся 2 запроса: WHERE slug "post-title-1" и WHERE id 16
+        Скрин: https://i.imgur.com/cYjSI2f.png
+    */
+
+    /**
+     * @ParamConverter("post", options={"mapping" = {"slug" = "slug"}})
+     * @param Request $request
+     * @param ObjectManager $manager
+     * @param Post $post
+     * @param $slug
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function post(Request $request, ObjectManager $manager, Post $post, $slug, $id): Response
     {
-        $repoPost = $this
-            ->getDoctrine()
-            ->getRepository(Post::class);
+        $repoUser = $this->getDoctrine()->getRepository(User::class);
+        $repoComment = $this->getDoctrine()->getRepository(Comment::class);
 
-        $post = $repoPost
-            ->getWithRootComments($id);
-
-
-        if (!$post) {
-            throw $this->createNotFoundException(
-                'No post found for id ' . $id
+        // если slug из url не совпадает со slug в посте, то редирект на слуг поста
+        // таким образом: если была ссылка с slug который поменялся (вместе с title), то такая ссылка будет работать
+        // изначально ParamConverter ищет по id и (или) slug, если нашло по id, а slug отличается, то будет редирект
+        if ($slug !== $post->getSlug()) {
+            return $this->redirect(
+                $this->generateUrl('post', [
+                    'id' => $post->getId(),
+                    'slug' => $post->getSlug()
+                ]),
+                301
             );
         }
 
-        // TODO вот этот кусок кода нужно вынести в сервис, очень важно подумать хорошо о том
-        // как писать не жирные контроллеры, даже если текущий контроллер пока не жирный
-        $comment = new Comment();
+        // TODO Security
+        $authUser = $repoUser->getFirst();
+        $comment = new Comment($authUser, $post);
 
         $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // я так понимаю это ссылка на тот же $comment
-            // $commentRequest = $form->getData();
-
-            // TODO не знаю пока как добавить коммент в уже полученные комменты $post.
-            $comment->setPost($post);
-            $comment->setAuthorId(1);
-
-            // dump($commentRequest, $comment);
-
             $manager->persist($comment);
             $manager->flush();
+
+            // если ASC: $rootComments[] = $comment;
+            // array_unshift($rootComments, $comment);
+//            $rootComments->add($comment);
 
             $this->addFlash(
                 'success',
                 'Comment saved!'
             );
-            // печально что так нельзя
-//            $this->addFlash(
-//                'message',
-//                [
-//                    'type' => 'success',
-//                    'text' => 'Comment saved!'
-//                ]
-//            );
-
         }
+
+        // $repoComment->getCommentsByPostId($id);
+        $rootComments = $repoComment->getPaginatedByPostId(
+            $id,
+            // берется из query ?page=2 (так сделано на stackoverflow)
+            $request->query->getInt('page', 1),
+            static::COMMENTS_PER_PAGE
+        );
 
         return $this->render('blog/posts/post.html.twig', [
             'post' => $post,
+            'rootComments' => $rootComments,
             'form' => $form->createView(),
             'vue_data' => [
                 'formComment' => json_encode([
-                    'text' => 'Form text'
-                ], JSON_FORCE_OBJECT)
+                    'text' => 'Form text',
+                ], JSON_FORCE_OBJECT),
             ],
+            // TODO убрать
             'vue_methods' => [
                 'onSubmit' => [
-                    'body' => '
-                    alert(123)
-                    '
+                    'body' => ''
                 ]
             ]
         ]);

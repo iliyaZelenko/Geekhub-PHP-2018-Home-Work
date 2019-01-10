@@ -3,7 +3,6 @@
 namespace App\Twig;
 
 use Twig\Extension\AbstractExtension;
-use Twig\TwigFilter;
 use Twig\TwigFunction;
 
 class DateExtension extends AbstractExtension
@@ -12,7 +11,7 @@ class DateExtension extends AbstractExtension
     {
         return [
             new TwigFunction('blogDate', function (\DateTimeInterface $date) {
-                $html = '<small>🕒 <blog-date date="' . $date->format('U') . '"></blog-date></small>';
+                $html = '<blog-date date="' . $date->format('U') . '"></blog-date>';
 
                 return new \Twig\Markup($html, 'UTF-8');
             }),

@@ -2,14 +2,11 @@
 
 namespace App\GraphQL\Resolver;
 
-use GraphQL\Error\Error;
-use GraphQL\Language\AST\StringValueNode;
+use App\GraphQL\Mutation\CreatePostMutation;
 use GraphQL\Type\Definition\ResolveInfo;
-use GraphQL\Utils;
 use Overblog\GraphQLBundle\Definition\Argument;
 use Overblog\GraphQLBundle\Resolver\ResolverMap;
 use Overblog\GraphQLBundle\Upload\Type\GraphQLUploadType;
-use App\GraphQL\Mutation\CreatePostMutation;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class MyResolverMap extends ResolverMap
@@ -52,11 +49,11 @@ class MyResolverMap extends ResolverMap
 
                     return null;
                 },
-                'paginatedPosts' => [PostsResolver::class, 'getPosts']
+                'paginatedPosts' => [PostsResolver::class, 'getPosts'],
             ],
             'Mutation' => [
-                'createPost' => [new CreatePostMutation($this->container), 'createPost']
-            ]
+                'createPost' => [new CreatePostMutation($this->container), 'createPost'],
+            ],
         ];
     }
 }
