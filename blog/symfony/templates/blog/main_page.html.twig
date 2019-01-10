@@ -1,0 +1,19 @@
+{% extends 'layouts/main/index.html.twig' %}
+
+{% block title %}
+  Home page
+{% endblock %}
+
+{% block content %}
+  <b-alert show>
+    {{ hello_translated }}
+    <b-link to="/blog">
+      Visit blog.
+    </b-link>
+  </b-alert>
+
+  {# TODO для русского языка не подходит, например, для 101 будет яблок (Pluralization) #}
+  {% transchoice count %}
+    {0} There are no apples|{1} There is one apple|]1,Inf[ There are %count% apples
+  {% endtranschoice %}
+{% endblock %}

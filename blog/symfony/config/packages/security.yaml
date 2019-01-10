@@ -1,48 +1,50 @@
 security:
-    # это я см добавил
     encoders:
-      App\Entity\User:
-        algorithm: bcrypt
+        App\Entity\User:
+            # bcrypt or argon2i are recommended
+            # argon2i is more secure, but requires PHP 7.2 or the Sodium extension
+            algorithm: bcrypt
+            cost: 12
 
+    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
 #      in_memory: { memory: ~ }
       # добавил это и закомментировал in_memory
-      entity_provider:
-        entity:
-          class: App\Entity\User
-          property: username
-
-    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
-#    providers:
-#        in_memory: { memory: ~ }
+        entity_provider:
+            entity:
+                class: App\Entity\User
+                property: username
     firewalls:
         dev:
-          pattern: ^/(_(profiler|wdt)|css|images|js)/
-          security: false
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
 
-        login:
-          pattern: ^/api/auth/signin
-          stateless: true
-          anonymous: true
-          json_login:
-            check_path: /api/auth/signin/token
-            success_handler: lexik_jwt_authentication.handler.authentication_success
-            failure_handler: lexik_jwt_authentication.handler.authentication_failure
-
-        register:
-          pattern:  ^/api/register
-          stateless: true
-          anonymous: true
-
-        api:
-          pattern: ^/api
-          stateless: true
-          guard:
-            authenticators:
-            - lexik_jwt_authentication.jwt_token_authenticator
+#        login:
+#            pattern: ^/api/auth/signin
+#            stateless: true
+#            anonymous: true
+#            json_login:
+#                check_path: /api/auth/signin/token
+#                success_handler: lexik_jwt_authentication.handler.authentication_success
+#                failure_handler: lexik_jwt_authentication.handler.authentication_failure
+#
+#        register:
+#            pattern:  ^/api/register
+#            stateless: true
+#            anonymous: true
+#
+#        api:
+#            pattern: ^/api
+#            stateless: true
+#            guard:
+#                authenticators:
+#                - lexik_jwt_authentication.jwt_token_authenticator
 
         main:
-          anonymous: true
+            anonymous: true
+            guard:
+                authenticators:
+                    - App\Security\LoginFormAuthenticator
 
             # activate different ways to authenticate
 
@@ -55,9 +57,9 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        - { path: ^/api/auth/signin, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/api/auth/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/api/res, roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
+#        - { path: ^/api/auth/signin, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+#        - { path: ^/api/auth/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+#        - { path: ^/api/res, roles: IS_AUTHENTICATED_FULLY }
+#        - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }

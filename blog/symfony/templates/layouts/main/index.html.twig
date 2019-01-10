@@ -1,13 +1,10 @@
-{% extends 'layouts/main/baseHtmlPage.html.twig' %}
+{% extends 'layouts/main/base_html_page.html.twig' %}
 
 {% block body %}
 
   {% include 'layouts/main/parts/header.html.twig' %}
 
   <main>
-    {#bg-dark#}
-    {#fluid#}
-    {#class="p-4"#}
     <b-container class="pt-5">
       <div>
         {% include 'layouts/main/parts/messages.html.twig' %}
@@ -16,10 +13,4 @@
       {% block content %}{% endblock %}
     </b-container>
   </main>
-{#
-  {% embed "layouts/main/parts/contentWrap.html.twig" %}
-    {% block content_wrap %}
-      TODO Content here
-    {% endblock %}
-  {% endembed %}#}
 {% endblock %}
