@@ -5,24 +5,13 @@
 {% block content %}
   <h1>{{ post.title }}</h1>
 
-  {{ blogDate(post.createdAt) }}
-
-  {# Теги #}
-  <div>
-    {% for tag in post.tags %}
-      <b-badge variant="secondary">
-        {{ tag.name }}
-      </b-badge>
-    {% endfor %}
-  </div>
+  {{ blogDate(post.getCreatedAt()) }}
 
   <p>
     {{ post.text }}
   </p>
 
   <hr>
-
-  {{ form(form) }}
 
 
   <h4 class="mb-4">
@@ -38,11 +27,7 @@
 
   <editor></editor>
 
-  {% include 'blog/posts/parts/comments_tree.html.twig' with { commentsPost: post, comments: rootComments, form: form } only %}
-
-  <div class="d-flex justify-content-center mt-4">
-    {{ knp_pagination_render(rootComments) }}
-  </div>
+  {% include 'blog/posts/parts/commentsLvl.html.twig' with { comments: post.getComments(), isRoot: true, form: form } only %}
 
   {#{% for comment in post.getComments() %}#}
     {#<div>#}

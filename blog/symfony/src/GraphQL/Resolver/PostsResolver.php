@@ -29,12 +29,12 @@ class PostsResolver
         $posts = [];
 
         // генерирует посты текущей страницы
-        for ($i = $postsCurrentPageStart; $i <= $postsBeforePage + $perPage && $i <= $postsTotalCount; ++$i) {
+        for ($i = $postsCurrentPageStart; $i <= $postsBeforePage + $perPage && $i <= $postsTotalCount; $i++) {
             $posts[] = static::fetchPost($i, $postFields, $postRelations, $selectedFieldsPosts);
         }
 
         $response = [
-            'posts' => $posts,
+            'posts' => $posts
         ];
 
         if (isset($selectedFields['pageInfo'])) {
@@ -55,7 +55,7 @@ class PostsResolver
                 $pageInfo['totalItems'] = $postsTotalCount;
             }
             if (isset($selectedFieldsPageInfo['hasNextPage'])) {
-                // или $page + 1 <= $pagesCount
+                # или $page + 1 <= $pagesCount
                 $pageInfo['hasNextPage'] = $pagesCount - $page >= 1;
             }
 
@@ -70,26 +70,26 @@ class PostsResolver
     {
         $post = [
             'id' => $i,
-            'comments' => [],
+            'comments' => []
         ];
 
-        if (\in_array('title', $postFields, true)) {
+        if (\in_array('title', $postFields)) {
             $post['title'] = 'Title ' . $i;
         }
-        if (\in_array('text', $postFields, true)) {
+        if (\in_array('text', $postFields)) {
             $post['text'] = 'Text ' . $i;
         }
-        if (\in_array('comments', $postRelations, true)) {
+        if (\in_array('comments', $postRelations)) {
             [
                 'fields' => $commentsFields
             ] = static::getLevelInfo($selectedFields['comments']);
 
             $post['comments'] = static::fetchComments($commentsFields);
         }
-        if (\in_array('pageInfo', $postRelations, true)) {
+        if (\in_array('pageInfo', $postRelations)) {
             $post['pageInfo'] = [
                 'hasNextPage' => false,
-                'endCursor' => 20,
+                'endCursor' => 20
             ];
         }
 
@@ -101,19 +101,20 @@ class PostsResolver
         $comments = [];
         $randCount = random_int(1, 10);
 
-        for ($i = 1; $i <= $randCount; ++$i) {
+        for ($i = 1; $i <= $randCount; $i++) {
             $comment = [];
 
-            if (\in_array('text', $fields, true)) {
+            if (\in_array('text', $fields)) {
                 $comment['text'] = 'Comment text';
             }
-            if (\in_array('text', $fields, true)) {
+            if (\in_array('text', $fields)) {
                 $author = ['Вася', 'Васько', 'Василий', 'Василько', 'Васьковый'][random_int(0, 4)];
                 $comment['author'] = $author;
             }
 
             $comments[] = $comment;
         }
+
 
         return $comments;
     }
@@ -136,7 +137,7 @@ class PostsResolver
 
         return [
             'fields' => $fields,
-            'relations' => $relations,
+            'relations' => $relations
         ];
     }
 }

@@ -9,29 +9,43 @@ trait TimestampableTrait
     /**
      * @ORM\Column(type="datetimetz_immutable")
      */
-    private $createdAt;
+    private $created_at;
 
     /**
      * @ORM\Column(type="datetimetz_immutable", nullable=true)
      */
-    private $updatedAt;
+    private $updated_at;
 
     /* Getters / Setters */
 
     public function getCreatedAt(): ?\DateTimeImmutable
     {
-        return $this->createdAt;
+        return $this->created_at;
+    }
+
+    private function setCreatedAt(\DateTimeImmutable $created_at): self
+    {
+        $this->created_at = $created_at;
+
+        return $this;
     }
 
     public function getUpdatedAt(): ?\DateTimeImmutable
     {
-        return $this->updatedAt;
+        return $this->updated_at;
+    }
+
+    private function setUpdatedAt(?\DateTimeImmutable $updated_at): self
+    {
+        $this->updated_at = $updated_at;
+
+        return $this;
     }
 
     /* Lifecycle hooks */
 
     /**
-     * @ORM\PrePersist()
+     * @ORM\PrePersist
      */
     public function setCreatedAtValue()
     {
@@ -39,25 +53,11 @@ trait TimestampableTrait
     }
 
     /**
-     * @ORM\PreUpdate()
+     * @ORM\PreUpdate
      */
     public function onPreUpdate()
     {
         $this->setUpdatedAt($this->getNowUTC());
-    }
-
-    private function setCreatedAt(\DateTimeImmutable $createdAt): self
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    private function setUpdatedAt(?\DateTimeImmutable $updatedAt): self
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
     }
 
     /* Other */

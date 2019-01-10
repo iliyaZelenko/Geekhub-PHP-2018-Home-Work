@@ -2,18 +2,18 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Category;
 use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
+use App\Entity\Category;
 
 class CategoryFixture extends Fixture implements OrderedFixtureInterface
 {
     public function load(ObjectManager $manager)
     {
-//        $food = new Category();
-//        $food->setTitle('Food');
-//        $manager->persist($food);
+        $food = new Category();
+        $food->setTitle('Food');
+        $manager->persist($food);
 
         // это вызывает оишбку https://i.imgur.com/rUm139L.png
         // $manager->flush();
@@ -39,9 +39,9 @@ class CategoryFixture extends Fixture implements OrderedFixtureInterface
     }
 
     /**
-     * Get the order of this fixture.
+     * Get the order of this fixture
      *
-     * @return int
+     * @return integer
      */
     public function getOrder()
     {

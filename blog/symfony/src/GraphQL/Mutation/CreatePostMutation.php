@@ -3,12 +3,13 @@
 namespace App\GraphQL\Mutation;
 
 use App\Entity\Post;
-use GraphQL\Type\Definition\ResolveInfo;
-use Overblog\GraphQLBundle\Definition\Argument;
 use Overblog\GraphQLBundle\Definition\Resolver\AliasedInterface;
 use Overblog\GraphQLBundle\Definition\Resolver\MutationInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Validator\Validation;
+
+use GraphQL\Type\Definition\ResolveInfo;
+use Overblog\GraphQLBundle\Definition\Argument;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 //use Symfony\Component\Validator\Validator\ValidatorInterface;
 //, AliasedInterface
@@ -23,30 +24,35 @@ class CreatePostMutation implements MutationInterface
 
     public function createPost($value, Argument $args, \ArrayObject $context, ResolveInfo $info)
     {
+//        $container;
         [
             'title' => $title,
             'text' => $text
             // TODO попробовать так: $args['input']
         ] = $args->offsetGet('input');
 
+        // Do something with `$shipName` and `$factionId` ...
         $post = new Post();
         $post->setTitle($title);
         $post->setText($text);
         // $post->setTextShort();
         // ...
 
-        // TODO обращатся к контейнеру плохая практика, хоть и пробывал тут делать через ValidatorInterface и не работало,
-        // но всеравно попробовать по другому
+//        dump($post);
+
         $validator = $this->container->get('validator'); // Validation::createValidator(); // $container->get('valdiator'); // Validation::createValidator();
         $errors = $validator->validate($post);
+//        \Symfony\Component\DependencyInjection\ContainerInterface
+//        dump($post, $errors);
 
+//        dump($errors);
         $errorsResponse = [];
 
         if (\count($errors)) {
             foreach ($errors as $error) {
                 $errorsResponse[] = [
                     'key' => $error->getPropertyPath(),
-                    'message' => $error->getMessage(),
+                    'message' => $error->getMessage()
                 ];
             }
 
@@ -58,12 +64,13 @@ class CreatePostMutation implements MutationInterface
 //            throw new \Error($errorsString);
         }
 
+        // Then returns our payload, it should fits `IntroduceShipPayload` type
         return [
             'post' => [
                 'title' => $title,
                 'text' => $text,
             ],
-            'errors' => $errorsResponse,
+            'errors' => $errorsResponse
         ];
     }
 
