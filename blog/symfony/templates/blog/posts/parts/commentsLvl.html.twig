@@ -1,8 +1,6 @@
 <div class="comments-wrap ml-5 my-2">
   {% for comment in comments %}
       {#<b-card class="comments ml-4 mb-2">#}
-
-      {#createdAt#}
       {{ blogDate(comment.getCreatedAt()) }}
 
       <p class="card-text">
@@ -23,21 +21,17 @@
           Reply
         </b-btn>
         <b-collapse id="collapse-for-comment{{ comment.id }}" class="mt-2">
-          <b-form
-            @submit="onSubmit"
-            action="{{ url('post', { slug: commentsPost.slug, id: commentsPost.id}) }}"
-            method="post"
-          >
+          <b-form @submit="onSubmit">
             <b-form-group
+              id="exampleInputGroup1"
               label="Email address:"
-              label-for="comment-{{ comment.id }}-input-message"
-              description="Please, provide a good message."
+              label-for="exampleInput1"
+              description="We'll never share your email with anyone else."
             >
-              <input type="hidden" name="token" value="{{ csrf_token('create-comment-item') }}" />
-
+              ${ formComment.text }
               <b-form-input
                 v-model="formComment.text"
-                id="comment-{{ comment.id }}-input-message"
+                id="exampleInput1"
                 type="text"
                 placeholder="Enter text"
                 required
@@ -54,14 +48,11 @@
 
       <hr>
 
-      {% set childrenComments = comment.getChildrenComments() %}
+      {#не хотел два раза вызывать, не знаю плохо ли тут set юзать#}
+      {% set comments = comment.getChildrenComments() %}
 
-      {% if childrenComments | length > 0 %}
-        {# не уверен что стоит так делать, комменты же имеют одинаковый пост,
-        не хотел писать commentsPost: commentsPost как ты мне замечание сделал с comments: comments #}
-        {% set childrenCommentsPost = commentsPost %}
-
-        {% include 'blog/posts/parts/comments_tree.html.twig' with { commentsPost: childrenCommentsPost, comments: childrenComments, form: form } only %}
+      {% if comments | length > 0 %}
+        {% include 'blog/posts/parts/commentsLvl.html.twig' with { comments: comments, isRoot: false, form: form } only %}
       {% endif %}
 
       {#</b-card>#}

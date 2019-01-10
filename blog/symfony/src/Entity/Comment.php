@@ -2,22 +2,18 @@
 
 namespace App\Entity;
 
-use App\Entity\Traits\TimestampableTrait;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use App\Entity\Traits\TimestampableTrait;
 
 /**
  * @ORM\Table(name="comments")
  * @ORM\Entity(repositoryClass="App\Repository\CommentRepository")
- * @ORM\HasLifecycleCallbacks()
+ * @ORM\HasLifecycleCallbacks
  */
 class Comment
 {
     use TimestampableTrait;
-
-    /* Columns */
 
     /**
      * @ORM\Id()
@@ -27,32 +23,33 @@ class Comment
     private $id;
 
     /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $parent_id;
+
+    /**
+     * TODO если используется отношение то вроде это не нужно
+     * @ORM\Column(type="integer")
+     */
+    private $author_id;
+
+    /**
      * @ORM\Column(type="text")
-     * @Assert\NotBlank()
-     * @Assert\NotNull()
+     * @Assert\NotBlank
+     * @Assert\NotNull
      * @Assert\Type("string")
      * @Assert\Length(
-     *     min=5,
-     *     max=100
+     *      min = 5,
+     *      max = 100
      * )
      */
     private $text;
 
-    /* Relations */
-
-    //, inversedBy="comments"
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Post")
-     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Post", inversedBy="comments")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $post;
-
-    //, inversedBy="comments"
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User")
-     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
-     */
-    private $author;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="parent", orphanRemoval=true)
@@ -66,29 +63,44 @@ class Comment
      */
     private $parent;
 
-    public function __construct(User $author, Post $post, string $text = '')
+    // TODO сразу тут ставить $post и $author_id
+    public function __construct()
     {
-        $this->childrenComments = new ArrayCollection();
 
-        $this
-            ->setAuthor($author)
-            ->setPost($post)
-            ->setText($text);
-
-//        $author->addComment($this);
-//        $post->addComment($this);
     }
 
     /* Getters / Setters */
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    // хотел возвращаеть просто ": string" так как поле text не nullable, но если ": ?string", то форма инициализируется с ошибкой
-    // update: Поставил в конструкторе $text = '', может уже не актуально
-    public function getText(): string
+    public function getParentId(): ?int
+    {
+        return $this->parent_id;
+    }
+
+    public function setParentId(?int $parent_id): self
+    {
+        $this->parent_id = $parent_id;
+
+        return $this;
+    }
+
+    public function getAuthorId(): ?int
+    {
+        return $this->author_id;
+    }
+
+    public function setAuthorId(int $author_id): self
+    {
+        $this->author_id = $author_id;
+
+        return $this;
+    }
+
+    public function getText(): ?string
     {
         return $this->text;
     }
@@ -114,41 +126,29 @@ class Comment
         return $this;
     }
 
-    public function getParent(): ?self
+    public function getParent(): Comment
     {
         return $this->parent;
     }
 
-    public function setParent(self $comment): self
+    public function setParent(Comment $comment): self
     {
         $this->parent = $comment;
 
         return $this;
     }
 
-    public function getChildrenComments(): Collection
+    public function getChildrenComments()
     {
         return $this->childrenComments;
     }
 
-    public function addChildrenComment(self $comment): self
+    public function addChildrenComment(Comment $comment): self
     {
         if (!$this->childrenComments->contains($comment)) {
             $this->childrenComments[] = $comment;
             $comment->setParent($this);
         }
-
-        return $this;
-    }
-
-    public function getAuthor(): User
-    {
-        return $this->author;
-    }
-
-    public function setAuthor(User $author): self
-    {
-        $this->author = $author;
 
         return $this;
     }

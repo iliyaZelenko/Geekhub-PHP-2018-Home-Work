@@ -1,5 +1,4 @@
 <?php
-
 $finder = PhpCsFixer\Finder::create()
     ->in(__DIR__ . '/src')
 ;
@@ -17,10 +16,10 @@ return PhpCsFixer\Config::create()
         '@PHP71Migration:risky' => true,
         'combine_consecutive_unsets' => true,
         'array_syntax' => [
-            'syntax' => 'short'
+            'syntax' => 'short',
         ],
         'list_syntax' => [
-            'syntax' => 'short'
+            'syntax' => 'short',
         ],
         'no_useless_else' => true,
         'no_useless_return' => true,
@@ -35,7 +34,7 @@ return PhpCsFixer\Config::create()
         'phpdoc_separation' => false,
         'phpdoc_to_comment' => false,
         'phpdoc_add_missing_param_annotation' => [
-            'only_untyped' => false
+            'only_untyped' => false,
         ],
         'modernize_types_casting' => true,
         'no_php4_constructor' => true,
@@ -43,23 +42,16 @@ return PhpCsFixer\Config::create()
         'php_unit_strict' => true,
         'semicolon_after_instruction' => true,
         'doctrine_annotation_braces' => [
-            'syntax' => 'with_braces'
+            'syntax' => 'with_braces',
         ],
         'doctrine_annotation_indentation' => true,
         'doctrine_annotation_spaces' => true,
         'declare_strict_types' => false,
         'phpdoc_types_order' => [
-            'null_adjustment' => 'always_last'
+            'null_adjustment' => 'always_last',
         ],
         'void_return' => false,
         'pre_increment' => false,
         'yoda_style' => false,
-
-        /* это я ставил */
-
-        // это правило не отлючается походу, продолжает ставить заяпятые
-        'trailing_comma_in_multiline_array' => false,
-        // странное правило, в наглую заменяет все инкременты на pre форму, может так и код сломать.
-        'increment_style' => false
     ])
 ;

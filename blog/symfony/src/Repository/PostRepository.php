@@ -4,8 +4,6 @@ namespace App\Repository;
 
 use App\Entity\Post;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Knp\Component\Pager\Pagination\PaginationInterface as PaginationInterfaceReturn;
-use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -16,31 +14,60 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class PostRepository extends ServiceEntityRepository
 {
-    /**
-     * @var PaginatorInterface
-     */
-    private $paginator;
-
-    public function __construct(RegistryInterface $registry, PaginatorInterface $paginator)
+    public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Post::class);
-
-        $this->paginator = $paginator;
     }
 
-    public function getPaginated($page, $perPage): PaginationInterfaceReturn
+    public function paginated()
     {
-        $query = $this
-            ->createQueryBuilder('p')
-            ->orderBy('p.id', 'DESC')
-            ->getQuery()
-        ;
-
-        // Возвращается экземпляр: https://github.com/KnpLabs/KnpPaginatorBundle/blob/master/Pagination/SlidingPagination.php
-        return $this->paginator->paginate(
-            $query,
-            $page,
-            $perPage
-        );
+        // TODO
     }
+
+    public function getWithRootComments($id)
+    {
+        return $this->createQueryBuilder('post')
+            ->innerJoin('post.comments', 'post_comments')
+//            ->innerJoin('post_comments.childrenComments', 'post_comments_comments')
+            ->andWhere('post.id = :id')
+            ->andWhere('post_comments.parent_id is NULL')
+            ->setParameters([
+                'id' => $id
+            ])
+            ->addSelect('post_comments')
+            ->orderBy('post_comments.id', 'ASC')
+            ->getQuery()
+            ->getOneOrNullResult()
+//            ->getResult()
+        ;
+    }
+
+    // /**
+    //  * @return Post[] Returns an array of Post objects
+    //  */
+    /*
+    public function findByExampleField($value)
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.exampleField = :val')
+            ->setParameter('val', $value)
+            ->orderBy('p.id', 'ASC')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+    */
+
+    /*
+    public function findOneBySomeField($value): ?Post
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.exampleField = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+    */
 }

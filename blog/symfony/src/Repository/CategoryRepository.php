@@ -4,9 +4,8 @@ namespace App\Repository;
 
 use App\Entity\Post;
 //use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
-
+use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
 //use Gedmo\Tree\Traits\Repository\ORM\NestedTreeRepositoryTrait;
 
 /**

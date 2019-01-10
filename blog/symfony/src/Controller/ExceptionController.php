@@ -1,5 +1,4 @@
 <?php
-
 // src/Controller/ExceptionController.php
 
 namespace App\Controller;
@@ -10,7 +9,7 @@ use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\Log\DebugLoggerInterface;
 
 /**
- * Custom ExceptionController that renders to json.
+ * Custom ExceptionController that renders to json
  */
 class ExceptionController
 {
@@ -33,7 +32,7 @@ class ExceptionController
             json_encode(
                 [
                     'error' => $exception->getMessage(),
-                    'statusCode' => $code,
+                    'statusCode' => $code
                 ],
                 JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
             ),

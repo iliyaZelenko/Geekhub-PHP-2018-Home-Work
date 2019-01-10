@@ -3,31 +3,32 @@
 namespace App\DataFixtures;
 
 use App\Entity\Post;
-use App\Entity\Tag;
 use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
+use Psr\Container\ContainerInterface;
 
 class PostFixture extends Fixture implements OrderedFixtureInterface
 {
-    public const REFERENCE_PREFIX = 'post';
+    public const POST_REFERENCE_PREFIX = 'post';
     public const POSTS_COUNT = 5;
 
-    public function load(ObjectManager $manager): void
+    private $container;
+
+    public function __construct(ContainerInterface $container)
     {
-        for ($i = 1; $i <= self::POSTS_COUNT; ++$i) {
-            // случайный автор
-            $userRef = UserFixture::REFERENCE_PREFIX . random_int(1, UserFixture::COUNT);
-            $user = $this->getReference($userRef);
+        $this->container = $container;
+    }
 
-            $title = 'Post title ' . $i;
-            $text = 'Post text ' . $i;
-            $textShort = 'Post text short ' . $i;
-            $tags = $this->getRandomTags();
+    public function load(ObjectManager $manager)
+    {
+        for ($i = 1; $i <= self::POSTS_COUNT; $i++) {
+            $post = new Post();
+            $post->setTitle('Post title ' . $i);
+            $post->setText('Post text ' . $i);
+            $post->setTextShort('Post text short ' . $i);
 
-            $post = new Post($user, $title, $text, $textShort, $tags);
-
-            $this->addReference(self::REFERENCE_PREFIX . $i, $post);
+            $this->addReference(self::POST_REFERENCE_PREFIX . $i, $post);
 
             $manager->persist($post);
         }
@@ -36,31 +37,12 @@ class PostFixture extends Fixture implements OrderedFixtureInterface
     }
 
     /**
-     * Get the order of this fixture.
+     * Get the order of this fixture
      *
-     * @return int
+     * @return integer
      */
-    public function getOrder(): int
+    public function getOrder()
     {
         return 101;
-    }
-
-    /**
-     * @throws \Exception
-     * @return Tag[]
-     */
-    private function getRandomTags(): array
-    {
-        for ($i = 1, $tags = []; $i < TagFixture::COUNT; $i++) {
-            // пропускает рандомные теги
-            if (random_int(0, 2)) {
-                continue;
-            }
-
-            $ref = TagFixture::REFERENCE_PREFIX . $i;
-            $tags[] = $this->getReference($ref);
-        }
-
-        return $tags;
     }
 }

@@ -2,13 +2,12 @@
 
 namespace App\Controller\RESTful\Auth;
 
-use App\Entity\User;
 use App\Resources\UserResource;
-use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\{JsonResponse, Request};
+use App\Entity\User;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 
 class AuthController extends AbstractController
 {
@@ -25,7 +24,7 @@ class AuthController extends AbstractController
         $em->persist($user);
         $em->flush();
 
-        $token = $JWTManager->create($user);
+        $token =  $JWTManager->create($user);
 
         // $JWTManager->create($user)
         return new JsonResponse([
@@ -36,13 +35,13 @@ class AuthController extends AbstractController
               // timestamp
               'expiresIn' => '',
               // timestamp
-              'refreshTokenExpiresIn' => '',
-            ],
+              'refreshTokenExpiresIn' => ''
+            ]
         ]);
     }
 
     // TODO сделать для маршрута auth/signin
-    public function signIn()
+    public function signIn ()
     {
         // возвращать токен и все остальное
     }

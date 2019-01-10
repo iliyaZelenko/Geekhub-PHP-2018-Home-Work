@@ -4,8 +4,6 @@ namespace App\Repository;
 
 use App\Entity\Comment;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Knp\Component\Pager\Pagination\PaginationInterface as PaginationInterfaceReturn;
-use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -16,25 +14,12 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class CommentRepository extends ServiceEntityRepository
 {
-    /**
-     * @var PaginatorInterface
-     */
-    private $paginator;
-
-    public function __construct(RegistryInterface $registry, PaginatorInterface $paginator)
+    public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Comment::class);
-
-        $this->paginator = $paginator;
     }
 
-    /**
-     * Возвращает первый комментарий.
-     *
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     * @return Comment|null
-     */
-    public function getFirst(): ?Comment
+    public function getFirst()
     {
         return $this
             ->createQueryBuilder('comment')
@@ -45,31 +30,32 @@ class CommentRepository extends ServiceEntityRepository
         ;
     }
 
-    /**
-     * Возвращает все пагинированные комменты по id поста.
-     *
-     * @param int $postId
-     * @param int $page
-     * @param int $perPage
-     * @return PaginationInterfaceReturn
-     */
-    public function getPaginatedByPostId(int $postId, int $page, int $perPage): PaginationInterfaceReturn
+    // /**
+    //  * @return Comment[] Returns an array of Comment objects
+    //  */
+    /*
+    public function findByExampleField($value)
     {
-        $query = $this->createQueryBuilder('comment')
-            ->andWhere('comment.post = :post_id')
-            ->andWhere('comment.parent is NULL')
-            ->setParameters([
-                'post_id' => $postId,
-            ])
-            ->orderBy('comment.id', 'DESC')
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.exampleField = :val')
+            ->setParameter('val', $value)
+            ->orderBy('c.id', 'ASC')
+            ->setMaxResults(10)
             ->getQuery()
+            ->getResult()
         ;
-
-        // Возвращается экземпляр: https://github.com/KnpLabs/KnpPaginatorBundle/blob/master/Pagination/SlidingPagination.php
-        return $this->paginator->paginate(
-            $query,
-            $page,
-            $perPage
-        );
     }
+    */
+
+    /*
+    public function findOneBySomeField($value): ?Comment
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.exampleField = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+    */
 }
