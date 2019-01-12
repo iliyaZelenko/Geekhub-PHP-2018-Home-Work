@@ -22,8 +22,9 @@
 
   <hr>
 
-  {{ form(form) }}
-
+  {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+    {{ form(form) }}
+  {% endif %}
 
   <h4 class="mb-4">
     Comments

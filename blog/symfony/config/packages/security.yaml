@@ -45,6 +45,11 @@ security:
             guard:
                 authenticators:
                     - App\Security\LoginFormAuthenticator
+            logout:
+                path: app_logout
+                # where to redirect after logout
+                # редиректит на страницу входа, чтобы, например, войти под другим аккаунтом
+                target: app_login
 
             # activate different ways to authenticate
 

@@ -11,19 +11,26 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class UserFixture extends Fixture implements OrderedFixtureInterface
 {
     public const REFERENCE_PREFIX = 'user';
-    public const COUNT = 3;
     public const USERS = [
         [
+            'username' => 'Илья',
+            'email' => 'iliyazelenkog@gmail.com',
+            'password' => '123'
+        ],
+        [
             'username' => 'Василько-с_района.КРУТОЙ',
-            'email' => 'vasilko@example.com'
+            'email' => 'vasilko@example.com',
+            'password' => '321'
         ],
         [
             'username' => 'Неуравновешанный_хомяк_убийца',
-            'email' => 'killer@example.com'
+            'email' => 'killer@example.com',
+            'password' => null
         ],
         [
             'username' => 'ПьянаяяМартышка',
-            'email' => 'obezyana@example.com'
+            'email' => 'obezyana@example.com',
+            'password' => null
         ]
     ];
     private $passwordEncoder;
@@ -33,19 +40,32 @@ class UserFixture extends Fixture implements OrderedFixtureInterface
         $this->passwordEncoder = $passwordEncoder;
     }
 
+    public static function getUsersCount()
+    {
+        return count(static::USERS);
+    }
+
+    public static function getRandomReferenceName()
+    {
+        return static::REFERENCE_PREFIX . random_int(1, static::getUsersCount());
+    }
+
     public function load(ObjectManager $manager): void
     {
-        for ($i = 1; $i <= self::COUNT; ++$i) {
+        $usersCount = static::getUsersCount();
+
+        for ($i = 1; $i <= $usersCount; ++$i) {
             [
-               'username' => $username,
-               'email' => $email
+                'username' => $username,
+                'email' => $email,
+                'password' => $password
             ] = static::USERS[$i - 1];
-            // random string
-            $plainPassword = 'just text ' . bin2hex(random_bytes(10));
+            // static password or random string
+            $plainPassword = $password ?? 'just text ' . bin2hex(random_bytes(10));
             $user = new User($username, $email);
 
             $user->setPassword(
-                $password = $this->passwordEncoder->encodePassword($user, $plainPassword)
+                $this->passwordEncoder->encodePassword($user, $plainPassword)
             );
             $this->addReference(self::REFERENCE_PREFIX . $i, $user);
             $manager->persist($user);
