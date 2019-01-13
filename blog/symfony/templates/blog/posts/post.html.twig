@@ -5,6 +5,11 @@
 {% block content %}
   <h1>{{ post.title }}</h1>
 
+  By
+  <b>
+    {{ post.author.username }}
+  </b>
+
   {{ blogDate(post.createdAt) }}
 
   {# Теги #}
@@ -16,30 +21,38 @@
     {% endfor %}
   </div>
 
+  <br>
+
   <p>
     {{ post.text }}
   </p>
 
   <hr>
 
-  {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-    {{ form(form) }}
-  {% endif %}
+  {#{% if is_granted('IS_AUTHENTICATED_FULLY') %}#}
+    {#{{ form(form) }}#}
+  {#{% endif %}#}
 
   <h4 class="mb-4">
     Comments
 
-    <b-button
-      variant="primary"
-      class="ml-4"
-    >
-      Add comment
-    </b-button>
+    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+      <b-button
+        variant="primary"
+        class="ml-4"
+        @click="showFormAddRootComment = !showFormAddRootComment"
+      >
+        ${ showFormAddRootComment ? 'Hide form' : 'Add comment' }
+      </b-button>
+    {% endif %}
   </h4>
 
-  <editor></editor>
+  <create-comment
+    v-if="showFormAddRootComment"
+    api-endpoint="{{ path('post_create_comment', { slug: post.slug, id: post.id }) }}"
+  ></create-comment>
 
-  {% include 'blog/posts/parts/comments_tree.html.twig' with { commentsPost: post, comments: rootComments, form: form } only %}
+  {% include 'blog/posts/parts/comments_tree.html.twig' with { commentsPost: post, comments: rootComments } only %}
 
   <div class="d-flex justify-content-center mt-4">
     {{ knp_pagination_render(rootComments) }}

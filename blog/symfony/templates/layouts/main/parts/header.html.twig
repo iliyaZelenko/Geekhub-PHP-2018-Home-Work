@@ -3,7 +3,9 @@
   <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
 
   <b-navbar-brand href="/">
-    Blog
+    {% trans %}
+      Blog
+    {% endtrans %}
   </b-navbar-brand>
 
   <b-collapse is-nav id="nav_collapse">
@@ -28,9 +30,11 @@
       <b-nav-item-dropdown text="Lang" right>
         <b-dropdown-item href="/">
           EN
+          <img src="https://www.countryflags.io/us/shiny/32.png">
         </b-dropdown-item>
         <b-dropdown-item href="/ru">
           RU
+          <img src="https://www.countryflags.io/ru/shiny/32.png">
         </b-dropdown-item>
       </b-nav-item-dropdown>
 
@@ -42,6 +46,7 @@
           <b-dropdown-item href="{{ path('profile') }}">
             Profile
           </b-dropdown-item>
+          {#TODO не уверен что правильное сгенерировал роут, есть еще logout_url('main')#}
           <b-dropdown-item href="{{ path('app_logout') }}">
             Logout
           </b-dropdown-item>
@@ -50,6 +55,9 @@
         {#TODO не уверен что правильное имя роута (нужна сраница /login)#}
         <b-nav-item href="{{ path('app_login') }}">
           Sign In
+        </b-nav-item>
+        <b-nav-item href="{{ path('app_register') }}">
+          Sign Up
         </b-nav-item>
       {% endif %}
     </b-navbar-nav>

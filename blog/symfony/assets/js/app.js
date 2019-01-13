@@ -5,6 +5,7 @@ import '../css/app.css'
 import Vue from 'vue'
 import BootstrapVue from 'bootstrap-vue'
 import Editor from './components/Editor.vue'
+import CreateComment from './components/CreateComment'
 
 const delimiters = ['${', '}']
 
@@ -19,6 +20,7 @@ function init () {
   }
 
   addComponent('editor', Editor)
+  addComponent('create-comment', CreateComment)
 
   addComponent('blog-date', {
     delimiters: ['${', '}'],

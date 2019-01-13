@@ -33,7 +33,7 @@ class Comment
      * @Assert\Type("string")
      * @Assert\Length(
      *     min=5,
-     *     max=100
+     *     max=300
      * )
      */
     private $text;

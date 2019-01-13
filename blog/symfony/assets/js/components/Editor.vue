@@ -128,8 +128,10 @@
     </editor-menu-bar>
 
     <!--style="border-top-left-radius: 0; border-top-right-radius: 0;"-->
-    <b-card>
-      <editor-content class="editor__content" :editor="editor" />
+    <b-card no-body>
+      <b-card-body class="px-2 pt-2 pb-0">
+        <editor-content class="editor__content" :editor="editor" />
+      </b-card-body>
     </b-card>
   </div>
 </template>
@@ -154,19 +156,23 @@
     Strike,
     Underline,
     History,
+    Placeholder
   } from 'tiptap-extensions'
 
   export default {
+    props: ['value'],
     components: {
       EditorContent,
       EditorMenuBar,
-      Icon,
+      Icon
     },
     data() {
+      const val = this.value
+
       return {
         editor: new Editor({
-          onUpdate (c) {
-            console.log(c)
+          onUpdate: ({ getHTML }) => {
+            this.$emit('input', getHTML())
           },
           extensions: [
             new Blockquote(),
@@ -185,35 +191,28 @@
             new Strike(),
             new Underline(),
             new History(),
+            new Placeholder({
+              emptyClass: 'is-empty',
+              emptyNodeText: 'Write something …'
+            }),
           ],
-          content: `
-          <h2>
-            Hi there,
-          </h2>
-          <p>
-            this is a very <em>basic</em> example of tiptap.
-          </p>
-          <pre><code>body { display: none; }</code></pre>
-          <ul>
-            <li>
-              A regular list
-            </li>
-            <li>
-              With regular items
-            </li>
-          </ul>
-          <blockquote>
-            It's amazing 👏
-            <br />
-            – mom
-          </blockquote>
-        `,
-        }),
+          content: val
+        })
       }
     },
     beforeDestroy() {
       this.editor.destroy()
-    },
+    }
   }
 </script>
 
+<style>
+  .editor p.is-empty:first-child::before {
+    content: attr(data-empty-text);
+    float: left;
+    color: #aaa;
+    pointer-events: none;
+    height: 0;
+    font-style: italic;
+  }
+</style>
