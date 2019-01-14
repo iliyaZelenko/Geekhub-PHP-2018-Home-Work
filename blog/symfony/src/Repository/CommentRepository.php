@@ -55,6 +55,7 @@ class CommentRepository extends ServiceEntityRepository
      */
     public function getPaginatedByPostId(int $postId, int $page, int $perPage): PaginationInterfaceReturn
     {
+        // TODO оптимизировать, чтобы заранее получало коммент с автором (чтобы не не делать запрос автора в twig)
         $query = $this->createQueryBuilder('comment')
             ->andWhere('comment.post = :post_id')
             ->andWhere('comment.parent is NULL')

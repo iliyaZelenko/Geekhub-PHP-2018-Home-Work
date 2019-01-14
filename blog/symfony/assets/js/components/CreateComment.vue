@@ -21,6 +21,7 @@
     ></editor>
 
     <p>
+      <!--TODO валидация на бекенде не считающая теги-->
       Content length (with tags): {{ content.length }}.
     </p>
 
@@ -41,7 +42,7 @@ export default {
     successMessage: null,
     error: null,
     loading: false,
-    content: ``
+    content: ''
   }),
   methods: {
     async onSubmit () {
@@ -67,7 +68,6 @@ export default {
         } else {
           this.successMessage = res.successMessage
         }
-        console.log(res)
       } catch (e) {}
 
       this.loading = false

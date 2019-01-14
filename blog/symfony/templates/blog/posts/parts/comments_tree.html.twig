@@ -16,6 +16,14 @@
           {{ comment.text | raw }}
         </div>
 
+        {% if comment.author.id === app.user.id %}
+          <b-btn
+            size="sm"
+            variant="primary"
+          >
+            Edit
+          </b-btn>
+        {% endif %}
         <b-btn
           v-b-toggle.collapse-for-comment{{ comment.id }}
           size="sm"
