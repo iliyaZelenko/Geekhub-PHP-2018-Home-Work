@@ -2,7 +2,6 @@
 
 namespace App\Form;
 
-use App\Entity\User;
 use App\Form\DataObjects\RegistrationData;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -19,7 +18,6 @@ class RegistrationFormType extends AbstractType
             // type="email" для input добавилось, значит symfony определяет по "child" параметру что это Email,
             // не нужно писать EmailType::class вторым аргументов
             ->add('email')
-            // в Entity этого поля нет
             ->add('plainPassword', PasswordType::class)
         ;
     }

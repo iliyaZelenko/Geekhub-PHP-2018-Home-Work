@@ -13,7 +13,6 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class AccountManager
 {
-    // TODO DI
     /**
      * @var UserPasswordEncoderInterface
      */
@@ -23,6 +22,7 @@ class AccountManager
      */
     private $entityManager;
 
+    // TODO DI
     public function __construct(UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $entityManager)
     {
         $this->passwordEncoder = $passwordEncoder;
@@ -45,39 +45,10 @@ class AccountManager
                 $data->getPlainPassword()
             )
         );
-
-        // Внедрил через интерфейс вместо этого: $entityManager = $this->getDoctrine()->getManager();
+        
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
         return $user;
     }
 }
-
-
-//class AccountManager
-//{
-//    private $entityManager;
-//    private $secureRandom;
-//
-//    public function __construct(
-//        EntityManger $entityManager,
-//        SecureRandomInterface $secureRandom
-//    ) {
-//        $this->entityManager = $entityManager;
-//        $this->secureRandom = $secureRandom;
-//    }
-//
-//    public function createAccount(Account $account)
-//    {
-//        $confirmationCode = $this
-//            ->secureRandom
-//            ->nextBytes(4);
-//
-//        $account
-//            ->setConfirmationCode(md5($confirmationCode));
-//
-//        $this->entityManager->persist($account);
-//        $this->entityManager->flush();
-//    }
-//}

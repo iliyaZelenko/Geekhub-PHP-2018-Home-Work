@@ -27,22 +27,6 @@ class RegistrationFormHandler
      */
     public function handle(FormInterface $form, Request $request)
     {
-//        if (!$request->isMethod('POST')) {
-//            return false;
-//        }
-//
-//        $form->bind($request);
-//
-//        if (!$form->isValid()) {
-//            return false;
-//        }
-//
-//        $validAccount = $form->getData();
-//
-//        $this->createAccount($validAccount);
-//
-//        return true;
-
         $form->handleRequest($request);
 
         if (!$form->isSubmitted() || !$form->isValid()) {
