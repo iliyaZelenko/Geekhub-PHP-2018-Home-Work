@@ -25,3 +25,9 @@ services:
     App\Controller\:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
+
+#    App\Entity\User:
+#        public: true
+#        arguments:
+#            $username: string
+#            $email: string

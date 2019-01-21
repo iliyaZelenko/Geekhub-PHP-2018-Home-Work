@@ -25,7 +25,7 @@ class CommentFixture extends Fixture implements OrderedFixtureInterface
             $currentPostIndex = ceil($i / self::COMMENT_REFERENCE_EACH_COUNT);
 
             // автор коммента
-            $userRef = UserFixture::REFERENCE_PREFIX . random_int(1, UserFixture::COUNT);
+            $userRef = UserFixture::getRandomReferenceName();
             $user = $this->getReference($userRef);
             // пост коммента
             $postRef = PostFixture::REFERENCE_PREFIX . $currentPostIndex;

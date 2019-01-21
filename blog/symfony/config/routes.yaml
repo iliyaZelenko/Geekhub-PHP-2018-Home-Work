@@ -1,4 +1,26 @@
-# TODO для локали очень не хватает вложенных маршрутов / префикса для роутов (удивляет почему их нет в symfony)
+# TODO для локали очень не хватает вложенных маршрутов / префикса для роутов
+# придется для каждого роута писать все что связанно с _locale?
+
+# OAuth
+hwi_oauth_redirect:
+    resource: "@HWIOAuthBundle/Resources/config/routing/redirect_41.xml"
+    prefix:   /connect
+
+hwi_oauth_connect:
+    resource: "@HWIOAuthBundle/Resources/config/routing/connect_41.xml"
+    prefix:   /connect
+
+hwi_oauth_login:
+    resource: "@HWIOAuthBundle/Resources/config/routing/login_41.xml"
+    prefix:   /login
+
+auth0_login:
+    path: /auth0/callback
+
+auth0_logout:
+    path: /auth0/logout
+
+# Main routes
 index:
     path: /{_locale}
     controller: App\Controller\HomeController::index
@@ -16,16 +38,25 @@ blog:
         page: 1
 
 post:
-    path: /{id}/{slug}
+    path: /post/{id}/{slug}
     controller: App\Controller\PostsController::post
     requirements:
         slug: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
         id:  '\d+'
 
+post_create_comment:
+    path: /post/{id}/{slug}/new-comment/
+    controller: App\Controller\PostsController::createComment
+
+# Auth
 profile:
     path: /profile
-    controller: App\Controller\HomeController::index
+    controller: App\Controller\ProfileController::index
 
+app_logout:
+    path: /logout
+
+# Other
 routes:
     path: /routes/
     controller: App\Controller\BlogController::routes

@@ -2,6 +2,11 @@
 
 $finder = PhpCsFixer\Finder::create()
     ->in(__DIR__ . '/src')
+    ->exclude('config')
+    ->exclude('var')
+    ->exclude('docker')
+    ->exclude('public/build')
+    ->exclude('Migrations')
 ;
 return PhpCsFixer\Config::create()
     ->setFinder($finder)
@@ -63,6 +68,7 @@ return PhpCsFixer\Config::create()
         // это правило не отлючается походу, продолжает ставить заяпятые
         'trailing_comma_in_multiline_array' => false,
         // странное правило, в наглую заменяет все инкременты на pre форму, может так и код сломать.
-        'increment_style' => false
+        'increment_style' => false,
+        'no_superfluous_elseif' => true
     ])
 ;

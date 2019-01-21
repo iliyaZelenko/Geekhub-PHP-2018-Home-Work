@@ -1,12 +1,12 @@
 {% extends 'layouts/main/index.html.twig' %}
 
 {% block title %}
-  Log in!
+  Sign In
 {% endblock %}
 
 {% block content %}
   <h2 class="text-center">
-    Please sign in
+    Sign In
   </h2>
 
   {% if error %}
@@ -15,6 +15,15 @@
 
   <b-row align-h="center">
     <b-col cols="12" lg="4">
+      <br>
+      <a href="/connect/auth0">
+        <b-button size="sm" variant="primary">
+          Enter with <b>Auth0</b>
+        </b-button>
+      </a>
+
+      <hr>
+
       <b-form method="post">
         <input
           type="hidden"
@@ -33,6 +42,7 @@
             type="text"
             name="username"
             placeholder="Enter username"
+            autocomplete="username"
             required
             autofocus
           >
@@ -82,7 +92,7 @@
           variant="primary"
           class="float-right"
         >
-          Submit
+          Sign In
         </b-button>
       </b-form>
     </b-col>

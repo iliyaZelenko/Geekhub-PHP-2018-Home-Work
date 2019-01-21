@@ -56,19 +56,19 @@ class User implements UserInterface, \Serializable
     /* Relations */
 
     // TODO Подумать над односторонными связями. Походу эту свзяь убрать.
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Post", mappedBy="author", orphanRemoval=true)
-     * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
-     * @param string $username
-     * @param string $email
-     * @param string $password
-     */
+//    /**
+//     * @ORM\OneToMany(targetEntity="App\Entity\Post", mappedBy="author", orphanRemoval=true)
+//     * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
+//     * @param string $username
+//     * @param string $email
+//     * @param string $password
+//     */
 //    private $posts;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="author", orphanRemoval=true)
-     * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
-     */
+//    /**
+//     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="author", orphanRemoval=true)
+//     * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
+//     */
 //    private $comments;
 
     public function __construct(string $username, string $email)
@@ -103,6 +103,18 @@ class User implements UserInterface, \Serializable
     public function setPassword($password): self
     {
         $this->password = $password;
+
+        return $this;
+    }
+
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+
+    public function setEmail($email): self
+    {
+        $this->email = $email;
 
         return $this;
     }

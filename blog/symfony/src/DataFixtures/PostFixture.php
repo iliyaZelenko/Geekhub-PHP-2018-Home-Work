@@ -17,7 +17,7 @@ class PostFixture extends Fixture implements OrderedFixtureInterface
     {
         for ($i = 1; $i <= self::POSTS_COUNT; ++$i) {
             // случайный автор
-            $userRef = UserFixture::REFERENCE_PREFIX . random_int(1, UserFixture::COUNT);
+            $userRef = UserFixture::getRandomReferenceName();
             $user = $this->getReference($userRef);
 
             $title = 'Post title ' . $i;

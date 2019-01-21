@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class HomeController extends AbstractController
 {
@@ -11,7 +11,7 @@ class HomeController extends AbstractController
     {
         return $this->render('blog/main_page.html.twig', [
             // TODO не зависит от _locale роута
-            'hello_translated' => $translator->trans('Hello!'),
+            'hello_translated' => $translator->trans('hello_translated'),
             'count' => 1
         ]);
     }

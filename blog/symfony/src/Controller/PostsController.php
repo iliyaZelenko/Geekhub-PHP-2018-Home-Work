@@ -9,8 +9,10 @@ use App\Form\CommentType;
 use Doctrine\Common\Persistence\ObjectManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class PostsController extends AbstractController
 {
@@ -57,7 +59,6 @@ class PostsController extends AbstractController
      */
     public function post(Request $request, ObjectManager $manager, Post $post, $slug, $id): Response
     {
-        $repoUser = $this->getDoctrine()->getRepository(User::class);
         $repoComment = $this->getDoctrine()->getRepository(Comment::class);
 
         // если slug из url не совпадает со slug в посте, то редирект на слуг поста
@@ -73,26 +74,25 @@ class PostsController extends AbstractController
             );
         }
 
-        // TODO Security
-        $authUser = $repoUser->getFirst();
-        $comment = new Comment($authUser, $post);
+//        $authUser = $this->getUser();
+//        $comment = new Comment($authUser, $post);
 
-        $form = $this->createForm(CommentType::class, $comment);
-        $form->handleRequest($request);
+//        $form = $this->createForm(CommentType::class, $comment);
+//        $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $manager->persist($comment);
-            $manager->flush();
-
-            // если ASC: $rootComments[] = $comment;
-            // array_unshift($rootComments, $comment);
-//            $rootComments->add($comment);
-
-            $this->addFlash(
-                'success',
-                'Comment saved!'
-            );
-        }
+//        if ($form->isSubmitted() && $form->isValid()) {
+//            $manager->persist($comment);
+//            $manager->flush();
+//
+//            // если ASC: $rootComments[] = $comment;
+//            // array_unshift($rootComments, $comment);
+////            $rootComments->add($comment);
+//
+//            $this->addFlash(
+//                'success',
+//                'Comment saved!'
+//            );
+//        }
 
         // $repoComment->getCommentsByPostId($id);
         $rootComments = $repoComment->getPaginatedByPostId(
@@ -105,18 +105,69 @@ class PostsController extends AbstractController
         return $this->render('blog/posts/post.html.twig', [
             'post' => $post,
             'rootComments' => $rootComments,
-            'form' => $form->createView(),
+//            'form' => $form->createView(),
             'vue_data' => [
+                'showFormAddRootComment' => false,
                 'formComment' => json_encode([
                     'text' => 'Form text',
                 ], JSON_FORCE_OBJECT),
-            ],
-            // TODO убрать
-            'vue_methods' => [
-                'onSubmit' => [
-                    'body' => ''
-                ]
             ]
+        ]);
+    }
+
+    /**
+     * AJAX POST for creating a comment.
+     *
+     * @ParamConverter("post", options={"mapping" = {"slug" = "slug"}})
+     * @param Request $request
+     * @param ObjectManager $manager
+     * @param ValidatorInterface $validator
+     * @param Post $post
+     * @param $slug
+     * @param $id
+     * @return JsonResponse
+     */
+    public function createComment(Request $request, ObjectManager $manager, ValidatorInterface $validator, Post $post, $slug, $id): JsonResponse
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        $repo = $this
+            ->getDoctrine()
+            ->getRepository(Comment::class);
+
+        [
+            'message' => $message,
+            'parentCommentId' => $parentCommentId
+        ] = json_decode($request->getContent(), true);
+
+        $authUser = $this->getUser();
+        $comment = new Comment($authUser, $post);
+        $comment->setText($message);
+
+        if ($parentCommentId) {
+            $parentComment = $repo->find($parentCommentId);
+
+            # TODO возможно чтобы не делать лишний запрос лучше просто ->setParentId($id)
+            $comment->setParent($parentComment);
+        }
+
+        $errors = $validator->validate($comment);
+
+        if (count($errors) > 0) {
+            $errorMsg = $errors->get(0)->getMessage();
+
+            return new JsonResponse([
+                'error' => $errorMsg
+            ]);
+        }
+
+        $manager->persist($comment);
+        $manager->flush();
+
+        return new JsonResponse([
+            'successMessage' => 'Comment saved!',
+            '$parentCommentId' => $parentCommentId,
+            'message' => $message,
         ]);
     }
 }
