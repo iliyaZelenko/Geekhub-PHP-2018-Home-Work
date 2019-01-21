@@ -5,7 +5,6 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Validator\Constraints as Assert;
 
 //use Doctrine\Common\Collections\ArrayCollection;
 //use Doctrine\Common\Collections\Collection;
@@ -30,8 +29,6 @@ class User implements UserInterface, \Serializable
 
     /**
      * @ORM\Column(type="string", length=30, unique=true)
-     * Допускаются русские символы (почему никнейм обязательно должен быть на английском?).
-     * @Assert\Regex("/^[а-яА-Яa-zA-ZЁё][а-яА-Яa-zA-Z0-9Ёё]*?([-_.][а-яА-Яa-zA-Z0-9Ёё]+){0,3}$/u")
      */
     private $username;
 
@@ -48,8 +45,6 @@ class User implements UserInterface, \Serializable
 
     /**
      * @ORM\Column(type="string", length=60, unique=true)
-     * @Assert\NotBlank()
-     * @Assert\Email()
      */
     private $email;
 
@@ -121,7 +116,7 @@ class User implements UserInterface, \Serializable
 
     public function getSalt()
     {
-        return null;
+        // not needed when using the "bcrypt" algorithm in security.yaml
     }
 
     public function getRoles(): array
@@ -189,8 +184,13 @@ class User implements UserInterface, \Serializable
 
     /* Other */
 
+    /**
+     * Removes sensitive data from the user.
+     */
     public function eraseCredentials()
     {
+        // например, чтобы не палить пароль (у меня нет plainPassword)
+        // $this->plainPassword = null;
     }
 
     /** @see \Serializable::serialize() */
