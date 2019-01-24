@@ -1,16 +1,20 @@
+
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
-import '../css/app.css'
+import '../css/app.sass'
 
 import Vue from 'vue'
+import InstantSearch from 'vue-instantsearch'
 import BootstrapVue from 'bootstrap-vue'
 import Editor from './components/Editor.vue'
 import CreateComment from './components/CreateComment'
+import Search from './components/Search'
 
 const delimiters = ['${', '}']
 
 Vue.config.delimiters = delimiters
-Vue.use(BootstrapVue);
+Vue.use(BootstrapVue)
+Vue.use(InstantSearch)
 
 window.vm = init()
 
@@ -21,6 +25,7 @@ function init () {
 
   addComponent('editor', Editor)
   addComponent('create-comment', CreateComment)
+  addComponent('search', Search)
 
   addComponent('blog-date', {
     delimiters: ['${', '}'],

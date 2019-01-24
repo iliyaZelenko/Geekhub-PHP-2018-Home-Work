@@ -13,13 +13,10 @@ use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 
 class RegistrationController extends AbstractController
 {
-    public function register(Request $request, GuardAuthenticatorHandler $guardHandler, LoginFormAuthenticator $authenticator): Response
+    public function register(Request $request, RegistrationFormHandler $formHandler, GuardAuthenticatorHandler $guardHandler, LoginFormAuthenticator $authenticator): Response
     {
         $data = new RegistrationData();
         $form = $this->createForm(RegistrationFormType::class, $data);
-
-        // TODO DI
-        $formHandler = new RegistrationFormHandler();
 
         if ($user = $formHandler->handle($form, $request)) {
             // do anything else you need here, like send an email

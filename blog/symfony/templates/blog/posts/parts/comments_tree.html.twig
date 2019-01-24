@@ -16,7 +16,7 @@
           {{ comment.text | raw }}
         </div>
 
-        {% if comment.author.id === app.user.id %}
+        {% if is_granted('IS_AUTHENTICATED_FULLY') and comment.author.id is same as(app.user.id) %}
           <b-btn
             size="sm"
             variant="primary"

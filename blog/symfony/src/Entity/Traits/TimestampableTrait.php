@@ -18,7 +18,7 @@ trait TimestampableTrait
 
     /* Getters / Setters */
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): \DateTimeImmutable
     {
         return $this->createdAt;
     }

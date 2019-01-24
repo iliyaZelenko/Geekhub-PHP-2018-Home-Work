@@ -25,7 +25,7 @@ class ExceptionController
      *
      * @return Response
      */
-    public function showAction(Request $request, $exception, DebugLoggerInterface $logger = null)
+    public function showAction(Request $request, $exception, DebugLoggerInterface $logger = null): Response
     {
         $code = $this->getStatusCode($exception);
 

@@ -7,6 +7,8 @@ use App\Utils\Slugger\Slugger;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Normalizer\NormalizableInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 //use Symfony\Component\Validator\Constraints\Collection;
 
@@ -18,7 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="App\Repository\PostRepository")
  * @ORM\HasLifecycleCallbacks()
  */
-class Post
+class Post implements NormalizableInterface
 {
     use TimestampableTrait;
 
@@ -105,6 +107,35 @@ class Post
             ->setTitle($title)
             ->setText($text)
             ->setTextShort($textShort);
+    }
+
+    /**
+     * Search data. Это не обязательная часть. Можно вынести в отдельный класс.
+     *
+     * @param NormalizerInterface $serializer
+     * @param null $format
+     * @param array $context
+     * @return array
+     */
+    public function normalize(NormalizerInterface $serializer, $format = null, array $context = []): array
+    {
+        return [
+            'id' => $this->getId(),
+            'title' => $this->getTitle(),
+            'slug' => $this->getSlug(),
+            'content' => $this->getText(),
+            'contentShort' => $this->getTextShort(),
+            // 'comment_count' => $this->getComments()->count(),
+            'tags' => array_map(function (Tag $tag) {
+                return [
+                    'id' => $tag->getId(),
+                    'name' => $tag->getName()
+                ];
+            }, $this->getTags()->toArray()),
+            'createdAt' => $this->getCreatedAt()->getTimestamp(),
+            // Reuse the $serializer
+            'author' => $serializer->normalize($this->getAuthor(), $format, $context)
+        ];
     }
 
     /* Getters / Setters */

@@ -1,13 +1,11 @@
 <?php
 
-namespace App\DomainManager;
+namespace App\DomainManagers;
 
 use App\Entity\User;
 use App\Form\DataObjects\RegistrationData;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Form\FormInterface;
-use Doctrine\ORM\EntityManager;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoder;
+use App\Repository\UserRepository;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -21,17 +19,29 @@ class AccountManager
      * @var EntityManagerInterface
      */
     private $entityManager;
+    /**
+     * @var UserRepository
+     */
+    private $userRepo;
 
-    // TODO DI
-    public function __construct(UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $entityManager)
+    public function __construct(UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $entityManager, UserRepository $userRepo)
     {
         $this->passwordEncoder = $passwordEncoder;
         $this->entityManager = $entityManager;
+        $this->userRepo = $userRepo;
     }
 
     // User $user
     public function createAccount(RegistrationData $data): User
     {
+        $username = $data->getUsername();
+
+        if ($this->userRepo->findOneBy([
+            'username' => $username
+        ])) {
+            throw new HttpException(409, 'A user with this nickname already exists.');
+        }
+
         // до этого было new User('', ''); А теперь Entity всегда валидна как это и должно быть.
         $user = new User(
             $data->getUsername(),
@@ -45,7 +55,7 @@ class AccountManager
                 $data->getPlainPassword()
             )
         );
-        
+
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
