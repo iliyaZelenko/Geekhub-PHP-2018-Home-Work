@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Interfaces\CreatedUpdatedInterface;
 use App\Entity\Traits\TimestampableTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -11,9 +12,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Table(name="comments")
  * @ORM\Entity(repositoryClass="App\Repository\CommentRepository")
- * @ORM\HasLifecycleCallbacks()
  */
-class Comment
+class Comment implements CreatedUpdatedInterface
 {
     use TimestampableTrait;
 

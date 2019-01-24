@@ -8,6 +8,7 @@
         "ext-json": "*",
         "algolia/search-bundle": "^3.4",
         "doctrine/annotations": "^1.6",
+        "guzzlehttp/guzzle": "^6.3",
         "hwi/oauth-bundle": "^0.6.3",
         "knplabs/knp-paginator-bundle": "^2.8",
         "lexik/jwt-authentication-bundle": "^2.6",

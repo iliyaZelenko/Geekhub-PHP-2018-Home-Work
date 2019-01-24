@@ -14,6 +14,7 @@ final class RegistrationData
 
     /**
      * @Assert\Email()
+     * @Assert\NotBlank()
      */
     private $email;
 

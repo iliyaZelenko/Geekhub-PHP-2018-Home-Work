@@ -5,6 +5,9 @@
     "not dead",
     "> 0.2%"
   ],
+  "scripts": {
+    "dump-server": "dump-server --run-dump"
+  },
   "devDependencies": {
     "@symfony/webpack-encore": "^0.22.2",
     "node-sass": "^4.11.0",

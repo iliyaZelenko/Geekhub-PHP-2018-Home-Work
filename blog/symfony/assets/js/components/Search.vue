@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="super-search-1337">
     <ais-instant-search
       :search-client="searchClient"
       :index-name="index"
@@ -179,10 +179,17 @@
                   </div>
                 </div>
 
-                {{ item._highlightResult.content }}
+                <b-btn
+                  v-if="item._highlightResult.content.matchedWords.length"
+                  variant="primary"
+                  class="mx-auto mt-3 d-block"
+                  @click="modalShowTextHits = true; modalShowTextHitsData.text = item._highlightResult.content.value"
+                >
+                  Show text matches
+                </b-btn>
 
                 <!--item.text-->
-                <p class="text-muted mt-2" v-html="item._highlightResult.contentShort.value"></p>
+                <div class="text-muted mt-3" v-html="decodeHtml(item._highlightResult.contentShort.value)"></div>
               </div>
             </ais-hits>
 
@@ -197,6 +204,15 @@
         </template>
       </ais-state-results>
     </ais-instant-search>
+    <b-modal
+      v-model="modalShowTextHits"
+      size="lg"
+      title="Text matches"
+      cancel-disabled
+      centered
+    >
+      <span v-html="decodeHtml(modalShowTextHitsData.text)"></span>
+    </b-modal>
   </div>
 </template>
 
@@ -212,6 +228,10 @@ export default {
     }
   },
   data: () => ({
+    modalShowTextHits: false,
+    modalShowTextHitsData: {
+      text: null
+    },
     itemsWide: false,
     searchClient: algoliasearch(
       'FYDKVZS0P8',
@@ -226,6 +246,12 @@ export default {
         .forEach(i =>
           i.classList.toggle('ais-Hits-item--wide', this.itemsWide)
         )
+    },
+    decodeHtml (html) {
+      const el = document.createElement('textarea');
+      el.innerHTML = html;
+
+      return el.value;
     }
   }
 }

@@ -4,8 +4,10 @@ namespace App\Form\Handler;
 
 use App\DomainManagers\AccountManager;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use App\Entity\User;
+use App\Utils\Contracts\Recaptcha\RecaptchaInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 class RegistrationFormHandler
 {
@@ -13,10 +15,15 @@ class RegistrationFormHandler
      * @var AccountManager
      */
     private $accountManager;
+    /**
+     * @var RecaptchaInterface
+     */
+    private $recaptcha;
 
-    public function __construct(AccountManager $accountManager)
+    public function __construct(AccountManager $accountManager, RecaptchaInterface $recaptcha)
     {
         $this->accountManager = $accountManager;
+        $this->recaptcha = $recaptcha;
     }
 
     /**
@@ -32,8 +39,21 @@ class RegistrationFormHandler
             return false;
         }
 
+        $this->checkCaptcha($request);
+
         return $this->accountManager->createAccount(
             $form->getData()
         );
+    }
+
+    private function checkCaptcha(Request $request): void
+    {
+        $status = $this->recaptcha->check(
+            $request->get('g-recaptcha-response')
+        );
+
+        if (!$status) {
+            throw new HttpException(422, 'Captcha check failed.');
+        }
     }
 }

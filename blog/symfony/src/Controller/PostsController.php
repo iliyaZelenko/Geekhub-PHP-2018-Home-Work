@@ -6,6 +6,7 @@ use App\Entity\Comment;
 use App\Entity\Post;
 use App\Entity\User;
 use App\Form\CommentType;
+use App\Repository\CommentRepository;
 use Doctrine\Common\Persistence\ObjectManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -115,6 +116,8 @@ class PostsController extends AbstractController
         ]);
     }
 
+    // TODO optimize
+
     /**
      * AJAX POST for creating a comment.
      *
@@ -123,17 +126,22 @@ class PostsController extends AbstractController
      * @param ObjectManager $manager
      * @param ValidatorInterface $validator
      * @param Post $post
+     * @param CommentRepository $repo
      * @param $slug
      * @param $id
      * @return JsonResponse
      */
-    public function createComment(Request $request, ObjectManager $manager, ValidatorInterface $validator, Post $post, $slug, $id): JsonResponse
+    public function createComment(
+        Request $request,
+        ObjectManager $manager,
+        ValidatorInterface $validator,
+        Post $post,
+        CommentRepository $repo,
+        $slug,
+        $id
+    ): JsonResponse
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
-        $repo = $this
-            ->getDoctrine()
-            ->getRepository(Comment::class);
 
         [
             'message' => $message,
@@ -147,7 +155,6 @@ class PostsController extends AbstractController
         if ($parentCommentId) {
             $parentComment = $repo->find($parentCommentId);
 
-            # TODO возможно чтобы не делать лишний запрос лучше просто ->setParentId($id)
             $comment->setParent($parentComment);
         }
 
@@ -165,9 +172,7 @@ class PostsController extends AbstractController
         $manager->flush();
 
         return new JsonResponse([
-            'successMessage' => 'Comment saved!',
-            '$parentCommentId' => $parentCommentId,
-            'message' => $message,
+            'successMessage' => 'Comment saved!'
         ]);
     }
 }

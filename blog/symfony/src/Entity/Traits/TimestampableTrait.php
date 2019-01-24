@@ -4,6 +4,7 @@ namespace App\Entity\Traits;
 
 use Doctrine\ORM\Mapping as ORM;
 
+// TODO EventListener
 trait TimestampableTrait
 {
     /**
@@ -30,30 +31,30 @@ trait TimestampableTrait
 
     /* Lifecycle hooks */
 
-    /**
-     * @ORM\PrePersist()
-     */
-    public function setCreatedAtValue()
-    {
-        $this->setCreatedAt($this->getNowUTC());
-    }
+//    /**
+//     * @ORM\PrePersist()
+//     */
+//    public function setCreatedAtValue()
+//    {
+//        $this->setCreatedAt($this->getNowUTC());
+//    }
+//
+//    /**
+//     * @ORM\PreUpdate()
+//     */
+//    public function onPreUpdate()
+//    {
+//        $this->setUpdatedAt($this->getNowUTC());
+//    }
 
-    /**
-     * @ORM\PreUpdate()
-     */
-    public function onPreUpdate()
-    {
-        $this->setUpdatedAt($this->getNowUTC());
-    }
-
-    private function setCreatedAt(\DateTimeImmutable $createdAt): self
+    public function setCreatedAt(\DateTimeImmutable $createdAt): self
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    private function setUpdatedAt(?\DateTimeImmutable $updatedAt): self
+    public function setUpdatedAt(\DateTimeImmutable $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
 
@@ -62,11 +63,11 @@ trait TimestampableTrait
 
     /* Other */
 
-    private function getNowUTC(): \DateTimeImmutable
-    {
-        return new \DateTimeImmutable(
-            'now',
-            new \DateTimeZone('UTC')
-        );
-    }
+//    private function getNowUTC(): \DateTimeImmutable
+//    {
+//        return new \DateTimeImmutable(
+//            'now',
+//            new \DateTimeZone('UTC')
+//        );
+//    }
 }

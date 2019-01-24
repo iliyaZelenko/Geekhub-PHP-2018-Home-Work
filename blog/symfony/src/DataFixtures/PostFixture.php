@@ -21,7 +21,6 @@ class PostFixture extends Fixture implements OrderedFixtureInterface
 
     public function __construct(ContentGeneratorInterface $contentGenerator)
     {
-
         $this->contentGenerator = $contentGenerator;
     }
 
@@ -35,7 +34,7 @@ class PostFixture extends Fixture implements OrderedFixtureInterface
             $user = $this->getReference($userRef);
 
             // для последних двух
-            if ($i >= self::POSTS_COUNT - 2) {
+            if ($i > self::POSTS_COUNT - 2) {
                 $title = $this->contentGenerator->getRealContent('title');
                 $text = $this->contentGenerator->getRealContent('text');
                 $textShort = $this->contentGenerator->getRealContent('textShort');

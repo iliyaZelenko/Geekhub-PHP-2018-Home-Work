@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use App\Entity\Interfaces\CreatedUpdatedInterface;
+use App\Entity\Traits\TimestampableTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -16,8 +18,10 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @UniqueEntity({"username", "email"})
  */
-class User implements UserInterface, \Serializable
+class User implements UserInterface, \Serializable, CreatedUpdatedInterface
 {
+    use TimestampableTrait;
+
     /* Columns */
 
     /**

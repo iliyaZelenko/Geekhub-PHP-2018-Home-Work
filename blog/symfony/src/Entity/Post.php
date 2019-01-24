@@ -2,8 +2,9 @@
 
 namespace App\Entity;
 
+use App\Entity\Interfaces\CreatedUpdatedInterface;
+use App\Entity\Interfaces\SluggableInterface;
 use App\Entity\Traits\TimestampableTrait;
-use App\Utils\Slugger\Slugger;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -11,16 +12,14 @@ use Symfony\Component\Serializer\Normalizer\NormalizableInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 //use Symfony\Component\Validator\Constraints\Collection;
-
 // use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 // @UniqueEntity("slug")
 /**
  * @ORM\Table(name="posts")
  * @ORM\Entity(repositoryClass="App\Repository\PostRepository")
- * @ORM\HasLifecycleCallbacks()
  */
-class Post implements NormalizableInterface
+class Post implements NormalizableInterface, SluggableInterface, CreatedUpdatedInterface
 {
     use TimestampableTrait;
 
@@ -109,6 +108,7 @@ class Post implements NormalizableInterface
             ->setTextShort($textShort);
     }
 
+    // TODO в отдельный класс
     /**
      * Search data. Это не обязательная часть. Можно вынести в отдельный класс.
      *
@@ -138,6 +138,14 @@ class Post implements NormalizableInterface
         ];
     }
 
+    public function getSlugAttributes(): array
+    {
+        return [
+            // TODO если указывать метод setSlug => setTitle то их использовать
+            'slug' => 'title'
+        ];
+    }
+
     /* Getters / Setters */
 
     public function getId(): int
@@ -153,9 +161,9 @@ class Post implements NormalizableInterface
     public function setTitle(string $title): self
     {
         $this->title = $title;
-        $this->setSlug(
-            Slugger::slugify($title)
-        );
+//        $this->setSlug(
+//            Slugger::slugify($title)
+//        );
 
         return $this;
     }
@@ -245,7 +253,7 @@ class Post implements NormalizableInterface
         return $this;
     }
 
-    private function setSlug(string $slug): self
+    public function setSlug(string $slug): self
     {
         $this->slug = $slug;
 
