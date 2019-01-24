@@ -56,6 +56,9 @@ profile:
 app_logout:
     path: /logout
 
+app_register:
+    path: /register
+
 # Other
 routes:
     path: /routes/
