@@ -3,7 +3,7 @@
 namespace App\Entity;
 
 use App\Entity\Interfaces\CreatedUpdatedInterface;
-use App\Entity\Traits\TimestampableTrait;
+use App\Entity\Traits\CreatedUpdatedTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -20,7 +20,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class User implements UserInterface, \Serializable, CreatedUpdatedInterface
 {
-    use TimestampableTrait;
+    use CreatedUpdatedTrait;
 
     /* Columns */
 

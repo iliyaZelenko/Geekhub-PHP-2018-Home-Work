@@ -47,6 +47,12 @@
     {% endif %}
   </h4>
 
+  {% if is_granted('IS_AUTHENTICATED_FULLY') == false %}
+    <b-alert show>
+      You need to authenticate to leave a comment.
+    </b-alert>
+  {% endif %}
+
   <create-comment
     v-if="showFormAddRootComment"
     api-endpoint="{{ path('post_create_comment', { slug: post.slug, id: post.id }) }}"

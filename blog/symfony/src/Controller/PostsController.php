@@ -2,10 +2,13 @@
 
 namespace App\Controller;
 
+use App\DomainManagers\CommentManager;
 use App\Entity\Comment;
 use App\Entity\Post;
 use App\Entity\User;
 use App\Form\CommentType;
+use App\Form\DataObjects\CommentData;
+use App\Form\Handler\CommentFormHandler;
 use App\Repository\CommentRepository;
 use Doctrine\Common\Persistence\ObjectManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -13,6 +16,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class PostsController extends AbstractController
@@ -54,14 +58,20 @@ class PostsController extends AbstractController
      * @param Request $request
      * @param ObjectManager $manager
      * @param Post $post
+     * @param CommentRepository $repoComment
      * @param $slug
      * @param $id
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function post(Request $request, ObjectManager $manager, Post $post, $slug, $id): Response
+    public function post(
+        Request $request,
+        ObjectManager $manager,
+        Post $post,
+        CommentRepository $repoComment,
+        $slug,
+        $id
+    ): Response
     {
-        $repoComment = $this->getDoctrine()->getRepository(Comment::class);
-
         // если slug из url не совпадает со slug в посте, то редирект на слуг поста
         // таким образом: если была ссылка с slug который поменялся (вместе с title), то такая ссылка будет работать
         // изначально ParamConverter ищет по id и (или) slug, если нашло по id, а slug отличается, то будет редирект
@@ -116,63 +126,48 @@ class PostsController extends AbstractController
         ]);
     }
 
-    // TODO optimize
-
     /**
      * AJAX POST for creating a comment.
      *
      * @ParamConverter("post", options={"mapping" = {"slug" = "slug"}})
      * @param Request $request
-     * @param ObjectManager $manager
-     * @param ValidatorInterface $validator
      * @param Post $post
-     * @param CommentRepository $repo
+     * @param CommentFormHandler $commentFormHandler
+     * @param CommentData $commentData
+     * @param CommentManager $commentManager
      * @param $slug
      * @param $id
      * @return JsonResponse
      */
     public function createComment(
         Request $request,
-        ObjectManager $manager,
-        ValidatorInterface $validator,
         Post $post,
-        CommentRepository $repo,
+        CommentFormHandler $commentFormHandler,
+        CommentData $commentData,
+        CommentManager $commentManager,
         $slug,
         $id
     ): JsonResponse
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        [
-            'message' => $message,
-            'parentCommentId' => $parentCommentId
-        ] = json_decode($request->getContent(), true);
+        $user = $this->getUser();
 
-        $authUser = $this->getUser();
-        $comment = new Comment($authUser, $post);
-        $comment->setText($message);
+        if ($formResult = $commentFormHandler->handle($commentData, $request)) {
+            $commentManager->createComment(
+                $user,
+                $post,
+                $commentData
+            );
 
-        if ($parentCommentId) {
-            $parentComment = $repo->find($parentCommentId);
-
-            $comment->setParent($parentComment);
-        }
-
-        $errors = $validator->validate($comment);
-
-        if (count($errors) > 0) {
-            $errorMsg = $errors->get(0)->getMessage();
-
+            // TODO JsonResponseBuilder
             return new JsonResponse([
-                'error' => $errorMsg
+                'successMessage' => 'Comment saved!'
             ]);
         }
 
-        $manager->persist($comment);
-        $manager->flush();
-
         return new JsonResponse([
-            'successMessage' => 'Comment saved!'
+            'error' => $formResult
         ]);
     }
 }

@@ -31,7 +31,6 @@ class AccountManager
         $this->userRepo = $userRepo;
     }
 
-    // User $user
     public function createAccount(RegistrationData $data): User
     {
         $username = $data->getUsername();

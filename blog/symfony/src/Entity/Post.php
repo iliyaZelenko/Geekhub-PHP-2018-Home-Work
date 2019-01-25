@@ -4,14 +4,12 @@ namespace App\Entity;
 
 use App\Entity\Interfaces\CreatedUpdatedInterface;
 use App\Entity\Interfaces\SluggableInterface;
-use App\Entity\Traits\TimestampableTrait;
+use App\Entity\Traits\CreatedUpdatedTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Normalizer\NormalizableInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-//use Symfony\Component\Validator\Constraints\Collection;
+// use Symfony\Component\Validator\Constraints\Collection;
 // use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 // @UniqueEntity("slug")
@@ -19,9 +17,9 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
  * @ORM\Table(name="posts")
  * @ORM\Entity(repositoryClass="App\Repository\PostRepository")
  */
-class Post implements NormalizableInterface, SluggableInterface, CreatedUpdatedInterface
+class Post implements SluggableInterface, CreatedUpdatedInterface
 {
-    use TimestampableTrait;
+    use CreatedUpdatedTrait;
 
     /* Columns */
 
@@ -108,36 +106,6 @@ class Post implements NormalizableInterface, SluggableInterface, CreatedUpdatedI
             ->setTextShort($textShort);
     }
 
-    // TODO в отдельный класс
-    /**
-     * Search data. Это не обязательная часть. Можно вынести в отдельный класс.
-     *
-     * @param NormalizerInterface $serializer
-     * @param null $format
-     * @param array $context
-     * @return array
-     */
-    public function normalize(NormalizerInterface $serializer, $format = null, array $context = []): array
-    {
-        return [
-            'id' => $this->getId(),
-            'title' => $this->getTitle(),
-            'slug' => $this->getSlug(),
-            'content' => $this->getText(),
-            'contentShort' => $this->getTextShort(),
-            // 'comment_count' => $this->getComments()->count(),
-            'tags' => array_map(function (Tag $tag) {
-                return [
-                    'id' => $tag->getId(),
-                    'name' => $tag->getName()
-                ];
-            }, $this->getTags()->toArray()),
-            'createdAt' => $this->getCreatedAt()->getTimestamp(),
-            // Reuse the $serializer
-            'author' => $serializer->normalize($this->getAuthor(), $format, $context)
-        ];
-    }
-
     public function getSlugAttributes(): array
     {
         return [
@@ -161,9 +129,6 @@ class Post implements NormalizableInterface, SluggableInterface, CreatedUpdatedI
     public function setTitle(string $title): self
     {
         $this->title = $title;
-//        $this->setSlug(
-//            Slugger::slugify($title)
-//        );
 
         return $this;
     }

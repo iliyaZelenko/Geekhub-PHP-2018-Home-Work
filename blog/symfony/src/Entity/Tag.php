@@ -3,7 +3,7 @@
 namespace App\Entity;
 
 use App\Entity\Interfaces\CreatedUpdatedInterface;
-use App\Entity\Traits\TimestampableTrait;
+use App\Entity\Traits\CreatedUpdatedTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Tag implements CreatedUpdatedInterface
 {
-    use TimestampableTrait;
+    use CreatedUpdatedTrait;
 
     /* Columns */
 

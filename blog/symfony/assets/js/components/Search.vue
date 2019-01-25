@@ -32,6 +32,7 @@
             { value: index, label: 'Featured' },
             { value: index + '_asc', label: 'Ascending' },
             { value: index + '_desc', label: 'Descending' },
+            { value: index + '_sort_user', label: 'User' },
           ]"
           class="ml-2"
         />
@@ -45,26 +46,55 @@
         </b-btn>
 
         <b-btn
+          v-b-toggle.collapseAuthors
+          variant="secondary"
+          class="ml-4"
+        >
+          Search by authors
+        </b-btn>
+
+        <b-btn
           variant="secondary"
           class="ml-4"
           @click="toggleItemsWide"
         >
-          Toggle items wide
+          Switch size
         </b-btn>
         <!--<ais-menu-select attribute="tags.name" />-->
       </div>
 
       <!--<ais-clear-refinements />-->
 
-      <b-collapse id="collapseTags" class="mb-2">
+      <b-collapse id="collapseTags">
         <b-card>
+          <h5>Search by tags</h5>
+
           <ais-refinement-list
             attribute="tags.name"
+            operator="and"
+            searchable
+
+          />
+        </b-card>
+      </b-collapse>
+
+      <b-collapse
+        id="collapseAuthors"
+        class="mt-2"
+      >
+        <b-card>
+          <h5>Search by author</h5>
+
+          <!--:show-more-limit="15"-->
+          <!--show-more-->
+          <ais-refinement-list
+            attribute="author.username"
             operator="and"
             searchable
           />
         </b-card>
       </b-collapse>
+
 
 
       <!--
