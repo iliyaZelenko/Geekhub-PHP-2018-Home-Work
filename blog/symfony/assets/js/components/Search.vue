@@ -60,10 +60,7 @@
         >
           Switch size
         </b-btn>
-        <!--<ais-menu-select attribute="tags.name" />-->
       </div>
-
-      <!--<ais-clear-refinements />-->
 
       <b-collapse id="collapseTags">
         <b-card>
@@ -95,72 +92,6 @@
         </b-card>
       </b-collapse>
 
-
-
-      <!--
-      <ais-refinement-list
-        attribute="tags.name"
-        searchable
-        show-more
-      >
-        <div
-          slot-scope="{
-            items,
-            isShowingMore,
-            isFromSearch,
-            canToggleShowMore,
-            refine,
-            createURL,
-            toggleShowMore,
-            searchForItems
-          }"
-        >
-          <input @input="searchForItems($event.currentTarget.value)">
-          <ul>
-            <li v-if="isFromSearch && !items.length">No results.</li>
-            <li v-for="item in items" :key="item.value">
-              <a
-                :href="createURL(item)"
-                :style="{ fontWeight: item.isRefined ?  'bold' : '' }"
-                @click.prevent="refine(item.value)"
-              >
-                <ais-highlight attribute="item" :hit="item"/>
-                ({{ item.count.toLocaleString() }})
-              </a>
-            </li>
-          </ul>
-          <button
-            @click="toggleShowMore"
-            :disabled="!canToggleShowMore"
-          >
-            {{ !isShowingMore ? 'Show more' : 'Show less'}}
-          </button>
-        </div>
-      </ais-refinement-list>
-      -->
-
-
-      <!--
-      <ais-refinement-list attribute="tags.name">
-        <a
-          slot="item"
-          slot-scope="{ item, refine, createURL }"
-          :href="createURL(item.value)"
-          :style="{ fontWeight: item.isRefined ? 'bold' : '' }"
-          @click.prevent="refine(item.value)"
-        >
-          <ais-highlight attribute="item" :hit="item"/>
-          ({{ item.count.toLocaleString() }})
-        </a>
-      </ais-refinement-list>
-
-
-      :transform-items="transformItems"
-      <ais-current-refinements
-        :included-attributes="['tags.name']"
-      />
-      -->
-
       <ais-state-results>
         <template slot-scope="{ query, hits }">
           <div v-if="hits.length">
@@ -175,17 +106,9 @@
                 slot="item"
                 slot-scope="{ item }"
               >
-                <!--{{ item._highlightResult }}-->
-
                 <a :href="`/post/${item.id}/${item.slug}`">
                   <h2 v-html="item._highlightResult.title.value"></h2>
                 </a>
-
-                <!--
-                <ais-highlight
-                  attribute="title"
-                  :hit="item._highlightResult"
-                />-->
 
                 <div style="text-overflow: ellipsis; overflow: hidden; font-size: 0.9rem;">
                   <span style="white-space: nowrap;">

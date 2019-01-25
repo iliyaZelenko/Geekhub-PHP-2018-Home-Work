@@ -127,9 +127,8 @@
       </div>
     </editor-menu-bar>
 
-    <!--style="border-top-left-radius: 0; border-top-right-radius: 0;"-->
     <b-card no-body>
-      <b-card-body class="px-2 pt-2 pb-0">
+      <b-card-body class="px-0 py-0">
         <editor-content class="editor__content" :editor="editor" />
       </b-card-body>
     </b-card>
@@ -137,82 +136,83 @@
 </template>
 
 <script>
-  import Icon from './Icon'
-  import { Editor, EditorContent, EditorMenuBar } from 'tiptap'
-  import {
-    Blockquote,
-    CodeBlock,
-    HardBreak,
-    Heading,
-    OrderedList,
-    BulletList,
-    ListItem,
-    TodoItem,
-    TodoList,
-    Bold,
-    Code,
-    Italic,
-    Link,
-    Strike,
-    Underline,
-    History,
-    Placeholder
-  } from 'tiptap-extensions'
+import { Editor, EditorContent, EditorMenuBar } from 'tiptap'
+import {
+  Blockquote,
+  CodeBlock,
+  HardBreak,
+  Heading,
+  OrderedList,
+  BulletList,
+  ListItem,
+  TodoItem,
+  TodoList,
+  Bold,
+  Code,
+  Italic,
+  Link,
+  Strike,
+  Underline,
+  History,
+  Placeholder,
+  CodeBlockHighlight
+} from 'tiptap-extensions'
+import javascript from 'highlight.js/lib/languages/javascript'
+import php from 'highlight.js/lib/languages/php'
+import css from 'highlight.js/lib/languages/css'
+import 'highlight.js/styles/github.css'
+import Icon from './Icon'
 
-  export default {
-    props: ['value'],
-    components: {
-      EditorContent,
-      EditorMenuBar,
-      Icon
-    },
-    data() {
-      const val = this.value
+export default {
+  props: ['value'],
+  components: {
+    EditorContent,
+    EditorMenuBar,
+    Icon
+  },
+  data() {
+    const val = this.value
 
-      return {
-        editor: new Editor({
-          onUpdate: ({ getHTML }) => {
-            this.$emit('input', getHTML())
-          },
-          extensions: [
-            new Blockquote(),
-            new BulletList(),
-            new CodeBlock(),
-            new HardBreak(),
-            new Heading({ levels: [1, 2, 3] }),
-            new ListItem(),
-            new OrderedList(),
-            new TodoItem(),
-            new TodoList(),
-            new Bold(),
-            new Code(),
-            new Italic(),
-            new Link(),
-            new Strike(),
-            new Underline(),
-            new History(),
-            new Placeholder({
-              emptyClass: 'is-empty',
-              emptyNodeText: 'Write something …'
-            }),
-          ],
-          content: val
-        })
-      }
-    },
-    beforeDestroy() {
-      this.editor.destroy()
+    return {
+      editor: new Editor({
+        onUpdate: ({ getHTML }) => {
+          this.$emit('input', getHTML())
+        },
+        extensions: [
+          new Blockquote(),
+          new BulletList(),
+          new CodeBlock(),
+          new HardBreak(),
+          new Heading({ levels: [1, 2, 3] }),
+          new ListItem(),
+          new OrderedList(),
+          new TodoItem(),
+          new TodoList(),
+          new Bold(),
+          new Code(),
+          new Italic(),
+          new Link(),
+          new Strike(),
+          new Underline(),
+          new History(),
+          new Placeholder({
+            emptyClass: 'is-empty',
+            emptyNodeText: 'Write something …'
+          }),
+          new CodeBlockHighlight({
+            languages: {
+              javascript,
+              css,
+              php
+            }
+          })
+        ],
+        content: val
+      })
     }
+  },
+  beforeDestroy() {
+    this.editor.destroy()
   }
+}
 </script>
-
-<style>
-  .editor p.is-empty:first-child::before {
-    content: attr(data-empty-text);
-    float: left;
-    color: #aaa;
-    pointer-events: none;
-    height: 0;
-    font-style: italic;
-  }
-</style>

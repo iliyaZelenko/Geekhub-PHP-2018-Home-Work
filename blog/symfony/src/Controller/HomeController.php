@@ -8,10 +8,9 @@ use Symfony\Component\HttpFoundation\Response;
 
 class HomeController extends AbstractController
 {
-    public function index(TranslatorInterface $translator, int $page = 1): Response
+    public function index(TranslatorInterface $translator): Response
     {
         return $this->render('blog/main_page.html.twig', [
-            // TODO не зависит от _locale роута
             'hello_translated' => $translator->trans('hello_translated'),
             'count' => 1
         ]);

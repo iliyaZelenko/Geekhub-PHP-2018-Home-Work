@@ -17,54 +17,12 @@ auth0_login:
 auth0_logout:
     path: /auth0/logout
 
-# TODO _locale не повторятся
-# Main routes
-index:
-    path: /{_locale}
-    controller: App\Controller\HomeController::index
-    requirements:
-        _locale: en|ru
-    defaults:
-        _locale: en
 
-blog:
-    path: /blog/{page}
-    controller: App\Controller\PostsController::allPosts
-    requirements:
-        page: '\d+'
-    defaults:
-        page: 1
-
-post:
-    path: /post/{id}/{slug}
-    controller: App\Controller\PostsController::post
-    requirements:
-        slug: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
-        id:  '\d+'
-
-post_create_comment:
-    path: /post/{id}/{slug}/new-comment/
-    controller: App\Controller\PostsController::createComment
-
-search:
-    path: /search
-    controller: App\Controller\SearchController::postSearch
-
-# Auth
-profile:
-    path: /profile
-    controller: App\Controller\ProfileController::index
-
-app_logout:
-    path: /logout
-
-app_login:
-    path: /login
-    controller: App\Controller\SecurityController::login
-
-app_register:
-    path: /register
-    controller: App\Controller\RegistrationController::register
+site:
+    resource: 'routes/app/index.yaml'
+    prefix:
+        en: '/'
+        ru: '/ru'
 
 # Other
 routes:
