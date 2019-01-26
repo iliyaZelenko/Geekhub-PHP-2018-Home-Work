@@ -28,7 +28,7 @@ class PostRepository extends ServiceEntityRepository
         $this->paginator = $paginator;
     }
 
-    public function getPaginated($page, $perPage): PaginationInterfaceReturn
+    public function getPaginatedQuery($page, $perPage): PaginationInterfaceReturn
     {
         $query = $this
             ->createQueryBuilder('p')

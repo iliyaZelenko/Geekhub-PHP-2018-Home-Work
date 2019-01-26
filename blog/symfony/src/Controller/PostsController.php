@@ -3,39 +3,46 @@
 namespace App\Controller;
 
 use App\DomainManagers\CommentManager;
-use App\Entity\Comment;
 use App\Entity\Post;
-use App\Entity\User;
-use App\Form\CommentType;
 use App\Form\DataObjects\CommentData;
 use App\Form\Handler\CommentFormHandler;
 use App\Repository\CommentRepository;
+use App\Repository\PostRepository;
 use Doctrine\Common\Persistence\ObjectManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class PostsController extends AbstractController
 {
     public const POSTS_PER_PAGE = 3;
     public const COMMENTS_PER_PAGE = 6;
 
-    public function allPosts($page = 1): Response
+    /**
+     * Get all paginated posts
+     *
+     * @param Request $request
+     * @param PostRepository $repo
+     * @param int $page
+     * @return Response
+     */
+    public function allPosts(
+        Request $request,
+        PostRepository $repo,
+        $page = 1
+    ): Response
     {
-        $repo = $this
-            ->getDoctrine()
-            ->getRepository(Post::class);
-
-        $posts = $repo->getPaginated($page, static::POSTS_PER_PAGE);
+        $perPageFromRequest = $request->get('perPage');
+        $perPage = $perPageFromRequest ?? static::POSTS_PER_PAGE;
+        $posts = $repo->getPaginatedQuery($page, $perPage);
 
         return $this->render('blog/posts/all_posts.html.twig', [
             'posts' => $posts,
             'pagesCount' => $posts->getPageCount(),
             'totalPosts' => $posts->getTotalItemCount(),
+            'perPage' => $perPage,
             'vue_data' => [
                 'currentPage' => $page
             ]
@@ -85,25 +92,27 @@ class PostsController extends AbstractController
             );
         }
 
-//        $authUser = $this->getUser();
-//        $comment = new Comment($authUser, $post);
+        /* Old comment creation:
+        $authUser = $this->getUser();
+        $comment = new Comment($authUser, $post);
 
-//        $form = $this->createForm(CommentType::class, $comment);
-//        $form->handleRequest($request);
+        $form = $this->createForm(CommentType::class, $comment);
+        $form->handleRequest($request);
 
-//        if ($form->isSubmitted() && $form->isValid()) {
-//            $manager->persist($comment);
-//            $manager->flush();
-//
-//            // если ASC: $rootComments[] = $comment;
-//            // array_unshift($rootComments, $comment);
-////            $rootComments->add($comment);
-//
-//            $this->addFlash(
-//                'success',
-//                'Comment saved!'
-//            );
-//        }
+        if ($form->isSubmitted() && $form->isValid()) {
+            $manager->persist($comment);
+            $manager->flush();
+
+            // если ASC: $rootComments[] = $comment;
+            // array_unshift($rootComments, $comment);
+//            $rootComments->add($comment);
+
+            $this->addFlash(
+                'success',
+                'Comment saved!'
+            );
+        }
+        */
 
         // $repoComment->getCommentsByPostId($id);
         $rootComments = $repoComment->getPaginatedByPostId(

@@ -1,4 +1,3 @@
-
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import '../css/app.sass'
@@ -9,6 +8,7 @@ import BootstrapVue from 'bootstrap-vue'
 import Editor from './components/Editor.vue'
 import CreateComment from './components/CreateComment'
 import Search from './components/Search'
+import BlogDate from './components/BlogDate'
 
 const delimiters = ['${', '}']
 
@@ -26,22 +26,7 @@ function init () {
   addComponent('editor', Editor)
   addComponent('create-comment', CreateComment)
   addComponent('search', Search)
-
-  addComponent('blog-date', {
-    delimiters: ['${', '}'],
-    props: ['date', 'time'],
-    template: '<small>🕒 <time class=".text-muted">${ output }</time></small>',
-    computed: {
-      output: {
-        cached: false,
-        get () {
-          // const method = this.time ? 'toLocaleTimeString' : 'toLocaleDateString'
-          // в JS не Unix, а в милисекундах
-          return new Date(+this.date * 1000).toLocaleString();
-        }
-      }
-    }
-  })
+  addComponent('blog-date', BlogDate)
 
   return initVue()
 }

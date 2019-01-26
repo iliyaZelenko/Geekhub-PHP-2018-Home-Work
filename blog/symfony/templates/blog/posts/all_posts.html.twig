@@ -3,60 +3,138 @@
 {% block title %}Posts{% endblock %}
 
 {% block content %}
-  Total posts: {{ totalPosts }}.
+  <p>
+    Total posts: {{ totalPosts }}.
+  </p>
 
-  <b-pagination-nav
+  <b-container fluid>
+    <b-row align-h="center">
+      <b-col
+        sm="2"
+        class="text-right"
+      >
+        <label
+          for="perPageInput"
+          class="mt-1"
+        >
+          Per page:
+        </label>
+      </b-col>
+      <b-col sm="3">
+        <b-form-input
+          v-model="perPage"
+          id="perPageInput"
+          type="text"
+        />
+      </b-col>
+      <b-col sm="3">
+        <b-form-select
+          v-model="perPage"
+          :options="perPageItems"
+          class="mb-3"
+          @input="paginationChangePage(currentPage, arguments[0])"
+        />
+      </b-col>
+    </b-row>
+  </b-container>
+
+  <hr>
+
+  <b-pagination
     v-model="currentPage"
-    :number-of-pages="{{ pagesCount }}"
-    base-url="/blog/"
+    :total-rows="{{ totalPosts }}"
+    :per-page="{{ perPage }}"
     align="center"
-  ></b-pagination-nav>
+    class="mt-5"
+    @input="paginationChangePage"
+  ></b-pagination>
 
   <b-card-group
     class="my-5"
     columns
   >
     {% for post in posts %}
-      <b-card no-body>
-        <b-link to="{{ path('post', { slug: post.slug, id: post.id }) }}" exact>
-          <b-card-img
-            src="https://picsum.photos/350/250?image={{ post.id }}"
-            alt="Image"
-            top
-          ></b-card-img>
-        </b-link>
-        <b-card-body>
-          <h3>
-            <b-link
-              to="{{ path('post', { slug: post.slug, id: post.id }) }}"
-              exact
-            >
-              {{ post.title }}
-            </b-link>
-            {#<b-link to="{{ postLink(post) }}" exact>{{ post.title }}</b-link>#}
+      <article>
+        <b-card no-body>
+          <b-link to="{{ path('post', { slug: post.slug, id: post.id }) }}" exact>
+            <b-card-img
+              src="https://picsum.photos/350/250?image={{ post.id }}"
+              alt="Image"
+              top
+            ></b-card-img>
+          </b-link>
+          <b-card-body>
+            <header>
+              <h3>
+                <b-link
+                  to="{{ path('post', { slug: post.slug, id: post.id }) }}"
+                  exact
+                >
+                  {{ post.title }}
+                </b-link>
+                {#<b-link to="{{ postLink(post) }}" exact>{{ post.title }}</b-link>#}
 
-          </h3>
-          <p class="card-text">
+              </h3>
+            </header>
+            <p class="card-text">
+              <br>
+              {{ post.textShort | raw }}
+            </p>
+          </b-card-body>
+          <b-card-footer>
+            By
+            <b>
+              {{ post.author.username }}
+            </b>
             <br>
-            {{ post.textShort | raw }}
-          </p>
-        </b-card-body>
-        <b-card-footer>
-          By
-          <b>
-            {{ post.author.username }}
-          </b>
-          <br>
-          {{ blogDate(post.createdAt()) }}
-        </b-card-footer>
-      </b-card>
+            {{ blogDate(post.createdAt()) }}
+          </b-card-footer>
+        </b-card>
+      </article>
     {% endfor %}
   </b-card-group>
 
-  <b-pagination-nav
+  <b-pagination
     v-model="currentPage"
-    :number-of-pages="{{ pagesCount }}"
-    base-url="/blog/"
+    :total-rows="{{ totalPosts }}"
+    :per-page="{{ perPage }}"
     align="center"
-  ></b-pagination-nav>
+    class="mb-5"
+    @input="paginationChangePage"
+  ></b-pagination>
+{% endblock %}
+
+{% block javascripts %}
+  {{ parent() }}
+  <script>
+    const params = new URLSearchParams(window.location.search)
+    const paramName = 'perPage'
+    const perPageDefault = {{ perPage }}
+    const perPage = +params.get(paramName) || perPageDefault
+    const perPageItems = [
+      { value: 3, text: '3 items' },
+      { value: 9, text: '9 items' },
+      { value: 15, text: '15 items' },
+      { value: 24, text: '24 items' }
+    ]
+
+    // если нет таких элементов, то добавляет
+    if (!perPageItems.some(i => i.value === perPage)) {
+      perPageItems.unshift({
+        value: perPage, text: perPage + ' items'
+      })
+    }
+
+    window.vueExtend.data.perPage = perPage
+    window.vueExtend.data.perPageItems = perPageItems
+    window.vueExtend.methods.paginationChangePage = (page, perPageLocal = perPage) => {
+      const basePath = '/blog/' + page
+      let postFix = ''
+
+      if (perPageLocal) {
+        postFix = `?${paramName}=` + perPageLocal
+      }
+      location.href = basePath + postFix
+    }
+  </script>
 {% endblock %}

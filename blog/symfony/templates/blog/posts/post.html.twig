@@ -37,13 +37,13 @@
     Comments
 
     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-      <b-button
+      <b-btn
+        v-b-toggle.collapse-create-comment
         variant="primary"
         class="ml-4"
-        @click="showFormAddRootComment = !showFormAddRootComment"
       >
         ${ showFormAddRootComment ? 'Hide form' : 'Add comment' }
-      </b-button>
+      </b-btn>
     {% endif %}
   </h4>
 
@@ -53,10 +53,11 @@
     </b-alert>
   {% endif %}
 
-  <create-comment
-    v-if="showFormAddRootComment"
-    api-endpoint="{{ path('post_create_comment', { slug: post.slug, id: post.id }) }}"
-  ></create-comment>
+  <b-collapse id="collapse-create-comment">
+    <create-comment
+      api-endpoint="{{ path('post_create_comment', { slug: post.slug, id: post.id }) }}"
+    ></create-comment>
+  </b-collapse>
 
   {% include 'blog/posts/parts/comments_tree.html.twig' with { commentsPost: post, comments: rootComments } only %}
 

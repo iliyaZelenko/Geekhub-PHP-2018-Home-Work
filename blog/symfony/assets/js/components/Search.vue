@@ -15,7 +15,7 @@
         :attributesToHighlight="[
           'title', 'content', 'contentShort'
         ]"
-        :hitsPerPage="4"
+        :hitsPerPage="perPage"
       />
 
 
@@ -60,10 +60,25 @@
         >
           Switch size
         </b-btn>
+
+        <div class="ml-4">
+          <label
+            for="perPageInput"
+          >
+            Per page:
+          </label>
+
+          <b-form-input
+            v-model="perPage"
+            id="perPageInput"
+            type="text"
+            style="width: 70px; display: inline;"
+          />
+        </div>
       </div>
 
       <b-collapse id="collapseTags">
-        <b-card>
+        <b-card style="background: aliceblue;">
           <h5>Search by tags</h5>
 
           <ais-refinement-list
@@ -79,7 +94,7 @@
         id="collapseAuthors"
         class="mt-2"
       >
-        <b-card>
+        <b-card style="background: antiquewhite;">
           <h5>Search by author</h5>
 
           <!--:show-more-limit="15"-->
@@ -181,6 +196,7 @@ export default {
     }
   },
   data: () => ({
+    perPage: 4,
     modalShowTextHits: false,
     modalShowTextHitsData: {
       text: null

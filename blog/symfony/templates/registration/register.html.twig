@@ -35,7 +35,7 @@
 {% block javascripts %}
   {{ parent() }}
   <script src="https://www.google.com/recaptcha/api.js?onload=onLoadCallback&render=explicit" async defer></script>
-  <script type="text/javascript">
+  <script>
     function onLoadCallback () {
       grecaptcha.render('recaptcha', {
         'sitekey' : '6LdVYIwUAAAAACiUo1k6mJm2iv2CF6coKu2ITPM_'
