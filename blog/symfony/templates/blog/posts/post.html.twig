@@ -5,12 +5,19 @@
 {% block content %}
   <h1>{{ post.title }}</h1>
 
-  By
-  <b>
-    {{ post.author.username }}
-  </b>
+  <div class="d-flex">
+    <div>
+      By
+      <b>
+        {{ post.author.username }}
+      </b>
 
-  {{ blogDate(post.createdAt) }}
+      {{ blogDate(post.createdAt) }}
+    </div>
+    <div class="ml-auto">
+      {% include 'blog/posts/parts/rating_button.html.twig' with { ratingPost: post, votingActivate: true } only %}
+    </div>
+  </div>
 
   {# Теги #}
   <div>
@@ -20,8 +27,6 @@
       </b-badge>
     {% endfor %}
   </div>
-
-  <br>
 
   <p>
     {{ post.text | raw }}
@@ -70,4 +75,7 @@
       {#{{ comment.text }}#}
     {#</div>#}
   {#{% endfor %}#}
+
+  {% include 'blog/posts/parts/rating_popover.html.twig' with { ratingPost: post } only %}
+
 {% endblock %}

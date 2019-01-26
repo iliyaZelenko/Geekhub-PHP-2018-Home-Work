@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\DataFixtures\Traits\RandomReference;
 use App\Entity\Post;
 use App\Entity\Tag;
 use App\Entity\User;
@@ -12,8 +13,11 @@ use Doctrine\Common\Persistence\ObjectManager;
 
 class PostFixture extends Fixture implements OrderedFixtureInterface
 {
+    use RandomReference;
+
     public const REFERENCE_PREFIX = 'post';
-    public const POSTS_COUNT = 5;
+    public const COUNT = 5;
+
     /**
      * @var ContentGeneratorInterface
      */
@@ -26,15 +30,15 @@ class PostFixture extends Fixture implements OrderedFixtureInterface
 
     public function load(ObjectManager $manager): void
     {
-        for ($i = 1; $i <= self::POSTS_COUNT; ++$i) {
+        for ($i = 1; $i <= static::getCount(); ++$i) {
             // случайный автор
-            $userRef = UserFixture::getRandomReferenceName();
+            $userRef = UserFixture::getRandomReference();
 
             /** @var User $user */
             $user = $this->getReference($userRef);
 
             // для последних двух
-            if ($i > self::POSTS_COUNT - 2) {
+            if ($i > static::getCount() - 2) {
                 $title = $this->contentGenerator->getRealContent('title');
                 $text = $this->contentGenerator->getRealContent('text');
                 $textShort = $this->contentGenerator->getRealContent('textShort');
@@ -48,40 +52,12 @@ class PostFixture extends Fixture implements OrderedFixtureInterface
 
             $post = new Post($user, $title, $text, $textShort, $tags);
 
-            $this->addReference(self::REFERENCE_PREFIX . $i, $post);
+            $this->addReference(static::REFERENCE_PREFIX . $i, $post);
 
             $manager->persist($post);
         }
 
         $manager->flush();
-    }
-
-    /**
-     * @param string $type 'title' | 'text' | 'textShort'
-     * @return string | null Content
-     * @throws \Exception
-     */
-    public function getRealContent(string $type): ?string
-    {
-        switch ($type) {
-            case 'title':
-                return substr(
-                    strip_tags(
-                        file_get_contents('https://loripsum.net/api/1/short')
-                    )
-                , 0, 100);
-
-            case 'text':
-                return file_get_contents('https://loripsum.net/api/' . random_int(10, 20));
-
-            case 'textShort':
-                return substr(
-                    file_get_contents('https://loripsum.net/api/' . random_int(1, 2) . '/short')
-                , 0, 255);
-
-            default:
-                throw new \Error("Please, use one of 'title', 'text' or 'textShort'.");
-        }
     }
 
     /**

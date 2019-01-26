@@ -15,7 +15,6 @@ const delimiters = ['${', '}']
 Vue.config.delimiters = delimiters
 Vue.use(BootstrapVue)
 Vue.use(InstantSearch)
-
 window.vm = init()
 
 function init () {

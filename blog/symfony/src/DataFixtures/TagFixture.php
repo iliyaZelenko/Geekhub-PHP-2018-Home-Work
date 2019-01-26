@@ -14,11 +14,11 @@ class TagFixture extends Fixture implements OrderedFixtureInterface
 
     public function load(ObjectManager $manager): void
     {
-        for ($i = 1; $i <= self::COUNT; ++$i) {
+        for ($i = 1; $i <= static::COUNT; ++$i) {
             $name = 'Tag ' . $i;
             $tag = new Tag($name);
 
-            $this->addReference(self::REFERENCE_PREFIX . $i, $tag);
+            $this->addReference(static::REFERENCE_PREFIX . $i, $tag);
 
             $manager->persist($tag);
         }

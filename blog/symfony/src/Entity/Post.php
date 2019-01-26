@@ -59,20 +59,40 @@ class Post implements SluggableInterface, CreatedUpdatedInterface
 
     /* Relations */
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="post", orphanRemoval=true)
-     * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
-     */
+//    /**
+//     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="post", orphanRemoval=true)
+//     * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
+//     */
 //    private $comments;
 
     /**
      * @ORM\ManyToMany(targetEntity="Tag")
-     * @ORM\JoinTable(name="posts_tags",
-     *     joinColumns={@ORM\JoinColumn(name="post_id", referencedColumnName="id")},
-     *     inverseJoinColumns={@ORM\JoinColumn(name="group_id", referencedColumnName="id")}
+     * @ORM\JoinTable(
+     *   name="post_tag",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="post_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="tag_id", referencedColumnName="id")
+     *   }
      * )
      */
     private $tags;
+
+// Сначала хотел сделать лайки так
+//    /**
+//     * @ORM\ManyToMany(targetEntity="User")
+//     * @ORM\JoinTable(
+//     *   name="post_like",
+//     *   joinColumns={
+//     *     @ORM\JoinColumn(name="post_id", referencedColumnName="id")
+//     *   },
+//     *   inverseJoinColumns={
+//     *     @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+//     *   }
+//     * )
+//     */
+//    private $likes;
 
     //, inversedBy="posts"
     /**
@@ -80,6 +100,12 @@ class Post implements SluggableInterface, CreatedUpdatedInterface
      * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
      */
     private $author;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Vote", mappedBy="post", orphanRemoval=true)
+     * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
+     */
+    private $votes;
 
     /**
      * Post constructor.
@@ -92,6 +118,7 @@ class Post implements SluggableInterface, CreatedUpdatedInterface
     public function __construct(User $author, string $title, string $text, string $textShort, $tags = [])
     {
 //        $this->comments = new ArrayCollection();
+        $this->votes = new ArrayCollection();
         $this->tags = new ArrayCollection();
 
         foreach ($tags as $tag) {
@@ -165,32 +192,77 @@ class Post implements SluggableInterface, CreatedUpdatedInterface
     /* Relations */
 
 //    public function getComments(): Collection
-//    {
-//        return $this->comments;
-//    }
-//
-//    public function addComment(Comment $comment): self
-//    {
-//        if (!$this->comments->contains($comment)) {
-//            $this->comments[] = $comment;
-//            $comment->setPost($this);
-//        }
-//
-//        return $this;
-//    }
-//
-//    public function removeComment(Comment $comment): self
-//    {
-//        if ($this->comments->contains($comment)) {
-//            $this->comments->removeElement($comment);
-//            // set the owning side to null (unless already changed)
-//            if ($comment->getPost() === $this) {
-//                $comment->setPost(null);
+////    {
+////        return $this->comments;
+////    }
+////
+////    public function addComment(Comment $comment): self
+////    {
+////        if (!$this->comments->contains($comment)) {
+////            $this->comments[] = $comment;
+////            $comment->setPost($this);
+////        }
+////
+////        return $this;
+////    }
+////
+////    public function removeComment(Comment $comment): self
+////    {
+////        if ($this->comments->contains($comment)) {
+////            $this->comments->removeElement($comment);
+////            // set the owning side to null (unless already changed)
+////            if ($comment->getPost() === $this) {
+////                $comment->setPost(null);
+////            }
+////        }
+////
+////        return $this;
+////    }
+
+    public function getVotesValue(): int
+    {
+//        $sum = array_reduce(
+//            $this->votes->toArray(),
+//            function ($perv, Vote $curr) {
+//                return $perv + $curr->getValue();
 //            }
-//        }
-//
-//        return $this;
-//    }
+//        );
+
+        $sum = array_sum(
+            array_map(function (Vote $vote) {
+                return $vote->getValue();
+            }, $this->votes->toArray())
+        );
+
+        return $sum;
+    }
+
+    public function getVotes(): Collection
+    {
+        return $this->votes;
+    }
+
+    public function addVote(Vote $vote): self
+    {
+        if (!$this->votes->contains($vote)) {
+            $this->votes[] = $vote;
+        }
+
+        return $this;
+    }
+
+    public function removeVote(Vote $vote): self
+    {
+        if ($this->votes->contains($vote)) {
+            $this->votes->removeElement($vote);
+            // set the owning side to null (unless already changed)
+            if ($vote->getPost() === $this) {
+                $vote->setPost(null);
+            }
+        }
+
+        return $this;
+    }
 
     public function getTags(): Collection
     {
@@ -223,5 +295,14 @@ class Post implements SluggableInterface, CreatedUpdatedInterface
         $this->slug = $slug;
 
         return $this;
+    }
+
+    /* Other */
+
+    public function getUserVoteValue(User $user): bool
+    {
+        return $this->votes->exists(function ($key, Vote $vote) use ($user) {
+            return $vote->getUser()->getId() === $user->getId();
+        });
     }
 }

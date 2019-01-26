@@ -82,12 +82,20 @@
             </p>
           </b-card-body>
           <b-card-footer>
-            By
-            <b>
-              {{ post.author.username }}
-            </b>
-            <br>
-            {{ blogDate(post.createdAt()) }}
+            <div class="d-flex">
+              <div>
+                By
+                <b>
+                  {{ post.author.username }}
+                </b>
+                <br>
+                {{ blogDate(post.createdAt()) }}
+              </div>
+              <div class="ml-auto">
+                {% include 'blog/posts/parts/rating_button.html.twig' with { ratingPost: post } only %}
+                {% include 'blog/posts/parts/rating_popover.html.twig' with { ratingPost: post } only %}
+              </div>
+            </div>
           </b-card-footer>
         </b-card>
       </article>
