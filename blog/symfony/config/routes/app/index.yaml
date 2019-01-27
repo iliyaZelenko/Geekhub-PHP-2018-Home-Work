@@ -2,6 +2,7 @@
 index:
     path: /
     controller: App\Controller\HomeController::index
+    methods: [GET]
 
 blog:
     path: /blog/{page}
@@ -10,6 +11,7 @@ blog:
         page: '\d+'
     defaults:
         page: 1
+    methods: [GET]
 
 post:
     path: /post/{id}/{slug}
@@ -17,27 +19,39 @@ post:
     requirements:
         slug: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
         id:  '\d+'
+    methods: [GET]
 
 post_create_comment:
     path: /post/{id}/{slug}/new-comment/
     controller: App\Controller\PostsController::createComment
+    methods: [POST]
+
+post_do_vote:
+    path: /post/{id}/do-vote/
+    controller: App\Controller\PostsController::postDoVote
+    methods: [POST]
 
 search:
     path: /search
     controller: App\Controller\SearchController::postSearch
+    methods: [GET]
 
 # Auth
 profile:
     path: /profile
     controller: App\Controller\ProfileController::index
+    methods: [GET]
 
 app_logout:
     path: /logout
+    methods: [POST]
 
 app_login:
     path: /login
     controller: App\Controller\SecurityController::login
+    methods: [POST]
 
 app_register:
     path: /register
     controller: App\Controller\RegistrationController::register
+    methods: [POST]

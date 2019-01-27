@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\DomainManagers\CommentManager;
+use App\DomainManagers\PostVoteManager;
 use App\Entity\Post;
+use App\Entity\PostVote;
 use App\Form\DataObjects\CommentData;
 use App\Form\Handler\CommentFormHandler;
 use App\Repository\CommentRepository;
@@ -178,5 +180,43 @@ class PostsController extends AbstractController
         return new JsonResponse([
             'error' => $formResult
         ]);
+    }
+
+    /**
+     * @ParamConverter("post", options={"mapping" = {"id" = "id"}})
+     * @param Request $request
+     * @param Post $post
+     * @param PostVoteManager $postVoteManager
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function postDoVote(Request $request, Post $post, PostVoteManager $postVoteManager)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        $user = $this->getUser();
+        $redirectResponse =  $this->redirectToRoute('post', [
+            'id' => $post->getId(),
+            'slug' => $post->getSlug()
+        ]);
+
+        if ($userVote = $post->getUserVote($user)) {
+            $oppositeValue = $userVote->getValue() * -1;
+
+            $postVoteManager->changeVoteValue($userVote, $oppositeValue);
+
+
+            return $redirectResponse;
+        }
+
+        $voteValue = +$request->get('voteValue');
+
+        dump([
+            'voteVal' => $voteValue,
+        ]);
+
+        $postVoteManager->createVote($user, $post, $voteValue);
+
+
+        return $redirectResponse;
     }
 }

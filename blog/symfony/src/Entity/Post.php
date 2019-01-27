@@ -102,8 +102,9 @@ class Post implements SluggableInterface, CreatedUpdatedInterface
     private $author;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Vote", mappedBy="post", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\PostVote", mappedBy="post", orphanRemoval=true)
      * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\OrderBy(value={"createdAt" = "DESC"})
      */
     private $votes;
 
@@ -223,13 +224,13 @@ class Post implements SluggableInterface, CreatedUpdatedInterface
     {
 //        $sum = array_reduce(
 //            $this->votes->toArray(),
-//            function ($perv, Vote $curr) {
+//            function ($perv, PostVote $curr) {
 //                return $perv + $curr->getValue();
 //            }
 //        );
 
         $sum = array_sum(
-            array_map(function (Vote $vote) {
+            array_map(function (PostVote $vote) {
                 return $vote->getValue();
             }, $this->votes->toArray())
         );
@@ -242,7 +243,7 @@ class Post implements SluggableInterface, CreatedUpdatedInterface
         return $this->votes;
     }
 
-    public function addVote(Vote $vote): self
+    public function addVote(PostVote $vote): self
     {
         if (!$this->votes->contains($vote)) {
             $this->votes[] = $vote;
@@ -251,7 +252,7 @@ class Post implements SluggableInterface, CreatedUpdatedInterface
         return $this;
     }
 
-    public function removeVote(Vote $vote): self
+    public function removeVote(PostVote $vote): self
     {
         if ($this->votes->contains($vote)) {
             $this->votes->removeElement($vote);
@@ -299,10 +300,34 @@ class Post implements SluggableInterface, CreatedUpdatedInterface
 
     /* Other */
 
-    public function getUserVoteValue(User $user): bool
+    public function getUserVoteValue(User $user): ?Int
     {
-        return $this->votes->exists(function ($key, Vote $vote) use ($user) {
-            return $vote->getUser()->getId() === $user->getId();
+        if (!$vote = $this->getUserVote($user)) {
+            return null;
+        }
+
+        return $vote->getValue();
+    }
+
+    /**
+     * @param User $user
+     * @return PostVote | null
+     */
+    public function getUserVote(User $user): ?PostVote
+    {
+        $foundVote = null;
+
+        // не нашел более удобную функцию :( Нужно как find в JS.
+        $this->votes->forAll(function ($key, PostVote $vote) use ($user, &$foundVote) {
+            if ($vote->getUser()->getId() === $user->getId()) {
+                $foundVote = $vote;
+
+                return false;
+            }
+
+            return true;
         });
+
+        return $foundVote;
     }
 }

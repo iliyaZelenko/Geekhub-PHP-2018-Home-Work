@@ -7,9 +7,8 @@
   title="Last votes"
   triggers="hover"
   placement="bottom"
-  style="width: 1999px; max-width: 1999px;"
 >
-  <div>
+  <div style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
     {% for vote in ratingPost.votes | slice(0, limit) %}
       <b-badge variant="{{ vote.value == -1 ? 'danger' : 'success' }}">
         {{ vote.value }}

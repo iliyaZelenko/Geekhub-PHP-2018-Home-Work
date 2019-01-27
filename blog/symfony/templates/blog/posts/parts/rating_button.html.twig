@@ -17,17 +17,35 @@
 </b-btn>
 
 {% if is_granted('IS_AUTHENTICATED_FULLY') and votingActivate is defined and votingActivate %}
-  <b-button
-    size="small"
-    variant="{% if ratingPost.userVoteValue(app.user) %}outline-{% endif %}success"
+  <form
+    action="{{ path('post_do_vote', { id: ratingPost.id }) }}"
+    method="POST"
+    class="d-inline"
   >
-    👍🏻
-  </b-button>
+    <input type="text" name="voteValue" value="+1" hidden>
 
-  <b-button
-    size="small"
-    variant="{% if not ratingPost.userVoteValue(app.user) %}outline-{% endif %}danger"
+    <b-button
+      type="submit"
+      size="small"
+      variant="{% if not ratingPost.userVoteValue(app.user) is same as(1) %}outline-{% endif %}success"
+    >
+      👍🏻
+    </b-button>
+  </form>
+
+  <form
+    action="{{ path('post_do_vote', { id: ratingPost.id }) }}"
+    method="POST"
+    class="d-inline"
   >
-    👎🏻
-  </b-button>
+    <input type="text" name="voteValue" value="-1" hidden>
+
+    <b-button
+      type="submit"
+      size="small"
+      variant="{% if not ratingPost.userVoteValue(app.user) is same as(-1) %}outline-{% endif %}danger"
+    >
+      👎🏻
+    </b-button>
+  </form>
 {% endif %}

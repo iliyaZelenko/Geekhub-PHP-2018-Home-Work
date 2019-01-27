@@ -7,10 +7,10 @@ use App\Entity\Traits\CreatedUpdatedTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="votes")
+ * @ORM\Table(name="posts_votes")
  * @ORM\Entity()
  */
-class Vote implements CreatedUpdatedInterface
+class PostVote implements CreatedUpdatedInterface
 {
     use CreatedUpdatedTrait;
 
@@ -39,7 +39,7 @@ class Vote implements CreatedUpdatedInterface
     private $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Post")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Post", inversedBy="votes")
      * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
      */
     private $post;
@@ -81,7 +81,7 @@ class Vote implements CreatedUpdatedInterface
 
     /**
      * @param mixed $value
-     * @return Vote
+     * @return PostVote
      */
     public function setValue($value): self
     {
@@ -100,7 +100,7 @@ class Vote implements CreatedUpdatedInterface
 
     /**
      * @param mixed $user
-     * @return Vote
+     * @return PostVote
      */
     public function setUser($user): self
     {
@@ -119,7 +119,7 @@ class Vote implements CreatedUpdatedInterface
 
     /**
      * @param mixed $post
-     * @return Vote
+     * @return PostVote
      */
     public function setPost($post): self
     {

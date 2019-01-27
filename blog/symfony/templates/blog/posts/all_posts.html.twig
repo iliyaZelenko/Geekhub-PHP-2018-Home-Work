@@ -83,7 +83,7 @@
           </b-card-body>
           <b-card-footer>
             <div class="d-flex">
-              <div>
+              <div style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
                 By
                 <b>
                   {{ post.author.username }}
@@ -127,7 +127,7 @@
     ]
 
     // если нет таких элементов, то добавляет
-    if (!perPageItems.some(i => i.value === perPage)) {
+    if (!perPageItems.find(i => i.value === perPage)) {
       perPageItems.unshift({
         value: perPage, text: perPage + ' items'
       })
