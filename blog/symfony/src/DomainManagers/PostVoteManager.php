@@ -38,4 +38,14 @@ class PostVoteManager
 
         return $newVote;
     }
+
+    public function removeVote(Post $post, PostVote $vote): Post
+    {
+        $post->removeVote($vote);
+
+        $this->entityManager->remove($vote);
+        $this->entityManager->flush();
+
+        return $post;
+    }
 }

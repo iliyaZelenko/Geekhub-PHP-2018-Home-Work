@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\DomainManagers\CommentManager;
 use App\DomainManagers\PostVoteManager;
 use App\Entity\Post;
-use App\Entity\PostVote;
 use App\Form\DataObjects\CommentData;
 use App\Form\Handler\CommentFormHandler;
 use App\Repository\CommentRepository;
@@ -16,6 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class PostsController extends AbstractController
 {
@@ -189,32 +189,28 @@ class PostsController extends AbstractController
      * @param PostVoteManager $postVoteManager
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function postDoVote(Request $request, Post $post, PostVoteManager $postVoteManager)
+    public function postDoVote(Request $request, Post $post, PostVoteManager $postVoteManager): RedirectResponse
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $user = $this->getUser();
-        $redirectResponse =  $this->redirectToRoute('post', [
+        $requestVoteValue = +$request->get('voteValue');
+        $redirectResponse = $this->redirectToRoute('post', [
             'id' => $post->getId(),
             'slug' => $post->getSlug()
         ]);
 
         if ($userVote = $post->getUserVote($user)) {
-            $oppositeValue = $userVote->getValue() * -1;
+            $currentValue = $userVote->getValue();
 
-            $postVoteManager->changeVoteValue($userVote, $oppositeValue);
-
-
-            return $redirectResponse;
+            if ($currentValue === $requestVoteValue) {
+                $postVoteManager->removeVote($post, $userVote);
+            } else {
+                $postVoteManager->changeVoteValue($userVote, $requestVoteValue);
+            }
+        } else {
+            $postVoteManager->createVote($user, $post, $requestVoteValue);
         }
-
-        $voteValue = +$request->get('voteValue');
-
-        dump([
-            'voteVal' => $voteValue,
-        ]);
-
-        $postVoteManager->createVote($user, $post, $voteValue);
 
 
         return $redirectResponse;

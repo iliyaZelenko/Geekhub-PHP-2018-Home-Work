@@ -307,6 +307,7 @@ class Post implements SluggableInterface, CreatedUpdatedInterface
         }
 
         return $vote->getValue();
+        // Если бы PHP возвращал не bool для логических: return ($vote = $this->getUserVote($user)) && $vote->getValue()
     }
 
     /**
