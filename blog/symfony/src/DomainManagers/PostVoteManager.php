@@ -19,7 +19,7 @@ class PostVoteManager
         $this->entityManager = $entityManager;
     }
 
-    public function changeVoteValue(PostVote $vote, int $voteValue): PostVote
+    public function updateVoteValue(PostVote $vote, int $voteValue): PostVote
     {
         $vote->setValue($voteValue);
         $this->entityManager->flush();

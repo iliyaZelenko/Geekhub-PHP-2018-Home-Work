@@ -160,7 +160,6 @@ import {
 import javascript from 'highlight.js/lib/languages/javascript'
 import php from 'highlight.js/lib/languages/php'
 import css from 'highlight.js/lib/languages/css'
-import 'highlight.js/styles/github.css'
 import Icon from './Icon'
 
 export default {

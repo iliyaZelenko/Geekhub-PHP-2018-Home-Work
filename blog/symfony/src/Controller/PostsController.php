@@ -38,7 +38,7 @@ class PostsController extends AbstractController
     {
         $perPageFromRequest = $request->get('perPage');
         $perPage = $perPageFromRequest ?? static::POSTS_PER_PAGE;
-        $posts = $repo->getPaginatedQuery($page, $perPage);
+        $posts = $repo->getPaginated($page, $perPage);
 
         return $this->render('blog/posts/all_posts.html.twig', [
             'posts' => $posts,
@@ -46,7 +46,8 @@ class PostsController extends AbstractController
             'totalPosts' => $posts->getTotalItemCount(),
             'perPage' => $perPage,
             'vue_data' => [
-                'currentPage' => $page
+                'currentPage' => $page,
+                'basePathURL' => '"/blog/"'
             ]
         ]);
     }
@@ -189,7 +190,11 @@ class PostsController extends AbstractController
      * @param PostVoteManager $postVoteManager
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function postDoVote(Request $request, Post $post, PostVoteManager $postVoteManager): RedirectResponse
+    public function postDoVote(
+        Request $request,
+        Post $post,
+        PostVoteManager $postVoteManager
+    ): RedirectResponse
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
@@ -201,18 +206,38 @@ class PostsController extends AbstractController
         ]);
 
         if ($userVote = $post->getUserVote($user)) {
-            $currentValue = $userVote->getValue();
-
-            if ($currentValue === $requestVoteValue) {
-                $postVoteManager->removeVote($post, $userVote);
-            } else {
-                $postVoteManager->changeVoteValue($userVote, $requestVoteValue);
-            }
+            $userVote->getValue() === $requestVoteValue
+                ? $postVoteManager->removeVote($post, $userVote)
+                : $postVoteManager->updateVoteValue($userVote, $requestVoteValue);
         } else {
             $postVoteManager->createVote($user, $post, $requestVoteValue);
         }
 
 
         return $redirectResponse;
+    }
+
+    public function createPost(
+        Request $request
+    )
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        $user = $this->getUser();
+
+//        $form = $this->createForm(PostCreationFormType::class, $registrationData);
+//
+//        if ($user = $formHandler->handle($form, $request)) {
+//            // do anything else you need here, like send an email
+//
+//            return $guardHandler->authenticateUserAndHandleSuccess(
+//                $user,
+//                $request,
+//                $authenticator,
+//                'main' // firewall name in security.yaml
+//            );
+//        }
+
+        return $this->render('blog/posts/post_creation.html.twig');
     }
 }

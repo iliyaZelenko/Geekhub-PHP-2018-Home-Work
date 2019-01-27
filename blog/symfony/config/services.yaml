@@ -19,12 +19,11 @@ services:
                             # fetching services directly from the container via $container->get() won't work.
                             # The best practice is to be explicit about your dependencies anyway.
 
+
     #------- Packages services -------
 
     GuzzleHttp\Client: ~
     GuzzleHttp\ClientInterface: '@GuzzleHttp\Client'
-
-
 
 
     #------- App services -------
@@ -41,14 +40,11 @@ services:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
 
-
     App\Utils\ContentGenerator\ContentGenerator: ~
     App\Utils\Slugger\Slugger: ~
 
     App\Utils\Contracts\ContentGenerator\ContentGeneratorInterface: '@App\Utils\ContentGenerator\ContentGenerator'
     App\Utils\Contracts\Slugger\SluggerInterface: '@App\Utils\Slugger\Slugger'
-
-
 
     #** EventListeners **
 

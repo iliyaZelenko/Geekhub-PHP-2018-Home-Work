@@ -1,19 +1,17 @@
-<div class="comments-wrap ml-5 my-2">
+<div class="comments-wrap">
   {% for comment in comments %}
+    <div class="comment">
       {#<b-card class="comments ml-4 mb-2">#}
 
-      By
-      <b>
-        {{ comment.author.username }}
-      </b>
+      <div class="comment__self-content">
+        By
+        <b>
+          {{ comment.author.username }}
+        </b>
 
-      {#createdAt#}
-      {{ blogDate(comment.getCreatedAt()) }}
+        {{ blogDate(comment.createdAt) }}
 
-      <p class="card-text">
-
-        <div class="editor-view-content">
-          {# TODO code highlight not only in editor #}
+        <div class="comment__text editor-view-content">
           {{ comment.text | raw }}
         </div>
 
@@ -68,9 +66,10 @@
             #}
           </b-collapse>
         {% endif %}
-      </p>
+      </div>
 
-      <hr>
+
+      {#<hr>#}
 
       {% set childrenComments = comment.getChildrenComments() %}
 
@@ -83,5 +82,6 @@
       {% endif %}
 
       {#</b-card>#}
+    </div>
   {% endfor %}
 </div>

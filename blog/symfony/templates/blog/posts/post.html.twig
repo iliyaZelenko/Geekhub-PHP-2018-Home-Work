@@ -1,6 +1,8 @@
 {% extends 'layouts/main/index.html.twig' %}
 
-{% block title %}Post{% endblock %}
+{% block title %}
+  Post "{ post.title }}"
+{% endblock %}
 
 {% block content %}
   <h1>{{ post.title }}</h1>
@@ -28,9 +30,9 @@
     {% endfor %}
   </div>
 
-  <p>
+  <div>
     {{ post.text | raw }}
-  </p>
+  </div>
 
   <hr>
 

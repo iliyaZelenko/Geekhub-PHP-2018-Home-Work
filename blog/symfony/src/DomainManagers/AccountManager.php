@@ -38,6 +38,7 @@ class AccountManager
         if ($this->userRepo->findOneBy([
             'username' => $username
         ])) {
+            // TODO по идее не должно быть связанности с Http исключениями, не знаю как сделать
             throw new HttpException(409, 'A user with this nickname already exists.');
         }
 

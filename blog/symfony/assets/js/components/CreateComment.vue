@@ -43,23 +43,19 @@ export default {
     error: null,
     loading: false,
     content: `
-      <h2>
-        Code Highlighting 😊
-      </h2>
-      <p>
-        These are code blocks with <strong>automatic syntax highlighting</strong> based on highlight.js.
-      </p>
-      <h4>JS</h4>
-      <pre><code>alert([] + 0 + [] === '0')</code></pre>
-      <h4>CSS</h4>
-      <pre><code>body { color: blue; }</code></pre>
-      <p>
-        Note: tiptap doesn't import syntax highlighting language definitions from highlight.js. You
-        <strong>must</strong> import them and initialize the extension with all languages you want to support:
-      </p>
+Самая интересная возможность редактора: отличная поддержка markdown размети.
 
-      <h4>PHP</h4>
-
+<h2>
+  Code Highlighting 😊
+</h2>
+<p>
+  These are code blocks with <strong>automatic syntax highlighting</strong> based on highlight.js (поставил Atom Dark тему).
+</p>
+<h4>JS</h4>
+<pre><code>alert([] == ![]) // true</code></pre>
+<h4>CSS</h4>
+<pre><code>body { color: blue; }</code></pre>
+<h4>PHP</h4>
 <pre><code>class Test {
   public function sayHello() {
     echo 'Hello world!';

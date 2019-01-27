@@ -6,7 +6,8 @@
     "> 0.2%"
   ],
   "scripts": {
-    "dump-server": "dump-server --run-dump"
+    "dump-server": "dump-server --run-dump",
+    "best-dev-server-in-the-world": "encore dev --watch"
   },
   "devDependencies": {
     "@symfony/webpack-encore": "^0.22.2",

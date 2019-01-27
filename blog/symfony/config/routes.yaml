@@ -17,7 +17,7 @@ auth0_login:
 auth0_logout:
     path: /auth0/logout
 
-
+# TODO не понятно зачем тут имя и нач то оно влияет
 site:
     resource: 'routes/app/index.yaml'
     prefix:

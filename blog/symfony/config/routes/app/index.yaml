@@ -1,3 +1,8 @@
+# Profile
+profile:
+    resource: 'profile/index.yaml'
+    prefix: 'profile'
+
 # Main routes
 index:
     path: /
@@ -26,6 +31,11 @@ post_create_comment:
     controller: App\Controller\PostsController::createComment
     methods: [POST]
 
+post_creation:
+    path: /post-creation/
+    controller: App\Controller\PostsController::createPost
+    methods: [POST, GET]
+
 post_do_vote:
     path: /post/{id}/do-vote/
     controller: App\Controller\PostsController::postDoVote
@@ -37,21 +47,16 @@ search:
     methods: [GET]
 
 # Auth
-profile:
-    path: /profile
-    controller: App\Controller\ProfileController::index
-    methods: [GET]
-
 app_logout:
     path: /logout
     methods: [POST]
 
 app_login:
     path: /login
-    controller: App\Controller\SecurityController::login
+    controller: App\Controller\AuthController::login
     methods: [POST]
 
 app_register:
     path: /register
-    controller: App\Controller\RegistrationController::register
+    controller: App\Controller\AuthController::register
     methods: [POST]

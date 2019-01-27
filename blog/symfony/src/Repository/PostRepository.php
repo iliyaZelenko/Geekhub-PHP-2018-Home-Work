@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Post;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Knp\Component\Pager\Pagination\PaginationInterface as PaginationInterfaceReturn;
 use Knp\Component\Pager\PaginatorInterface;
@@ -28,15 +29,32 @@ class PostRepository extends ServiceEntityRepository
         $this->paginator = $paginator;
     }
 
-    public function getPaginatedQuery($page, $perPage): PaginationInterfaceReturn
+    public function getPaginated($page, $perPage): PaginationInterfaceReturn
     {
         $query = $this
             ->createQueryBuilder('p')
-            ->orderBy('p.id', 'DESC')
+            ->orderBy('p.createdAt', 'DESC')
             ->getQuery()
         ;
 
         // Возвращается экземпляр: https://github.com/KnpLabs/KnpPaginatorBundle/blob/master/Pagination/SlidingPagination.php
+        return $this->paginator->paginate(
+            $query,
+            $page,
+            $perPage
+        );
+    }
+
+    public function getByUserPaginated(User $user, $page, $perPage): PaginationInterfaceReturn
+    {
+        $query = $this
+            ->createQueryBuilder('p')
+            ->andWhere('p.author = :user')
+            ->setParameter('user', $user)
+            ->orderBy('p.createdAt', 'DESC')
+            ->getQuery()
+        ;
+
         return $this->paginator->paginate(
             $query,
             $page,
