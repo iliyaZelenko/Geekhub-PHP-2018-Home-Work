@@ -2,7 +2,8 @@
 
 namespace App\Entity;
 
-use App\Entity\Traits\TimestampableTrait;
+use App\Entity\Interfaces\CreatedUpdatedInterface;
+use App\Entity\Traits\CreatedUpdatedTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -11,11 +12,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Table(name="comments")
  * @ORM\Entity(repositoryClass="App\Repository\CommentRepository")
- * @ORM\HasLifecycleCallbacks()
  */
-class Comment
+class Comment implements CreatedUpdatedInterface
 {
-    use TimestampableTrait;
+    use CreatedUpdatedTrait;
 
     /* Columns */
 
@@ -28,13 +28,6 @@ class Comment
 
     /**
      * @ORM\Column(type="text")
-     * @Assert\NotBlank()
-     * @Assert\NotNull()
-     * @Assert\Type("string")
-     * @Assert\Length(
-     *     min=5,
-     *     max=300
-     * )
      */
     private $text;
 

@@ -21,20 +21,44 @@
 
     <!-- Right aligned nav items -->
     <b-navbar-nav class="ml-auto">
+      <b-btn
+        to="{{ path('search') }}"
+        variant="primary"
+        class="mr-3"
+      >
+        Search
+      </b-btn>
 
-      <b-nav-form>
-        <b-form-input size="sm" class="mr-sm-2" type="text" placeholder="Search"/>
-        <b-button size="sm" class="my-2 my-sm-0" type="submit">Search</b-button>
-      </b-nav-form>
+      {% if app.request.locale is same as ('en') %}
+        <img src="{{ flag.en }}">
+      {% elseif app.request.locale is same as ('ru') %}
+        <img src="{{ flag.ru }}">
+      {% endif %}
 
-      <b-nav-item-dropdown text="Lang" right>
-        <b-dropdown-item href="/">
-          EN
-          <img src="https://www.countryflags.io/us/shiny/32.png">
+      <b-nav-item-dropdown text="Lang ({{ app.request.locale }})" right>
+        {#
+        TODO Хотел генерировать роут на текущий маршрут, но только с измененной локалью, типа:
+        {{ path(app.request.get('_route'), { _locale: 'ru'   Но тут нужны парамтры текущего роута     }) }}
+        #}
+        <b-dropdown-item href="{{ path('index', { _locale: 'en' }) }}">
+          {% if app.request.locale is same as ('en') %}
+            <b>
+              EN
+            </b>
+          {% else %}
+            EN
+          {% endif %}
+          <img src="{{ flag.en }}">
         </b-dropdown-item>
-        <b-dropdown-item href="/ru">
-          RU
-          <img src="https://www.countryflags.io/ru/shiny/32.png">
+        <b-dropdown-item href="{{ path('index', { _locale: 'ru' }) }}">
+          {% if app.request.locale is same as ('ru') %}
+            <b>
+              RU
+            </b>
+          {% else %}
+            RU
+          {% endif %}
+          <img src="{{ flag.ru }}">
         </b-dropdown-item>
       </b-nav-item-dropdown>
 
@@ -46,13 +70,11 @@
           <b-dropdown-item href="{{ path('profile') }}">
             Profile
           </b-dropdown-item>
-          {#TODO не уверен что правильное сгенерировал роут, есть еще logout_url('main')#}
           <b-dropdown-item href="{{ path('app_logout') }}">
             Logout
           </b-dropdown-item>
         </b-nav-item-dropdown>
       {% else %}
-        {#TODO не уверен что правильное имя роута (нужна сраница /login)#}
         <b-nav-item href="{{ path('app_login') }}">
           Sign In
         </b-nav-item>

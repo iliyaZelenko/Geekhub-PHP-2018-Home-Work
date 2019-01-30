@@ -6,14 +6,16 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 final class RegistrationData
 {
-    // Допускаются русские символы (почему никнейм обязательно должен быть на английском?).
     /**
+     * Допускаются русские символы (почему никнейм обязательно должен быть на английском?).
+     *
      * @Assert\Regex("/^[а-яА-Яa-zA-ZЁё][а-яА-Яa-zA-Z0-9Ёё]*?([-_.][а-яА-Яa-zA-Z0-9Ёё]+){0,3}$/u")
      */
     private $username;
 
     /**
      * @Assert\Email()
+     * @Assert\NotBlank()
      */
     private $email;
 

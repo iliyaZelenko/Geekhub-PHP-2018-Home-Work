@@ -2,37 +2,52 @@
 
 namespace App\Controller;
 
-use App\Entity\Comment;
+use App\DomainManagers\CommentManager;
+use App\DomainManagers\PostVoteManager;
 use App\Entity\Post;
-use App\Entity\User;
-use App\Form\CommentType;
+use App\Form\DataObjects\CommentData;
+use App\Form\Handler\CommentFormHandler;
+use App\Repository\CommentRepository;
+use App\Repository\PostRepository;
 use Doctrine\Common\Persistence\ObjectManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class PostsController extends AbstractController
 {
     public const POSTS_PER_PAGE = 3;
     public const COMMENTS_PER_PAGE = 6;
 
-    public function allPosts($page = 1): Response
+    /**
+     * Get all paginated posts
+     *
+     * @param Request $request
+     * @param PostRepository $repo
+     * @param int $page
+     * @return Response
+     */
+    public function allPosts(
+        Request $request,
+        PostRepository $repo,
+        $page = 1
+    ): Response
     {
-        $repo = $this
-            ->getDoctrine()
-            ->getRepository(Post::class);
-
-        $posts = $repo->getPaginated($page, static::POSTS_PER_PAGE);
+        $perPageFromRequest = $request->get('perPage');
+        $perPage = $perPageFromRequest ?? static::POSTS_PER_PAGE;
+        $posts = $repo->getPaginated($page, $perPage);
 
         return $this->render('blog/posts/all_posts.html.twig', [
             'posts' => $posts,
             'pagesCount' => $posts->getPageCount(),
             'totalPosts' => $posts->getTotalItemCount(),
+            'perPage' => $perPage,
             'vue_data' => [
-                'currentPage' => $page
+                'currentPage' => $page,
+                'basePathURL' => '"/blog/"'
             ]
         ]);
     }
@@ -53,14 +68,20 @@ class PostsController extends AbstractController
      * @param Request $request
      * @param ObjectManager $manager
      * @param Post $post
+     * @param CommentRepository $repoComment
      * @param $slug
      * @param $id
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function post(Request $request, ObjectManager $manager, Post $post, $slug, $id): Response
+    public function post(
+        Request $request,
+        ObjectManager $manager,
+        Post $post,
+        CommentRepository $repoComment,
+        $slug,
+        $id
+    ): Response
     {
-        $repoComment = $this->getDoctrine()->getRepository(Comment::class);
-
         // если slug из url не совпадает со slug в посте, то редирект на слуг поста
         // таким образом: если была ссылка с slug который поменялся (вместе с title), то такая ссылка будет работать
         // изначально ParamConverter ищет по id и (или) slug, если нашло по id, а slug отличается, то будет редирект
@@ -74,25 +95,27 @@ class PostsController extends AbstractController
             );
         }
 
-//        $authUser = $this->getUser();
-//        $comment = new Comment($authUser, $post);
+        /* Old comment creation:
+        $authUser = $this->getUser();
+        $comment = new Comment($authUser, $post);
 
-//        $form = $this->createForm(CommentType::class, $comment);
-//        $form->handleRequest($request);
+        $form = $this->createForm(CommentType::class, $comment);
+        $form->handleRequest($request);
 
-//        if ($form->isSubmitted() && $form->isValid()) {
-//            $manager->persist($comment);
-//            $manager->flush();
-//
-//            // если ASC: $rootComments[] = $comment;
-//            // array_unshift($rootComments, $comment);
-////            $rootComments->add($comment);
-//
-//            $this->addFlash(
-//                'success',
-//                'Comment saved!'
-//            );
-//        }
+        if ($form->isSubmitted() && $form->isValid()) {
+            $manager->persist($comment);
+            $manager->flush();
+
+            // если ASC: $rootComments[] = $comment;
+            // array_unshift($rootComments, $comment);
+//            $rootComments->add($comment);
+
+            $this->addFlash(
+                'success',
+                'Comment saved!'
+            );
+        }
+        */
 
         // $repoComment->getCommentsByPostId($id);
         $rootComments = $repoComment->getPaginatedByPostId(
@@ -120,54 +143,101 @@ class PostsController extends AbstractController
      *
      * @ParamConverter("post", options={"mapping" = {"slug" = "slug"}})
      * @param Request $request
-     * @param ObjectManager $manager
-     * @param ValidatorInterface $validator
      * @param Post $post
+     * @param CommentFormHandler $commentFormHandler
+     * @param CommentData $commentData
+     * @param CommentManager $commentManager
      * @param $slug
      * @param $id
      * @return JsonResponse
      */
-    public function createComment(Request $request, ObjectManager $manager, ValidatorInterface $validator, Post $post, $slug, $id): JsonResponse
+    public function createComment(
+        Request $request,
+        Post $post,
+        CommentFormHandler $commentFormHandler,
+        CommentData $commentData,
+        CommentManager $commentManager,
+        $slug,
+        $id
+    ): JsonResponse
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        $repo = $this
-            ->getDoctrine()
-            ->getRepository(Comment::class);
+        $user = $this->getUser();
 
-        [
-            'message' => $message,
-            'parentCommentId' => $parentCommentId
-        ] = json_decode($request->getContent(), true);
+        if ($formResult = $commentFormHandler->handle($commentData, $request)) {
+            $commentManager->createComment(
+                $user,
+                $post,
+                $commentData
+            );
 
-        $authUser = $this->getUser();
-        $comment = new Comment($authUser, $post);
-        $comment->setText($message);
-
-        if ($parentCommentId) {
-            $parentComment = $repo->find($parentCommentId);
-
-            # TODO возможно чтобы не делать лишний запрос лучше просто ->setParentId($id)
-            $comment->setParent($parentComment);
-        }
-
-        $errors = $validator->validate($comment);
-
-        if (count($errors) > 0) {
-            $errorMsg = $errors->get(0)->getMessage();
-
+            // TODO JsonResponseBuilder
             return new JsonResponse([
-                'error' => $errorMsg
+                'successMessage' => 'Comment saved!'
             ]);
         }
 
-        $manager->persist($comment);
-        $manager->flush();
-
         return new JsonResponse([
-            'successMessage' => 'Comment saved!',
-            '$parentCommentId' => $parentCommentId,
-            'message' => $message,
+            'error' => $formResult
         ]);
+    }
+
+    /**
+     * @ParamConverter("post", options={"mapping" = {"id" = "id"}})
+     * @param Request $request
+     * @param Post $post
+     * @param PostVoteManager $postVoteManager
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function postDoVote(
+        Request $request,
+        Post $post,
+        PostVoteManager $postVoteManager
+    ): RedirectResponse
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        $user = $this->getUser();
+        $requestVoteValue = +$request->get('voteValue');
+        $redirectResponse = $this->redirectToRoute('post', [
+            'id' => $post->getId(),
+            'slug' => $post->getSlug()
+        ]);
+
+        if ($userVote = $post->getUserVote($user)) {
+            $userVote->getValue() === $requestVoteValue
+                ? $postVoteManager->removeVote($post, $userVote)
+                : $postVoteManager->updateVoteValue($userVote, $requestVoteValue);
+        } else {
+            $postVoteManager->createVote($user, $post, $requestVoteValue);
+        }
+
+
+        return $redirectResponse;
+    }
+
+    public function createPost(
+        Request $request
+    )
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        $user = $this->getUser();
+
+//        $form = $this->createForm(PostCreationFormType::class, $registrationData);
+//
+//        if ($user = $formHandler->handle($form, $request)) {
+//            // do anything else you need here, like send an email
+//
+//            return $guardHandler->authenticateUserAndHandleSuccess(
+//                $user,
+//                $request,
+//                $authenticator,
+//                'main' // firewall name in security.yaml
+//            );
+//        }
+
+        return $this->render('blog/posts/post_creation.html.twig');
     }
 }

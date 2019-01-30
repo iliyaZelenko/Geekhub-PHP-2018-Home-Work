@@ -2,17 +2,17 @@
 
 namespace App\Entity;
 
-use App\Entity\Traits\TimestampableTrait;
+use App\Entity\Interfaces\CreatedUpdatedInterface;
+use App\Entity\Traits\CreatedUpdatedTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="tags")
  * @ORM\Entity(repositoryClass="App\Repository\TagRepository")
- * @ORM\HasLifecycleCallbacks()
  */
-class Tag
+class Tag implements CreatedUpdatedInterface
 {
-    use TimestampableTrait;
+    use CreatedUpdatedTrait;
 
     /* Columns */
 

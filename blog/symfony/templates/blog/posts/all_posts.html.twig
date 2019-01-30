@@ -3,60 +3,47 @@
 {% block title %}Posts{% endblock %}
 
 {% block content %}
-  Total posts: {{ totalPosts }}.
+  <p>
+    Total posts: {{ totalPosts }}.
+  </p>
 
-  <b-pagination-nav
-    v-model="currentPage"
-    :number-of-pages="{{ pagesCount }}"
-    base-url="/blog/"
-    align="center"
-  ></b-pagination-nav>
+  <b-container fluid>
+    <b-row align-h="center">
+      <b-col
+        sm="2"
+        class="text-right"
+      >
+        <label
+          for="perPageInput"
+          class="mt-1"
+        >
+          Per page:
+        </label>
+      </b-col>
+      <b-col sm="3">
+        <b-form-input
+          v-model="perPage"
+          id="perPageInput"
+          type="text"
+        />
+      </b-col>
+      <b-col sm="3">
+        <b-form-select
+          v-model="perPage"
+          :options="perPageItems"
+          class="mb-3"
+          @input="paginationChangePage(currentPage, arguments[0])"
+        />
+      </b-col>
+    </b-row>
+  </b-container>
 
-  <b-card-group
-    class="my-5"
-    columns
-  >
-    {% for post in posts %}
-      <b-card no-body>
-        <b-link to="{{ path('post', { slug: post.slug, id: post.id }) }}" exact>
-          <b-card-img
-            src="https://picsum.photos/350/250?image={{ post.id }}"
-            alt="Image"
-            top
-          ></b-card-img>
-        </b-link>
-        <b-card-body>
-          <h3>
-            <b-link
-              to="{{ path('post', { slug: post.slug, id: post.id }) }}"
-              exact
-            >
-              {{ post.title }}
-            </b-link>
-            {#<b-link to="{{ postLink(post) }}" exact>{{ post.title }}</b-link>#}
+  <hr>
 
-          </h3>
-          <p class="card-text">
-            <br>
-            {{ post.textShort }}
-          </p>
-        </b-card-body>
-        <b-card-footer>
-          By
-          <b>
-            {{ post.author.username }}
-          </b>
-          <br>
-          {{ blogDate(post.createdAt()) }}
-        </b-card-footer>
-      </b-card>
-    {% endfor %}
-  </b-card-group>
+  {% include 'blog/posts/parts/posts_list/posts_list_main.html.twig' %}
+{% endblock %}
 
-  <b-pagination-nav
-    v-model="currentPage"
-    :number-of-pages="{{ pagesCount }}"
-    base-url="/blog/"
-    align="center"
-  ></b-pagination-nav>
+{% block javascripts %}
+  {{ parent() }}
+  {% include 'blog/posts/parts/posts_list/posts_list_js.html.twig' %}
 {% endblock %}

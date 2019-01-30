@@ -1,18 +1,30 @@
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
-import '../css/app.css'
+import 'highlight.js/styles/atom-one-dark.css'
+import '../css/app.sass'
 
 import Vue from 'vue'
+import hljs from 'highlight.js'
+import InstantSearch from 'vue-instantsearch'
 import BootstrapVue from 'bootstrap-vue'
 import Editor from './components/Editor.vue'
 import CreateComment from './components/CreateComment'
+import Search from './components/Search'
+import BlogDate from './components/BlogDate'
 
 const delimiters = ['${', '}']
 
 Vue.config.delimiters = delimiters
-Vue.use(BootstrapVue);
-
+Vue.use(BootstrapVue)
+Vue.use(InstantSearch)
 window.vm = init()
+
+document.addEventListener('DOMContentLoaded', (event) => {
+  document.querySelectorAll('pre code').forEach(i => {
+    hljs.highlightBlock(i)
+    i.classList.remove('hljs')
+  });
+});
 
 function init () {
   const addComponent = (name, params) => {
@@ -21,22 +33,8 @@ function init () {
 
   addComponent('editor', Editor)
   addComponent('create-comment', CreateComment)
-
-  addComponent('blog-date', {
-    delimiters: ['${', '}'],
-    props: ['date', 'time'],
-    template: '<small>🕒 <time class=".text-muted">${ output }</time></small>',
-    computed: {
-      output: {
-        cached: false,
-        get () {
-          // const method = this.time ? 'toLocaleTimeString' : 'toLocaleDateString'
-          // в JS не Unix, а в милисекундах
-          return new Date(+this.date * 1000).toLocaleString();
-        }
-      }
-    }
-  })
+  addComponent('search', Search)
+  addComponent('blog-date', BlogDate)
 
   return initVue()
 }

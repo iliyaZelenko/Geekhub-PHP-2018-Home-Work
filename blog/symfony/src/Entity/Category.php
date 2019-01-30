@@ -5,11 +5,14 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
-//* @ORM\Entity(repositoryClass="Gedmo\Tree\Entity\Repository\NestedTreeRepository")
+// TODO @Gedmo\Tree(type="materializedPath")
+// @ORM\Entity(repositoryClass="App\Repository\CategoryRepository")
+
 /**
- * @ORM\Table(name="categories")
- * @ORM\Entity(repositoryClass="App\Repository\CategoryRepository")
  * @Gedmo\Tree(type="nested")
+ *
+ * @ORM\Table(name="categories")
+ * @ORM\Entity(repositoryClass="Gedmo\Tree\Entity\Repository\NestedTreeRepository")
  */
 class Category
 {
@@ -27,21 +30,21 @@ class Category
 
     /**
      * @Gedmo\TreeLeft()
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true)
      */
-    private $left;
-
-    /**
-     * @Gedmo\TreeLevel()
-     * @ORM\Column(type="integer")
-     */
-    private $level;
+    private $lft;
 
     /**
      * @Gedmo\TreeRight()
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true)
      */
-    private $right;
+    private $rgt;
+
+    /**
+     * @Gedmo\TreeLevel()
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $depth;
 
     /**
      * @Gedmo\TreeRoot()
@@ -92,4 +95,53 @@ class Category
     {
         return $this->parent;
     }
+
+// Это не помогло
+//    /**
+//     * @return mixed
+//     */
+//    public function getLft()
+//    {
+//        return $this->lft;
+//    }
+//
+//    /**
+//     * @param mixed $lft
+//     */
+//    public function setLft($lft): void
+//    {
+//        $this->lft = $lft;
+//    }
+//
+//    /**
+//     * @return mixed
+//     */
+//    public function getRgt()
+//    {
+//        return $this->rgt;
+//    }
+//
+//    /**
+//     * @param mixed $rgt
+//     */
+//    public function setRgt($rgt): void
+//    {
+//        $this->rgt = $rgt;
+//    }
+//
+//    /**
+//     * @return mixed
+//     */
+//    public function getDepth()
+//    {
+//        return $this->depth;
+//    }
+//
+//    /**
+//     * @param mixed $depth
+//     */
+//    public function setDepth($depth): void
+//    {
+//        $this->depth = $depth;
+//    }
 }

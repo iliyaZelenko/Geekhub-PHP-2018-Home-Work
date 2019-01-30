@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\DataFixtures\Traits\RandomReference;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
@@ -10,6 +11,8 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserFixture extends Fixture implements OrderedFixtureInterface
 {
+    use RandomReference;
+
     public const REFERENCE_PREFIX = 'user';
     public const USERS = [
         [
@@ -40,19 +43,14 @@ class UserFixture extends Fixture implements OrderedFixtureInterface
         $this->passwordEncoder = $passwordEncoder;
     }
 
-    public static function getUsersCount()
+    public static function getCount(): int
     {
         return count(static::USERS);
     }
 
-    public static function getRandomReferenceName()
-    {
-        return static::REFERENCE_PREFIX . random_int(1, static::getUsersCount());
-    }
-
     public function load(ObjectManager $manager): void
     {
-        $usersCount = static::getUsersCount();
+        $usersCount = static::getCount();
 
         for ($i = 1; $i <= $usersCount; ++$i) {
             [

@@ -5,6 +5,10 @@
     "not dead",
     "> 0.2%"
   ],
+  "scripts": {
+    "dump-server": "dump-server --run-dump",
+    "best-dev-server-in-the-world": "encore dev --watch"
+  },
   "devDependencies": {
     "@symfony/webpack-encore": "^0.22.2",
     "node-sass": "^4.11.0",
@@ -18,9 +22,13 @@
     "webpack-notifier": "^1.7.0"
   },
   "dependencies": {
+    "algoliasearch": "^3.32.0",
     "bootstrap-vue": "^2.0.0-rc.11",
+    "highlight.js": "^9.13.1",
+    "instantsearch.css": "^7.1.0",
     "tiptap": "^1.4.0",
     "tiptap-extensions": "^1.4.0",
-    "vue": "^2.5.21"
+    "vue": "^2.5.21",
+    "vue-instantsearch": "^2.0.0-beta.2"
   }
 }

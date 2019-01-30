@@ -2,25 +2,24 @@
 
 namespace App\Entity;
 
-use App\Entity\Traits\TimestampableTrait;
-use App\Utils\Slugger\Slugger;
+use App\Entity\Interfaces\CreatedUpdatedInterface;
+use App\Entity\Interfaces\SluggableInterface;
+use App\Entity\Traits\CreatedUpdatedTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-//use Symfony\Component\Validator\Constraints\Collection;
-
+// use Symfony\Component\Validator\Constraints\Collection;
 // use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 // @UniqueEntity("slug")
 /**
  * @ORM\Table(name="posts")
  * @ORM\Entity(repositoryClass="App\Repository\PostRepository")
- * @ORM\HasLifecycleCallbacks()
  */
-class Post
+class Post implements SluggableInterface, CreatedUpdatedInterface
 {
-    use TimestampableTrait;
+    use CreatedUpdatedTrait;
 
     /* Columns */
 
@@ -60,20 +59,40 @@ class Post
 
     /* Relations */
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="post", orphanRemoval=true)
-     * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
-     */
+//    /**
+//     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="post", orphanRemoval=true)
+//     * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
+//     */
 //    private $comments;
 
     /**
      * @ORM\ManyToMany(targetEntity="Tag")
-     * @ORM\JoinTable(name="posts_tags",
-     *     joinColumns={@ORM\JoinColumn(name="post_id", referencedColumnName="id")},
-     *     inverseJoinColumns={@ORM\JoinColumn(name="group_id", referencedColumnName="id")}
+     * @ORM\JoinTable(
+     *   name="post_tag",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="post_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="tag_id", referencedColumnName="id")
+     *   }
      * )
      */
     private $tags;
+
+// Сначала хотел сделать лайки так
+//    /**
+//     * @ORM\ManyToMany(targetEntity="User")
+//     * @ORM\JoinTable(
+//     *   name="post_like",
+//     *   joinColumns={
+//     *     @ORM\JoinColumn(name="post_id", referencedColumnName="id")
+//     *   },
+//     *   inverseJoinColumns={
+//     *     @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+//     *   }
+//     * )
+//     */
+//    private $likes;
 
     //, inversedBy="posts"
     /**
@@ -81,6 +100,13 @@ class Post
      * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
      */
     private $author;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\PostVote", mappedBy="post", orphanRemoval=true)
+     * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\OrderBy(value={"createdAt" = "DESC"})
+     */
+    private $votes;
 
     /**
      * Post constructor.
@@ -93,6 +119,7 @@ class Post
     public function __construct(User $author, string $title, string $text, string $textShort, $tags = [])
     {
 //        $this->comments = new ArrayCollection();
+        $this->votes = new ArrayCollection();
         $this->tags = new ArrayCollection();
 
         foreach ($tags as $tag) {
@@ -105,6 +132,14 @@ class Post
             ->setTitle($title)
             ->setText($text)
             ->setTextShort($textShort);
+    }
+
+    public function getSlugAttributes(): array
+    {
+        return [
+            // TODO если указывать метод setSlug => setTitle то их использовать
+            'slug' => 'title'
+        ];
     }
 
     /* Getters / Setters */
@@ -122,9 +157,6 @@ class Post
     public function setTitle(string $title): self
     {
         $this->title = $title;
-        $this->setSlug(
-            Slugger::slugify($title)
-        );
 
         return $this;
     }
@@ -161,32 +193,77 @@ class Post
     /* Relations */
 
 //    public function getComments(): Collection
-//    {
-//        return $this->comments;
-//    }
-//
-//    public function addComment(Comment $comment): self
-//    {
-//        if (!$this->comments->contains($comment)) {
-//            $this->comments[] = $comment;
-//            $comment->setPost($this);
-//        }
-//
-//        return $this;
-//    }
-//
-//    public function removeComment(Comment $comment): self
-//    {
-//        if ($this->comments->contains($comment)) {
-//            $this->comments->removeElement($comment);
-//            // set the owning side to null (unless already changed)
-//            if ($comment->getPost() === $this) {
-//                $comment->setPost(null);
+////    {
+////        return $this->comments;
+////    }
+////
+////    public function addComment(Comment $comment): self
+////    {
+////        if (!$this->comments->contains($comment)) {
+////            $this->comments[] = $comment;
+////            $comment->setPost($this);
+////        }
+////
+////        return $this;
+////    }
+////
+////    public function removeComment(Comment $comment): self
+////    {
+////        if ($this->comments->contains($comment)) {
+////            $this->comments->removeElement($comment);
+////            // set the owning side to null (unless already changed)
+////            if ($comment->getPost() === $this) {
+////                $comment->setPost(null);
+////            }
+////        }
+////
+////        return $this;
+////    }
+
+    public function getVotesValue(): int
+    {
+//        $sum = array_reduce(
+//            $this->votes->toArray(),
+//            function ($perv, PostVote $curr) {
+//                return $perv + $curr->getValue();
 //            }
-//        }
-//
-//        return $this;
-//    }
+//        );
+
+        $sum = array_sum(
+            array_map(function (PostVote $vote) {
+                return $vote->getValue();
+            }, $this->votes->toArray())
+        );
+
+        return $sum;
+    }
+
+    public function getVotes(): Collection
+    {
+        return $this->votes;
+    }
+
+    public function addVote(PostVote $vote): self
+    {
+        if (!$this->votes->contains($vote)) {
+            $this->votes[] = $vote;
+        }
+
+        return $this;
+    }
+
+    public function removeVote(PostVote $vote): self
+    {
+        if ($this->votes->contains($vote)) {
+            $this->votes->removeElement($vote);
+            // set the owning side to null (unless already changed)
+            if ($vote->getPost() === $this) {
+                $vote->setPost(null);
+            }
+        }
+
+        return $this;
+    }
 
     public function getTags(): Collection
     {
@@ -214,10 +291,44 @@ class Post
         return $this;
     }
 
-    private function setSlug(string $slug): self
+    public function setSlug(string $slug): self
     {
         $this->slug = $slug;
 
         return $this;
+    }
+
+    /* Other */
+
+    public function getUserVoteValue(User $user): ?Int
+    {
+        if (!$vote = $this->getUserVote($user)) {
+            return null;
+        }
+
+        return $vote->getValue();
+        // Если бы PHP возвращал не bool для логических: return ($vote = $this->getUserVote($user)) && $vote->getValue()
+    }
+
+    /**
+     * @param User $user
+     * @return PostVote | null
+     */
+    public function getUserVote(User $user): ?PostVote
+    {
+        $foundVote = null;
+
+        // не нашел более удобную функцию :( Нужно как find в JS.
+        $this->votes->forAll(function ($key, PostVote $vote) use ($user, &$foundVote) {
+            if ($vote->getUser()->getId() === $user->getId()) {
+                $foundVote = $vote;
+
+                return false;
+            }
+
+            return true;
+        });
+
+        return $foundVote;
     }
 }

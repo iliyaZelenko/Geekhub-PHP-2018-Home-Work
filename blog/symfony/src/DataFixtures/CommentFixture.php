@@ -18,14 +18,14 @@ class CommentFixture extends Fixture implements OrderedFixtureInterface
     public function load(ObjectManager $manager): void
     {
         $repo = $manager->getRepository(Comment::class);
-        $totalComments = self::COMMENT_REFERENCE_EACH_COUNT * PostFixture::POSTS_COUNT;
+        $totalComments = static::COMMENT_REFERENCE_EACH_COUNT * PostFixture::COUNT;
 
         for ($i = 1; $i <= $totalComments; ++$i) {
             // индекс текущего поста
-            $currentPostIndex = ceil($i / self::COMMENT_REFERENCE_EACH_COUNT);
+            $currentPostIndex = ceil($i / static::COMMENT_REFERENCE_EACH_COUNT);
 
             // автор коммента
-            $userRef = UserFixture::getRandomReferenceName();
+            $userRef = UserFixture::getRandomReference();
             $user = $this->getReference($userRef);
             // пост коммента
             $postRef = PostFixture::REFERENCE_PREFIX . $currentPostIndex;
@@ -88,7 +88,7 @@ class CommentFixture extends Fixture implements OrderedFixtureInterface
     {
         // начальный индекс коммента для текущего поста
         // если COMMENT_REFERENCE_EACH_COUNT === 10, то для первого поста будет 0, для второго - 10, потом 20, 30...
-        $currentPostCommentsStart = ($currentPostIndex - 1) * self::COMMENT_REFERENCE_EACH_COUNT;
+        $currentPostCommentsStart = ($currentPostIndex - 1) * static::COMMENT_REFERENCE_EACH_COUNT;
 
         $firstId = $this->getFirstCommentId($repo);
 
