@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controllers;
 
 use App\DomainManagers\CommentManager;
 use App\DomainManagers\PostVoteManager;
@@ -47,6 +47,7 @@ class PostsController extends AbstractController
             'perPage' => $perPage,
             'vue_data' => [
                 'currentPage' => $page,
+                // TODO generate path on frontend
                 'basePathURL' => '"/blog/"'
             ]
         ]);

@@ -2,9 +2,9 @@
 
 namespace App\Entity;
 
-use App\Entity\Interfaces\CreatedUpdatedInterface;
-use App\Entity\Interfaces\SluggableInterface;
-use App\Entity\Traits\CreatedUpdatedTrait;
+use App\Entity\Resources\CreatedUpdatedInterface;
+use App\Entity\Resources\SluggableInterface;
+use App\Entity\Resources\CreatedUpdatedTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -78,21 +78,6 @@ class Post implements SluggableInterface, CreatedUpdatedInterface
      * )
      */
     private $tags;
-
-// Сначала хотел сделать лайки так
-//    /**
-//     * @ORM\ManyToMany(targetEntity="User")
-//     * @ORM\JoinTable(
-//     *   name="post_like",
-//     *   joinColumns={
-//     *     @ORM\JoinColumn(name="post_id", referencedColumnName="id")
-//     *   },
-//     *   inverseJoinColumns={
-//     *     @ORM\JoinColumn(name="user_id", referencedColumnName="id")
-//     *   }
-//     * )
-//     */
-//    private $likes;
 
     //, inversedBy="posts"
     /**
@@ -191,34 +176,6 @@ class Post implements SluggableInterface, CreatedUpdatedInterface
     }
 
     /* Relations */
-
-//    public function getComments(): Collection
-////    {
-////        return $this->comments;
-////    }
-////
-////    public function addComment(Comment $comment): self
-////    {
-////        if (!$this->comments->contains($comment)) {
-////            $this->comments[] = $comment;
-////            $comment->setPost($this);
-////        }
-////
-////        return $this;
-////    }
-////
-////    public function removeComment(Comment $comment): self
-////    {
-////        if ($this->comments->contains($comment)) {
-////            $this->comments->removeElement($comment);
-////            // set the owning side to null (unless already changed)
-////            if ($comment->getPost() === $this) {
-////                $comment->setPost(null);
-////            }
-////        }
-////
-////        return $this;
-////    }
 
     public function getVotesValue(): int
     {

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controllers;
 
 use Algolia\SearchBundle\IndexManagerInterface;
 use App\Entity\Post;

@@ -1,8 +1,6 @@
 <?php
 
-// src/Controller/ExceptionController.php
-
-namespace App\Controller;
+namespace App\Controllers;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

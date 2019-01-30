@@ -2,7 +2,7 @@
 
 namespace App\EventListener;
 
-use App\Entity\Interfaces\CreatedUpdatedInterface;
+use App\Entity\Resources\CreatedUpdatedInterface;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 
 class EntitiesCreatedUpdatedListener

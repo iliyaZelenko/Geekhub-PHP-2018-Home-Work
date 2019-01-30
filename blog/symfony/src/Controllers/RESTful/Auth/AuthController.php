@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\RESTful\Auth;
+namespace App\Controllers\RESTful\Auth;
 
 use App\Entity\User;
 use App\Resources\UserResource;

@@ -2,8 +2,8 @@
 
 namespace App\Entity;
 
-use App\Entity\Interfaces\CreatedUpdatedInterface;
-use App\Entity\Traits\CreatedUpdatedTrait;
+use App\Entity\Resources\CreatedUpdatedInterface;
+use App\Entity\Resources\CreatedUpdatedTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -85,13 +85,6 @@ class User implements UserInterface, \Serializable, CreatedUpdatedInterface
     public function getId()
     {
         return $this->id;
-    }
-
-    public function setId($id): self
-    {
-        $this->id = $id;
-
-        return $this;
     }
 
     public function getUsername(): string

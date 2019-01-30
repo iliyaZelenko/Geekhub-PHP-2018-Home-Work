@@ -9,15 +9,19 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class AlgoliaExtension extends AbstractExtension
 {
     /**
-     * @var ContainerInterface
+     * @var array
      */
-    private $container;
+    private $indexes;
 
-    // TODO мне просто хотелось получить значение из конфига, не знаю правильно ли это, я следовал этому гайду:
-    // https://symfony.com/doc/current/service_container/parameters.html#getting-and-setting-container-parameters-in-php
-    public function __construct(ContainerInterface $container)
+    /**
+     * @var string
+     */
+    private $indexPrefix;
+
+    public function __construct(array $indexes, string $indexPrefix)
     {
-        $this->container = $container;
+        $this->indexes = $indexes;
+        $this->indexPrefix = $indexPrefix;
     }
 
     public function getFunctions(): array
@@ -25,11 +29,9 @@ class AlgoliaExtension extends AbstractExtension
         return [
             // возвращает полное имя индекса Algolia (используется префикс)
             new TwigFunction('appAlgoliaGetIndexName', function ($indexKey) {
-                $indexes = $this->container->getParameter('app.algolia.indexes');
-                $indexName = $indexes[$indexKey];
-                $indexPrefix = getenv('ALGOLIA_INDEX_PREFIX');
+                $indexName = $this->indexes[$indexKey];
 
-                return $indexPrefix . '_' . $indexName;
+                return $this->indexPrefix . '_' . $indexName;
             })
         ];
     }

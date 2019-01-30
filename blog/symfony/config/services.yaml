@@ -36,9 +36,18 @@ services:
 
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
-    App\Controller\:
-        resource: '../src/Controller'
+    App\Controllers\:
+        resource: '../src/Controllers'
         tags: ['controller.service_arguments']
+
+    App\Twig\AlgoliaExtension:
+        arguments:
+            $indexes: '%app.algolia.indexes%'
+            $indexPrefix: '%env(ALGOLIA_INDEX_PREFIX)%'
+
+    App\Utils\Recaptcha\Recaptcha:
+        arguments:
+            $secret: '%env(RECAPTCHA_SECRET)%'
 
     App\Utils\ContentGenerator\ContentGenerator: ~
     App\Utils\Slugger\Slugger: ~

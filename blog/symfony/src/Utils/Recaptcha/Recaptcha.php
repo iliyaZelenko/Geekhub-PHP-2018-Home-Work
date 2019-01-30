@@ -13,10 +13,15 @@ class Recaptcha implements RecaptchaInterface
      * @var ClientInterface
      */
     private $client;
+    /**
+     * @var string
+     */
+    private $secret;
 
-    public function __construct(ClientInterface $client)
+    public function __construct(ClientInterface $client, string $secret)
     {
         $this->client = $client;
+        $this->secret = $secret;
     }
 
     /**
@@ -25,9 +30,8 @@ class Recaptcha implements RecaptchaInterface
      */
     public function check(string $captchaResponse): bool
     {
-        $secret = getenv('RECAPTCHA_SECRET');
         $query = [
-            'secret' => $secret,
+            'secret' => $this->secret,
             'response' => $captchaResponse
         ];
 

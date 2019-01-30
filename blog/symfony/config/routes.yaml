@@ -27,14 +27,14 @@ site:
 # Other
 routes:
     path: /routes/
-    controller: App\Controller\BlogController::routes
+    controller: App\Controllers\BlogController::routes
 
 #api_login_check:
 #  path: /api/login_check
 #
 #register:
 #  path: /api/register
-#  controller: App\Controller\RESTful\Auth\AuthController::register
+#  controller: App\Controllers\RESTful\Auth\AuthController::register
 #  methods: POST
 #
 #res:

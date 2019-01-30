@@ -22,7 +22,8 @@
     method="POST"
     class="d-inline"
   >
-    <input type="text" name="voteValue" value="+1" hidden>
+    <input type="hidden" name="token" value="{{ csrf_token('user_logout') }}">
+    <input type="hidden" name="voteValue" value="+1">
 
     <b-button
       type="submit"
@@ -38,7 +39,8 @@
     method="POST"
     class="d-inline"
   >
-    <input type="text" name="voteValue" value="-1" hidden>
+    <input type="hidden" name="token" value="{{ csrf_token('user_logout') }}">
+    <input type="hidden" name="voteValue" value="-1">
 
     <b-button
       type="submit"

@@ -2,7 +2,7 @@
 
 namespace App\EventListener;
 
-use App\Entity\Interfaces\SluggableInterface;
+use App\Entity\Resources\SluggableInterface;
 use App\Utils\Contracts\Slugger\SluggerInterface;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 //use Doctrine\ORM\Event\PreFlushEventArgs;

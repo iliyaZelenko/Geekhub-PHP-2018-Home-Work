@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entity\Interfaces;
+namespace App\Entity\Resources;
 
 interface CreatedUpdatedInterface
 {
