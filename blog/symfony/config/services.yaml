@@ -49,9 +49,11 @@ services:
         arguments:
             $secret: '%env(RECAPTCHA_SECRET)%'
 
+    App\Entity\Factories\UserFactory: ~
     App\Utils\ContentGenerator\ContentGenerator: ~
     App\Utils\Slugger\Slugger: ~
 
+    App\Entity\Factories\UserFactoryInterface: '@App\Entity\Factories\UserFactory'
     App\Utils\Contracts\ContentGenerator\ContentGeneratorInterface: '@App\Utils\ContentGenerator\ContentGenerator'
     App\Utils\Contracts\Slugger\SluggerInterface: '@App\Utils\Slugger\Slugger'
 

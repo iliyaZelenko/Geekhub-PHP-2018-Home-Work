@@ -2,12 +2,15 @@
 
 namespace App\Controllers;
 
+use App\Entity\Factories\UserFactoryInterface;
+use App\Exceptions\AppException;
+use App\Utils\Contracts\Recaptcha\RecaptchaInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use App\Form\DataObjects\RegistrationData;
-use App\Form\Handler\RegistrationFormHandler;
 use App\Form\RegistrationFormType;
 use App\Security\LoginFormAuthenticator;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
@@ -28,7 +31,8 @@ class AuthController extends AbstractController
         $lastUsername = $authenticationUtils->getLastUsername();
 
         return $this->render('auth/login.html.twig', [
-            'last_username' => $lastUsername, 'error' => $error
+            'last_username' => $lastUsername,
+            'error' => $error
         ]);
     }
 
@@ -36,35 +40,60 @@ class AuthController extends AbstractController
      * Registration
      *
      * @param Request $request
-     * @param RegistrationFormHandler $formHandler
      * @param GuardAuthenticatorHandler $guardHandler
      * @param LoginFormAuthenticator $authenticator
-     * @param RegistrationData $registrationData
+     * @param RecaptchaInterface $recaptcha
+     * @param UserFactoryInterface $userFactory
      * @return Response
      */
     public function register(
         Request $request,
-        RegistrationFormHandler $formHandler,
         GuardAuthenticatorHandler $guardHandler,
         LoginFormAuthenticator $authenticator,
-        RegistrationData $registrationData
+        RecaptchaInterface $recaptcha,
+        UserFactoryInterface $userFactory
     ): Response
     {
-        $form = $this->createForm(RegistrationFormType::class, $registrationData);
+        $captchaResponse = $request->get('g-recaptcha-response');
+        $form = $this->createForm(
+            RegistrationFormType::class,
+            new RegistrationData()
+        );
 
-        if ($user = $formHandler->handle($form, $request)) {
-            // do anything else you need here, like send an email
+        $form->handleRequest($request);
 
-            return $guardHandler->authenticateUserAndHandleSuccess(
-                $user,
-                $request,
-                $authenticator,
-                'main' // firewall name in security.yaml
+        // по моему это гениально
+        try {
+            if (!$form->isSubmitted() || !$form->isValid()) {
+                throw new AppException(null, 422);
+            }
+            // TODO Сделать совместимость с формой
+            if (!$recaptcha->check($captchaResponse)) {
+                throw new AppException('Captcha check failed.', 422);
+            }
+            // это тоже кидает исключение
+            $createdUser = $userFactory->createNew(
+                $form->getData()
             );
+        } catch (AppException $e) {
+            if ($message = $e->getMessage()) {
+                // добавляет глобальную ошибку связанную с формой (не имеет поля)
+                $form->addError(
+                    new FormError($message)
+                );
+            }
+
+            return $this->render('auth/register.html.twig', [
+                'registrationForm' => $form->createView(),
+            ]);
         }
 
-        return $this->render('auth/register.html.twig', [
-            'registrationForm' => $form->createView(),
-        ]);
+
+        return $guardHandler->authenticateUserAndHandleSuccess(
+            $createdUser,
+            $request,
+            $authenticator,
+            'main' // firewall name in security.yaml
+        );
     }
 }

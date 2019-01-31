@@ -6,7 +6,7 @@ use App\Entity\Comment;
 use App\Entity\Post;
 use App\Entity\User;
 use App\Form\DataObjects\CommentData;
-use App\Repository\CommentRepository;
+use App\Repository\App\Controllers;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -18,11 +18,11 @@ class CommentManager
     private $entityManager;
 
     /**
-     * @var CommentRepository
+     * @var App\Controllers
      */
     private $commentRepo;
 
-    public function __construct(EntityManagerInterface $entityManager, CommentRepository $commentRepo)
+    public function __construct(EntityManagerInterface $entityManager, App\Controllers $commentRepo)
     {
         $this->entityManager = $entityManager;
         $this->commentRepo = $commentRepo;

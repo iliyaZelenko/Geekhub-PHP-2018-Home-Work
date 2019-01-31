@@ -7,8 +7,8 @@ use App\DomainManagers\PostVoteManager;
 use App\Entity\Post;
 use App\Form\DataObjects\CommentData;
 use App\Form\Handler\CommentFormHandler;
-use App\Repository\CommentRepository;
-use App\Repository\PostRepository;
+use App\Repository\CommentRepositoryInterface;
+use App\Repository\PostRepositoryInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,13 +26,13 @@ class PostsController extends AbstractController
      * Get all paginated posts
      *
      * @param Request $request
-     * @param PostRepository $repo
+     * @param PostRepositoryInterface $repo
      * @param int $page
      * @return Response
      */
     public function allPosts(
         Request $request,
-        PostRepository $repo,
+        PostRepositoryInterface $repo,
         $page = 1
     ): Response
     {
@@ -69,7 +69,7 @@ class PostsController extends AbstractController
      * @param Request $request
      * @param ObjectManager $manager
      * @param Post $post
-     * @param CommentRepository $repoComment
+     * @param CommentRepositoryInterface $repoComment
      * @param $slug
      * @param $id
      * @return \Symfony\Component\HttpFoundation\Response
@@ -78,7 +78,7 @@ class PostsController extends AbstractController
         Request $request,
         ObjectManager $manager,
         Post $post,
-        CommentRepository $repoComment,
+        CommentRepositoryInterface $repoComment,
         $slug,
         $id
     ): Response
@@ -166,6 +166,7 @@ class PostsController extends AbstractController
 
         $user = $this->getUser();
 
+        // TODO REFACTOR!!!
         if ($formResult = $commentFormHandler->handle($commentData, $request)) {
             $commentManager->createComment(
                 $user,

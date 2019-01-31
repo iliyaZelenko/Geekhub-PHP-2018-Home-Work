@@ -3,6 +3,7 @@
 namespace App\EventListener;
 
 use App\Entity\Resources\SluggableInterface;
+use App\Exceptions\AppException;
 use App\Utils\Contracts\Slugger\SluggerInterface;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 //use Doctrine\ORM\Event\PreFlushEventArgs;
@@ -37,7 +38,7 @@ class EntitiesSetSlugListener
                 // TODO проверять изменился ли аттрибут
                 foreach ([$methodSetSlug, $methodGetProp] as $method) {
                     if (!method_exists($entity, $method)) {
-                        throw new \Error(
+                        throw new AppException(
                             "Please, add a \"$method\" method to the " . get_class($entity) . ' class.'
                         );
                     }

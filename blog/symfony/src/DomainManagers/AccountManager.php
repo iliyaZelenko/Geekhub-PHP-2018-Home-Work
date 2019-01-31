@@ -4,7 +4,7 @@ namespace App\DomainManagers;
 
 use App\Entity\User;
 use App\Form\DataObjects\RegistrationData;
-use App\Repository\UserRepository;
+use App\Repository\UserRepositoryInterface;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Doctrine\ORM\EntityManagerInterface;
@@ -20,11 +20,11 @@ class AccountManager
      */
     private $entityManager;
     /**
-     * @var UserRepository
+     * @var UserRepositoryInterface
      */
     private $userRepo;
 
-    public function __construct(UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $entityManager, UserRepository $userRepo)
+    public function __construct(UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $entityManager, UserRepositoryInterface $userRepo)
     {
         $this->passwordEncoder = $passwordEncoder;
         $this->entityManager = $entityManager;
@@ -42,7 +42,6 @@ class AccountManager
             throw new HttpException(409, 'A user with this nickname already exists.');
         }
 
-        // до этого было new User('', ''); А теперь Entity всегда валидна как это и должно быть.
         $user = new User(
             $data->getUsername(),
             $data->getEmail()

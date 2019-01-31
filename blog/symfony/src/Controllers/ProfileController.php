@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-use App\Repository\PostRepository;
+use App\Repository\PostRepositoryInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -19,7 +19,7 @@ class ProfileController extends AbstractController
     }
 
     public function posts(
-        PostRepository $postRepository,
+        PostRepositoryInterface $postRepository,
         $page = 1
     ): Response
     {
