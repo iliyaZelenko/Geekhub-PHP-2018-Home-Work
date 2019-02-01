@@ -1,5 +1,14 @@
 <template>
   <div>
+    <editor
+      v-model="content"
+    ></editor>
+
+    <p>
+      <!--TODO валидация на бекенде не считающая теги-->
+      Content length (with tags): {{ content.length }}.
+    </p>
+
     <b-alert
       :show="!!error"
       variant="danger"
@@ -12,18 +21,11 @@
     <b-alert
       :show="!!successMessage"
       variant="success"
+      dismissible
+      fade
     >
       {{ successMessage }}
     </b-alert>
-
-    <editor
-      v-model="content"
-    ></editor>
-
-    <p>
-      <!--TODO валидация на бекенде не считающая теги-->
-      Content length (with tags): {{ content.length }}.
-    </p>
 
     <b-button
       class="mt-2"
@@ -43,16 +45,8 @@ export default {
     error: null,
     loading: false,
     content: `
-Самая интересная возможность редактора: отличная поддержка markdown размети.
-
-<h2>
-  Code Highlighting 😊
-</h2>
-<p>
-  These are code blocks with <strong>automatic syntax highlighting</strong> based on highlight.js (поставил Atom Dark тему).
-</p>
 <h4>JS</h4>
-<pre><code>alert([] == ![]) // true</code></pre>
+<pre><code>alert(1 + '1' === '11') // true</code></pre>
 <h4>CSS</h4>
 <pre><code>body { color: blue; }</code></pre>
 <h4>PHP</h4>

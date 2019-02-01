@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="posts_votes")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="App\Repository\PostVoteRepository")
  */
 class PostVote implements CreatedUpdatedInterface
 {

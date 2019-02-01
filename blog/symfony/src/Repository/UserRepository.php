@@ -26,6 +26,13 @@ class UserRepository extends ServiceEntityRepository implements UserRepositoryIn
         ;
     }
 
+    /**
+     * Save entity
+     *
+     * @param UserInterface $user
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
     public function save(UserInterface $user): void
     {
         $this->_em->persist($user);

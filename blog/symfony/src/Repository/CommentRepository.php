@@ -65,4 +65,17 @@ class CommentRepository extends ServiceEntityRepository implements CommentReposi
             $perPage
         );
     }
+
+    /**
+     * Save entity
+     *
+     * @param Comment $comment
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function save(Comment $comment): void
+    {
+        $this->_em->persist($comment);
+        $this->_em->flush();
+    }
 }

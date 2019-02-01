@@ -5,7 +5,7 @@ namespace App\Entity\Factories;
 use App\Entity\User;
 use App\Entity\UserInterface;
 use App\Exceptions\AppException;
-use App\Form\DataObjects\RegistrationData;
+use App\Form\DataObjects\User\UserCreationData;
 use App\Repository\UserRepositoryInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
@@ -24,18 +24,21 @@ class UserFactory implements UserFactoryInterface
      */
     private $userRepo;
 
-    public function __construct(UserPasswordEncoderInterface $passwordEncoder, UserRepositoryInterface $userRepo)
+    public function __construct(
+        UserPasswordEncoderInterface $passwordEncoder,
+        UserRepositoryInterface $userRepo
+    )
     {
         $this->passwordEncoder = $passwordEncoder;
         $this->userRepo = $userRepo;
     }
 
     /**
-     * @param RegistrationData $data
-     * @return User
+     * @param UserCreationData $data
+     * @return UserInterface
      * @throws AppException
      */
-    public function createNew(RegistrationData $data): UserInterface
+    public function createNew(UserCreationData $data): UserInterface
     {
         $username = $data->getUsername();
         $email = $data->getEmail();

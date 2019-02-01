@@ -5,7 +5,7 @@ namespace App\Repository;
 use App\Entity\Comment;
 use Knp\Component\Pager\Pagination\PaginationInterface as PaginationInterfaceReturn;
 
-interface CommentRepositoryInterface
+interface CommentRepositoryInterface extends BaseRepositroyInterface
 {
     /**
      * Возвращает первый комментарий.
@@ -24,4 +24,11 @@ interface CommentRepositoryInterface
      * @return PaginationInterfaceReturn
      */
     public function getPaginatedByPostId(int $postId, int $page, int $perPage): PaginationInterfaceReturn;
+
+    /**
+     * Save entity
+     *
+     * @param Comment $comment
+     */
+    public function save(Comment $comment): void;
 }

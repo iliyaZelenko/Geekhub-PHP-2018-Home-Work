@@ -2,13 +2,15 @@
 
 namespace App\Controllers;
 
-use App\DomainManagers\CommentManager;
-use App\DomainManagers\PostVoteManager;
+use App\Entity\Factories\CommentFactoryInterface;
+use App\Entity\Factories\PostVoteFactoryInterface;
 use App\Entity\Post;
-use App\Form\DataObjects\CommentData;
-use App\Form\Handler\CommentFormHandler;
+use App\Exceptions\AppException;
+use App\Form\DataObjects\Comment\CommentCreationData;
+use App\Form\DataObjects\PostVote\PostVoteCreationData;
 use App\Repository\CommentRepositoryInterface;
 use App\Repository\PostRepositoryInterface;
+use App\Repository\PostVoteRepositoryInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,6 +18,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class PostsController extends AbstractController
 {
@@ -145,9 +149,8 @@ class PostsController extends AbstractController
      * @ParamConverter("post", options={"mapping" = {"slug" = "slug"}})
      * @param Request $request
      * @param Post $post
-     * @param CommentFormHandler $commentFormHandler
-     * @param CommentData $commentData
-     * @param CommentManager $commentManager
+     * @param ValidatorInterface $validator
+     * @param CommentFactoryInterface $commentFactory
      * @param $slug
      * @param $id
      * @return JsonResponse
@@ -155,9 +158,8 @@ class PostsController extends AbstractController
     public function createComment(
         Request $request,
         Post $post,
-        CommentFormHandler $commentFormHandler,
-        CommentData $commentData,
-        CommentManager $commentManager,
+        ValidatorInterface $validator,
+        CommentFactoryInterface $commentFactory,
         $slug,
         $id
     ): JsonResponse
@@ -165,23 +167,37 @@ class PostsController extends AbstractController
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $user = $this->getUser();
+        $requestData = json_decode($request->getContent(), true);
+        [
+            'message' => $message,
+            'parentCommentId' => $parentCommentId
+        ] = $requestData;
+        $commentData = (new CommentCreationData($user, $post))
+            ->setText($message)
+            ->setParentCommentId($parentCommentId)
+        ;
+        $errors = $validator->validate($commentData);
 
-        // TODO REFACTOR!!!
-        if ($formResult = $commentFormHandler->handle($commentData, $request)) {
-            $commentManager->createComment(
-                $user,
-                $post,
-                $commentData
-            );
-
-            // TODO JsonResponseBuilder
+        if (count($errors)) {
             return new JsonResponse([
-                'successMessage' => 'Comment saved!'
+                'error' => $errors->get(0)->getMessage()
             ]);
         }
 
+        try {
+            $comment = $commentFactory->createNew($commentData);
+        } catch (AppException $e) {
+            $errCode = $e->getCode();
+            $errMsg = $e->getMessage();
+
+            if ($errCode === 404) {
+                throw new NotFoundHttpException($errMsg);
+            }
+        }
+
+        // TODO JsonResponseBuilder
         return new JsonResponse([
-            'error' => $formResult
+            'successMessage' => 'Comment saved!'
         ]);
     }
 
@@ -189,13 +205,15 @@ class PostsController extends AbstractController
      * @ParamConverter("post", options={"mapping" = {"id" = "id"}})
      * @param Request $request
      * @param Post $post
-     * @param PostVoteManager $postVoteManager
+     * @param PostVoteRepositoryInterface $postVoteRepo
+     * @param PostVoteFactoryInterface $postVoteFactory
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function postDoVote(
         Request $request,
         Post $post,
-        PostVoteManager $postVoteManager
+        PostVoteRepositoryInterface $postVoteRepo,
+        PostVoteFactoryInterface $postVoteFactory
     ): RedirectResponse
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
@@ -208,11 +226,17 @@ class PostsController extends AbstractController
         ]);
 
         if ($userVote = $post->getUserVote($user)) {
-            $userVote->getValue() === $requestVoteValue
-                ? $postVoteManager->removeVote($post, $userVote)
-                : $postVoteManager->updateVoteValue($userVote, $requestVoteValue);
+            if ($userVote->getValue() === $requestVoteValue) {
+                $post->removeVote($userVote);
+                $postVoteRepo->remove($userVote);
+            } else {
+                $userVote->setValue($requestVoteValue);
+                $postVoteRepo->update();
+            }
         } else {
-            $postVoteManager->createVote($user, $post, $requestVoteValue);
+            $newData = new PostVoteCreationData($user, $post, $requestVoteValue);
+
+            $postVoteFactory->createNew($newData);
         }
 
 

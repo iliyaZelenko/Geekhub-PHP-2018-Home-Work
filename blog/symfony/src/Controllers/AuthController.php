@@ -10,7 +10,7 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
-use App\Form\DataObjects\RegistrationData;
+use App\Form\DataObjects\User\UserCreationData;
 use App\Form\RegistrationFormType;
 use App\Security\LoginFormAuthenticator;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
@@ -57,7 +57,7 @@ class AuthController extends AbstractController
         $captchaResponse = $request->get('g-recaptcha-response');
         $form = $this->createForm(
             RegistrationFormType::class,
-            new RegistrationData()
+            new UserCreationData()
         );
 
         $form->handleRequest($request);

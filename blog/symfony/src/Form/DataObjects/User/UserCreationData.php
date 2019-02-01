@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Form\DataObjects;
+namespace App\Form\DataObjects\User;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-final class RegistrationData
+final class UserCreationData
 {
     /**
      * Допускаются русские символы (почему никнейм обязательно должен быть на английском?).

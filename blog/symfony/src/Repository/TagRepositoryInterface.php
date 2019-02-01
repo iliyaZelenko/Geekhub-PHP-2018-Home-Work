@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-interface TagRepositoryInterface
+interface TagRepositoryInterface extends BaseRepositroyInterface
 {
 
 }

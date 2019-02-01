@@ -3,12 +3,12 @@
 namespace App\Entity\Factories;
 
 use App\Entity\UserInterface;
-use App\Form\DataObjects\RegistrationData;
+use App\Form\DataObjects\User\UserCreationData;
 
 /**
  * Factory method pattern
  */
 interface UserFactoryInterface
 {
-    public function createNew(RegistrationData $data): UserInterface;
+    public function createNew(UserCreationData $data): UserInterface;
 }
