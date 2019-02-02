@@ -1,6 +1,6 @@
 <?php
 
-namespace App\EventListener;
+namespace App\EventListeners;
 
 use App\Entity\Resources\CreatedUpdatedInterface;
 use Doctrine\ORM\Event\LifecycleEventArgs;

@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Entity\Factories\CommentFactoryInterface;
 use App\Entity\Factories\PostVoteFactoryInterface;
 use App\Entity\Post;
+use App\EventListeners\Events\CommentCreatedEvent;
 use App\Exceptions\AppException;
 use App\Form\DataObjects\Comment\CommentCreationData;
 use App\Form\DataObjects\PostVote\PostVoteCreationData;
@@ -14,6 +15,7 @@ use App\Repository\PostVoteRepositoryInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -160,6 +162,7 @@ class PostsController extends AbstractController
         Post $post,
         ValidatorInterface $validator,
         CommentFactoryInterface $commentFactory,
+        EventDispatcherInterface $eventDispatcher,
         $slug,
         $id
     ): JsonResponse
@@ -194,6 +197,11 @@ class PostsController extends AbstractController
                 throw new NotFoundHttpException($errMsg);
             }
         }
+
+        $eventDispatcher->dispatch(
+            'comment.created',
+            new CommentCreatedEvent($comment)
+        );
 
         // TODO JsonResponseBuilder
         return new JsonResponse([
@@ -244,12 +252,15 @@ class PostsController extends AbstractController
     }
 
     public function createPost(
-        Request $request
+        Request $request,
+        EventDispatcherInterface $eventDispatcher
     )
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $user = $this->getUser();
+
+        $eventDispatcher->dispatch('post.created');
 
 //        $form = $this->createForm(PostCreationFormType::class, $registrationData);
 //

@@ -19,6 +19,12 @@ services:
                             # fetching services directly from the container via $container->get() won't work.
                             # The best practice is to be explicit about your dependencies anyway.
 
+    # this config only applies to the services created by this file
+    _instanceof:
+        # services whose classes are instances of CustomInterface will be tagged automatically
+        App\Utils\Contracts\Notify\Notifiers\NotifierInterface:
+            tags: ['app.notifier']
+
 
     #------- Packages services -------
 
@@ -49,22 +55,35 @@ services:
         arguments:
             $secret: '%env(RECAPTCHA_SECRET)%'
 
+    # с интерфейсом
     App\Entity\Factories\PostVoteFactory: ~
     App\Entity\Factories\CommentFactory: ~
     App\Entity\Factories\UserFactory: ~
+    App\Utils\Notify\Notify: ~
     App\Utils\ContentGenerator\ContentGenerator: ~
     App\Utils\Slugger\Slugger: ~
+    # без интерфейса
+    App\Utils\Notify\NotifyChain: ~
 
     App\Entity\Factories\PostVoteFactoryInterface: '@App\Entity\Factories\PostVoteFactory'
     App\Entity\Factories\CommentFactoryInterface: '@App\Entity\Factories\CommentFactory'
     App\Entity\Factories\UserFactoryInterface: '@App\Entity\Factories\UserFactory'
+    App\Utils\Contracts\Notify\NotifyInterface: '@App\Utils\Notify\Notify'
     App\Utils\Contracts\ContentGenerator\ContentGeneratorInterface: '@App\Utils\ContentGenerator\ContentGenerator'
     App\Utils\Contracts\Slugger\SluggerInterface: '@App\Utils\Slugger\Slugger'
 
     #** EventListeners **
 
+    App\EventListeners\PostCreatedListener:
+        tags:
+            - { name: kernel.event_listener, event: post.created }
+
+    App\EventListeners\CommentCreatedListener:
+        tags:
+            - { name: kernel.event_listener, event: comment.created }
+
     entities.setslug.listener:
-        class: App\EventListener\EntitiesSetSlugListener
+        class: App\EventListeners\EntitiesSetSlugListener
         arguments:
             - '@App\Utils\Contracts\Slugger\SluggerInterface'
         tags:
@@ -72,7 +91,7 @@ services:
             - { name: doctrine.event_listener, event: prePersist } # postLoad
 
     entities.created.updated.listener:
-        class: App\EventListener\EntitiesCreatedUpdatedListener
+        class: App\EventListeners\EntitiesCreatedUpdatedListener
         tags:
             - { name: doctrine.event_listener, event: prePersist }
             - { name: doctrine.event_listener, event: preUpdate }
