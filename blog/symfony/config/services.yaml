@@ -55,22 +55,26 @@ services:
         arguments:
             $secret: '%env(RECAPTCHA_SECRET)%'
 
-    # с интерфейсом
+
     App\Entity\Factories\PostVoteFactory: ~
     App\Entity\Factories\CommentFactory: ~
     App\Entity\Factories\UserFactory: ~
-    App\Utils\Notify\Notify: ~
     App\Utils\ContentGenerator\ContentGenerator: ~
     App\Utils\Slugger\Slugger: ~
-    # без интерфейса
+    App\Utils\Notify\Notify: ~
+    App\Utils\Notify\NotifyNotificationsGenerator: ~
     App\Utils\Notify\NotifyChain: ~
+
 
     App\Entity\Factories\PostVoteFactoryInterface: '@App\Entity\Factories\PostVoteFactory'
     App\Entity\Factories\CommentFactoryInterface: '@App\Entity\Factories\CommentFactory'
     App\Entity\Factories\UserFactoryInterface: '@App\Entity\Factories\UserFactory'
-    App\Utils\Contracts\Notify\NotifyInterface: '@App\Utils\Notify\Notify'
     App\Utils\Contracts\ContentGenerator\ContentGeneratorInterface: '@App\Utils\ContentGenerator\ContentGenerator'
     App\Utils\Contracts\Slugger\SluggerInterface: '@App\Utils\Slugger\Slugger'
+    App\Utils\Contracts\Notify\NotifyInterface: '@App\Utils\Notify\Notify'
+    App\Utils\Contracts\Notify\NotifyNotificationsGeneratorInterface: '@App\Utils\Notify\NotifyNotificationsGenerator'
+    App\Utils\Contracts\Notify\NotifyChainInterface: '@App\Utils\Notify\NotifyChain'
+
 
     #** EventListeners **
 

@@ -2,11 +2,10 @@
 
 namespace App\Utils\Notify;
 
-use App\Utils\Contracts\Notify\Notifiers\NotifierInterface;
+use App\Exceptions\AppException;
 use App\Utils\Contracts\Notify\NotifyInterface;
-use App\Utils\Notify\Notifications\EmailNotification;
+use App\Utils\Contracts\Notify\NotifyNotificationsGeneratorInterface;
 use App\Utils\Notify\Notifications\NotificationData;
-use App\Utils\Notify\Notifiers\EmailNotifier;
 
 class Notify implements NotifyInterface
 {
@@ -17,11 +16,18 @@ class Notify implements NotifyInterface
      */
     private $notifyChain;
 
+    /**
+     * @var NotifyNotificationsGeneratorInterface
+     */
+    private $notificationsGenerator;
+
     public function __construct(
-        NotifyChain $notifyChain
+        NotifyChain $notifyChain,
+        NotifyNotificationsGeneratorInterface $notificationsGenerator
     )
     {
         $this->notifyChain = $notifyChain;
+        $this->notificationsGenerator = $notificationsGenerator;
     }
 
     /**
@@ -29,6 +35,8 @@ class Notify implements NotifyInterface
      *
      * @param $willBeNotified - who will be notified (e.g. User)
      * @param $notificationData
+     * @throws AppException
+     * @throws \ReflectionException
      */
     public function notify($willBeNotified, NotificationData $notificationData): void
     {
@@ -36,33 +44,13 @@ class Notify implements NotifyInterface
         $notification = null;
 
         foreach ($notifiers as $notifier) {
-            $notification = $this->generateNotificationForNotifier($notifier, $notificationData);
+            $notification = $this->notificationsGenerator->generateNotificationForNotifier($notifier, $notificationData);
 
             // поддерживается ли нотификатор для данного пользователя ($willBeNotified) и уведомления ($notification)
             if ($notification && $notifier->supports($willBeNotified, $notification)) {
                 // уведомляет пользователя
                 $notifier->notify($willBeNotified, $notification);
             }
-        }
-    }
-
-    /**
-     * Каждый нотификатор поддерживает свой класс уведомления. Преобразовывает $notificationData в уведомление.
-     *
-     * @param NotifierInterface $notifier
-     * @param NotificationData $notificationData
-     * @return EmailNotification
-     */
-    private function generateNotificationForNotifier(
-        NotifierInterface $notifier,
-        NotificationData $notificationData
-    )
-    {
-        if ($notifier instanceof EmailNotifier) {
-            $subject = $notificationData->getTitle();
-            $message = $notificationData->getText();
-
-            return new EmailNotification($subject, $message);
         }
     }
 }

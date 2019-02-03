@@ -2,7 +2,7 @@
 
 namespace App\DependencyInjection\Compilers;
 
-use App\Utils\Notify\NotifyChain;
+use App\Utils\Contracts\Notify\NotifyChainInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\Reference;
@@ -11,8 +11,8 @@ class NotifyCompilerPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container): void
     {
-        // TODO NotifyChainInterface
-        $class = NotifyChain::class;
+        // приятно, что можно использовать интерфейс
+        $class = NotifyChainInterface::class;
 
         // always first check if the primary service is defined
         if (!$container->has($class)) return;

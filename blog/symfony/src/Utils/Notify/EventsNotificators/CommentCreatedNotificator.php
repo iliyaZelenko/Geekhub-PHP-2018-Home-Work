@@ -28,7 +28,7 @@ class CommentCreatedNotificator
         $postAuthor = $commentPost->getAuthor();
 
         $title = 'Привет, ' . $postAuthor->getUsername();
-        $text = 'Пользователь ' . $commentAuthor->getUsername() . 'оставил комментарий под вашим постом "' .
+        $text = 'Пользователь "' . $commentAuthor->getUsername() . '" оставил комментарий под вашим постом "' .
             $commentPost->getTitle(). '". Его текст: "' . $comment->getText() . '".'
         ;
         $notificationData = new NotificationData($title, $text);

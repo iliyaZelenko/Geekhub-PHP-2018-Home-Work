@@ -3,10 +3,9 @@
 namespace App\Utils\Notify;
 
 use App\Utils\Contracts\Notify\Notifiers\NotifierInterface;
-use App\Utils\Contracts\Notify\NotifyInterface;
-use Symfony\Component\Security\Core\Security;
+use App\Utils\Contracts\Notify\NotifyChainInterface;
 
-class NotifyChain implements NotifyInterface
+class NotifyChain implements NotifyChainInterface
 {
     private $notifiers = [];
 
