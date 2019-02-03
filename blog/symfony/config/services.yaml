@@ -9,6 +9,7 @@ parameters:
         # в будущем можно переименовать индексы (тут переименовывать значения)
         posts: 'posts'
         comments: 'comments'
+    app.mail.site_email: 'iliyazelenkog@gmail.com'
 
 services:
     # default configuration for services in *this* file
@@ -64,6 +65,9 @@ services:
     App\Utils\Notify\Notify: ~
     App\Utils\Notify\NotifyNotificationsGenerator: ~
     App\Utils\Notify\NotifyChain: ~
+    App\Utils\Mail\Mail:
+        arguments:
+            $siteEmail: '%app.mail.site_email%'
 
 
     App\Entity\Factories\PostVoteFactoryInterface: '@App\Entity\Factories\PostVoteFactory'
@@ -74,7 +78,7 @@ services:
     App\Utils\Contracts\Notify\NotifyInterface: '@App\Utils\Notify\Notify'
     App\Utils\Contracts\Notify\NotifyNotificationsGeneratorInterface: '@App\Utils\Notify\NotifyNotificationsGenerator'
     App\Utils\Contracts\Notify\NotifyChainInterface: '@App\Utils\Notify\NotifyChain'
-
+    App\Utils\Contracts\Mail\MailInterface: '@App\Utils\Mail\Mail'
 
     #** EventListeners **
 

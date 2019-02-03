@@ -7,7 +7,7 @@ use App\Utils\Contracts\Notify\Notifiers\NotifierInterface;
 use App\Utils\Contracts\Notify\NotifyNotificationsGeneratorInterface;
 use App\Utils\Notify\Notifications\NotificationData;
 use App\Utils\Notify\Notifiers\NotificationsGenerators\EmailNotifierNotificationGenerator;
-use App\Utils\Notify\Notifiers\NotificationsGenerators\NotificationGeneratorInterface;
+use App\Utils\Contracts\Notify\Notifiers\NotificationsGenerators\NotificationGeneratorInterface;
 use App\Utils\Notify\Notifiers\NotificationsGenerators\SMSNotifierNotificationGenerator;
 use Psr\Container\ContainerInterface;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
@@ -46,7 +46,7 @@ class NotifyNotificationsGenerator implements NotifyNotificationsGeneratorInterf
     )
     {
         // это производительный вариант получения: https://coderwall.com/p/cpxxxw/php-get-class-name-without-namespace
-        $notifierClass = (new \ReflectionClass($notifier))->getShortName(); // get_class($notifier);
+        $notifierClass = (new \ReflectionClass($notifier))->getShortName();
         $notifierNotificationGeneratorClass = 'App\Utils\Notify\Notifiers\NotificationsGenerators\\'
             . $notifierClass . 'NotificationGenerator';
 

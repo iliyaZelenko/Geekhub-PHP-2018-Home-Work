@@ -12,6 +12,7 @@ class SMSNotifier implements NotifierInterface
     {
         return $willBeNotified instanceof SMSNotifiableInterface
             && $willBeNotified->getPhone()
+            // && $willBeNotified->hasEnabledSMSNotifications()
             && $notification instanceof SMSNotification
         ;
     }

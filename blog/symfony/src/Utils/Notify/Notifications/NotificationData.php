@@ -15,12 +15,17 @@ class NotificationData
     public $text;
 
     /**
+     * @var string
+     */
+    public $HTMLBody;
+
+    /**
      * NotificationData constructor.
      *
      * @param string $title
      * @param string $text
      */
-    public function __construct(string $title, string $text)
+    public function __construct(string $title = null, string $text = null)
     {
         $this->title = $title;
         $this->text = $text;
@@ -56,5 +61,21 @@ class NotificationData
     public function setText(string $text): void
     {
         $this->text = $text;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHTMLBody(): string
+    {
+        return $this->HTMLBody;
+    }
+
+    /**
+     * @param string $HTMLBody
+     */
+    public function setHTMLBody(string $HTMLBody): void
+    {
+        $this->HTMLBody = $HTMLBody;
     }
 }

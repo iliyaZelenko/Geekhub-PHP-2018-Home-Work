@@ -4,7 +4,6 @@ namespace App\Utils\Contracts\Notify;
 
 use App\Exceptions\AppException;
 use App\Utils\Contracts\Notify\Notifiers\NotifierInterface;
-use App\Utils\Notify\Notifications\EmailNotification;
 use App\Utils\Notify\Notifications\NotificationData;
 
 interface NotifyNotificationsGeneratorInterface
@@ -14,7 +13,6 @@ interface NotifyNotificationsGeneratorInterface
      *
      * @param NotifierInterface $notifier
      * @param NotificationData $notificationData
-     * @return EmailNotification
      * @throws AppException
      * @throws \ReflectionException
      */

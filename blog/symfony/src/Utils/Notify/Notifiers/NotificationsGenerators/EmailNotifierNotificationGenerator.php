@@ -2,6 +2,7 @@
 
 namespace App\Utils\Notify\Notifiers\NotificationsGenerators;
 
+use App\Utils\Contracts\Notify\Notifiers\NotificationsGenerators\NotificationGeneratorInterface;
 use App\Utils\Contracts\Notify\Notifiers\NotifierInterface;
 use App\Utils\Notify\Notifications\EmailNotification;
 use App\Utils\Notify\Notifications\NotificationData;
@@ -19,7 +20,7 @@ class EmailNotifierNotificationGenerator implements NotificationGeneratorInterfa
     ): EmailNotification
     {
         $subject = $notificationData->getTitle();
-        $message = $notificationData->getText();
+        $message = $notificationData->getHtmlBody();
 
         return new EmailNotification($subject, $message);
     }

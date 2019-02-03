@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Utils\Notify\Notifiers\NotificationsGenerators;
+namespace App\Utils\Contracts\Notify\Notifiers\NotificationsGenerators;
 
 use App\Utils\Contracts\Notify\Notifiers\NotifierInterface;
 use App\Utils\Notify\Notifications\NotificationData;
