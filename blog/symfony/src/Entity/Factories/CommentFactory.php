@@ -21,6 +21,8 @@ class CommentFactory implements CommentFactoryInterface
         CommentRepositoryInterface $repo
     )
     {
+        // TODO интересно нужно ли связывать репозиторий с фабриков или лучше передавать данные сразу в фабрику,
+        // чтоыб не получать их в этом слое
         $this->repo = $repo;
     }
 
@@ -39,6 +41,7 @@ class CommentFactory implements CommentFactoryInterface
         );
 
         if ($parentCommentId) {
+            // TODO правильно тут репозиторий использовать или может лучше в контроллере, например?
             /** @var Comment $parentComment */
             if (!$parentComment = $this->repo->find($parentCommentId)) {
                 throw new AppException('Parent comment not found.', 404);
@@ -48,7 +51,6 @@ class CommentFactory implements CommentFactoryInterface
         }
 
         $comment->setText($text);
-        $this->repo->save($comment);
 
         return $comment;
     }

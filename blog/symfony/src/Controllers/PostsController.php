@@ -13,6 +13,7 @@ use App\Repository\CommentRepositoryInterface;
 use App\Repository\PostRepositoryInterface;
 use App\Repository\PostVoteRepositoryInterface;
 use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -163,6 +164,7 @@ class PostsController extends AbstractController
         ValidatorInterface $validator,
         CommentFactoryInterface $commentFactory,
         EventDispatcherInterface $eventDispatcher,
+        EntityManagerInterface $entityManager,
         $slug,
         $id
     ): JsonResponse
@@ -197,6 +199,9 @@ class PostsController extends AbstractController
                 throw new NotFoundHttpException($errMsg);
             }
         }
+
+        $entityManager->persist($comment);
+        $entityManager->flush();
 
         $eventDispatcher->dispatch(
             'comment.created',
