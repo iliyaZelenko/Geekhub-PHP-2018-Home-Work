@@ -12,11 +12,4 @@ interface UserRepositoryInterface extends BaseRepositroyInterface
      * @return UserInterface|null
      */
     public function getFirst(): ?UserInterface;
-
-    /**
-     * Save entity
-     *
-     * @param UserInterface $user
-     */
-    public function save(UserInterface $user): void;
 }

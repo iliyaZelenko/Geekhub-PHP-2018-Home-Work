@@ -226,7 +226,8 @@ class PostsController extends AbstractController
         Request $request,
         Post $post,
         PostVoteRepositoryInterface $postVoteRepo,
-        PostVoteFactoryInterface $postVoteFactory
+        PostVoteFactoryInterface $postVoteFactory,
+        EntityManagerInterface $entityManager
     ): RedirectResponse
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
@@ -241,16 +242,20 @@ class PostsController extends AbstractController
         if ($userVote = $post->getUserVote($user)) {
             if ($userVote->getValue() === $requestVoteValue) {
                 $post->removeVote($userVote);
-                $postVoteRepo->remove($userVote);
+
+                $entityManager->remove($userVote);
             } else {
                 $userVote->setValue($requestVoteValue);
-                $postVoteRepo->update();
             }
         } else {
             $newData = new PostVoteCreationData($user, $post, $requestVoteValue);
 
-            $postVoteFactory->createNew($newData);
+            $postVote = $postVoteFactory->createNew($newData);
+
+            $entityManager->persist($postVote);
         }
+
+        $entityManager->flush();
 
 
         return $redirectResponse;
