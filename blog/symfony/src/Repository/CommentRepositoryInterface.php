@@ -24,11 +24,4 @@ interface CommentRepositoryInterface extends BaseRepositroyInterface
      * @return PaginationInterfaceReturn
      */
     public function getPaginatedByPostId(int $postId, int $page, int $perPage): PaginationInterfaceReturn;
-
-    /**
-     * Save entity
-     *
-     * @param Comment $comment
-     */
-    public function save(Comment $comment): void;
 }

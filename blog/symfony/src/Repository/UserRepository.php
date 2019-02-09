@@ -25,17 +25,4 @@ class UserRepository extends ServiceEntityRepository implements UserRepositoryIn
             ->getOneOrNullResult()
         ;
     }
-
-    /**
-     * Save entity
-     *
-     * @param UserInterface $user
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     */
-    public function save(UserInterface $user): void
-    {
-        $this->_em->persist($user);
-        $this->_em->flush();
-    }
 }

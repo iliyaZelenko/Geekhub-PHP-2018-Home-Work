@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Entity\Factories\UserFactoryInterface;
 use App\Exceptions\AppException;
 use App\Utils\Contracts\Recaptcha\RecaptchaInterface;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
@@ -51,7 +52,8 @@ class AuthController extends AbstractController
         GuardAuthenticatorHandler $guardHandler,
         LoginFormAuthenticator $authenticator,
         RecaptchaInterface $recaptcha,
-        UserFactoryInterface $userFactory
+        UserFactoryInterface $userFactory,
+        EntityManagerInterface $entityManager
     ): Response
     {
         $captchaResponse = $request->get('g-recaptcha-response');
@@ -87,6 +89,9 @@ class AuthController extends AbstractController
                 'registrationForm' => $form->createView(),
             ]);
         }
+
+        $entityManager->persist($createdUser);
+        $entityManager->flush();
 
 
         return $guardHandler->authenticateUserAndHandleSuccess(

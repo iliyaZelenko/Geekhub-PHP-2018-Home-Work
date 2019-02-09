@@ -13,6 +13,7 @@ use App\Repository\CommentRepositoryInterface;
 use App\Repository\PostRepositoryInterface;
 use App\Repository\PostVoteRepositoryInterface;
 use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -163,6 +164,7 @@ class PostsController extends AbstractController
         ValidatorInterface $validator,
         CommentFactoryInterface $commentFactory,
         EventDispatcherInterface $eventDispatcher,
+        EntityManagerInterface $entityManager,
         $slug,
         $id
     ): JsonResponse
@@ -198,6 +200,9 @@ class PostsController extends AbstractController
             }
         }
 
+        $entityManager->persist($comment);
+        $entityManager->flush();
+
         $eventDispatcher->dispatch(
             'comment.created',
             new CommentCreatedEvent($comment)
@@ -221,7 +226,8 @@ class PostsController extends AbstractController
         Request $request,
         Post $post,
         PostVoteRepositoryInterface $postVoteRepo,
-        PostVoteFactoryInterface $postVoteFactory
+        PostVoteFactoryInterface $postVoteFactory,
+        EntityManagerInterface $entityManager
     ): RedirectResponse
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
@@ -236,16 +242,20 @@ class PostsController extends AbstractController
         if ($userVote = $post->getUserVote($user)) {
             if ($userVote->getValue() === $requestVoteValue) {
                 $post->removeVote($userVote);
-                $postVoteRepo->remove($userVote);
+
+                $entityManager->remove($userVote);
             } else {
                 $userVote->setValue($requestVoteValue);
-                $postVoteRepo->update();
             }
         } else {
             $newData = new PostVoteCreationData($user, $post, $requestVoteValue);
 
-            $postVoteFactory->createNew($newData);
+            $postVote = $postVoteFactory->createNew($newData);
+
+            $entityManager->persist($postVote);
         }
+
+        $entityManager->flush();
 
 
         return $redirectResponse;

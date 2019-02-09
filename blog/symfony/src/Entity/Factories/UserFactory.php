@@ -73,7 +73,6 @@ class UserFactory implements UserFactoryInterface
                 $data->getPlainPassword()
             )
         );
-        $this->userRepo->save($user);
 
 
         return $user;

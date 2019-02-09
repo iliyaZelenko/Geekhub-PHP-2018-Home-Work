@@ -13,18 +13,6 @@ use App\Repository\PostVoteRepositoryInterface;
 class PostVoteFactory implements PostVoteFactoryInterface
 {
     /**
-     * @var CommentRepositoryInterface
-     */
-    private $repo;
-
-    public function __construct(
-        PostVoteRepositoryInterface $repo
-    )
-    {
-        $this->repo = $repo;
-    }
-
-    /**
      * @param PostVoteCreationData $data
      * @return PostVote
      */
@@ -35,9 +23,6 @@ class PostVoteFactory implements PostVoteFactoryInterface
             $data->getPost(),
             $data->getVoteValue()
         );
-
-        $this->repo->save($newVote);
-
 
         return $newVote;
     }

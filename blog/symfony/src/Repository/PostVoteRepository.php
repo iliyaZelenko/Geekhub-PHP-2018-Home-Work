@@ -18,40 +18,4 @@ class PostVoteRepository extends ServiceEntityRepository implements PostVoteRepo
     {
         parent::__construct($registry, PostVote::class);
     }
-
-    /**
-     * Save entity
-     *
-     * @param PostVote $vote
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     */
-    public function save(PostVote $vote): void
-    {
-        $this->_em->persist($vote);
-        $this->_em->flush();
-    }
-
-    /**
-     * @inheritdoc
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     */
-    public function remove(PostVote $vote): void
-    {
-        $this->_em->remove($vote);
-        $this->_em->flush();
-    }
-
-    /**
-     * @inheritdoc
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     */
-    public function update(): void
-    {
-        $this->_em->flush();
-    }
 }
