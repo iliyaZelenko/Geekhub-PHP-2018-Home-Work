@@ -2,7 +2,7 @@
 
 namespace App\Form;
 
-use App\Form\DataObjects\RegistrationData;
+use App\Form\DataObjects\User\UserCreationData;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -25,7 +25,7 @@ class RegistrationFormType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => RegistrationData::class,
+            'data_class' => UserCreationData::class,
         ]);
     }
 }

@@ -5,12 +5,12 @@
     <b-badge variant="success">
       {{ ratingPost.votesValue }}
     </b-badge>
-  {% elseif ratingPost.votesValue < 3 %}
+  {% elseif ratingPost.votesValue < -3 %}
     <b-badge variant="danger">
       {{ ratingPost.votesValue }}
     </b-badge>
   {% else %}
-    <b-badge variant="secondary">
+    <b-badge variant="light">
       {{ ratingPost.votesValue }}
     </b-badge>
   {% endif %}
@@ -22,7 +22,8 @@
     method="POST"
     class="d-inline"
   >
-    <input type="text" name="voteValue" value="+1" hidden>
+    <input type="hidden" name="token" value="{{ csrf_token('user_vote') }}">
+    <input type="hidden" name="voteValue" value="+1">
 
     <b-button
       type="submit"
@@ -38,7 +39,8 @@
     method="POST"
     class="d-inline"
   >
-    <input type="text" name="voteValue" value="-1" hidden>
+    <input type="hidden" name="token" value="{{ csrf_token('user_vote') }}">
+    <input type="hidden" name="voteValue" value="-1">
 
     <b-button
       type="submit"

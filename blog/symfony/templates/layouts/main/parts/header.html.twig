@@ -70,7 +70,9 @@
           <b-dropdown-item href="{{ path('profile') }}">
             Profile
           </b-dropdown-item>
-          <b-dropdown-item href="{{ path('app_logout') }}">
+
+
+          <b-dropdown-item @click="$refs.logoutForm.submit()">
             Logout
           </b-dropdown-item>
         </b-nav-item-dropdown>
@@ -86,3 +88,12 @@
 
   </b-collapse>
 </b-navbar>
+
+<form
+  ref="logoutForm"
+  action="{{ path('app_logout') }}"
+  method="POST"
+  class="d-none"
+>
+  <input type="hidden" name="token" value="{{ csrf_token('user_logout') }}">
+</form>

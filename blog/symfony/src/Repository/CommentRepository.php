@@ -14,7 +14,7 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  * @method Comment[]    findAll()
  * @method Comment[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class CommentRepository extends ServiceEntityRepository
+class CommentRepository extends ServiceEntityRepository implements CommentRepositoryInterface
 {
     /**
      * @var PaginatorInterface
@@ -29,10 +29,7 @@ class CommentRepository extends ServiceEntityRepository
     }
 
     /**
-     * Возвращает первый комментарий.
-     *
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     * @return Comment|null
+     * @inheritdoc
      */
     public function getFirst(): ?Comment
     {
@@ -46,12 +43,7 @@ class CommentRepository extends ServiceEntityRepository
     }
 
     /**
-     * Возвращает все пагинированные комменты по id поста.
-     *
-     * @param int $postId
-     * @param int $page
-     * @param int $perPage
-     * @return PaginationInterfaceReturn
+     * @inheritdoc
      */
     public function getPaginatedByPostId(int $postId, int $page, int $perPage): PaginationInterfaceReturn
     {
@@ -72,5 +64,18 @@ class CommentRepository extends ServiceEntityRepository
             $page,
             $perPage
         );
+    }
+
+    /**
+     * Save entity
+     *
+     * @param Comment $comment
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function save(Comment $comment): void
+    {
+        $this->_em->persist($comment);
+        $this->_em->flush();
     }
 }

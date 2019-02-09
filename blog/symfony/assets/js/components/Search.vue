@@ -196,7 +196,7 @@ export default {
     }
   },
   data: () => ({
-    perPage: 4,
+    perPage: 3,
     modalShowTextHits: false,
     modalShowTextHitsData: {
       text: null

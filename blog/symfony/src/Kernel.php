@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\DependencyInjection\Compilers\NotifyCompilerPass;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\Config\Resource\FileResource;
@@ -14,6 +15,13 @@ class Kernel extends BaseKernel
     use MicroKernelTrait;
 
     public const CONFIG_EXTS = '.{php,xml,yaml,yml}';
+
+    public function build(ContainerBuilder $container): void
+    {
+        $container->addCompilerPass(
+            new NotifyCompilerPass()
+        );
+    }
 
     public function getCacheDir()
     {

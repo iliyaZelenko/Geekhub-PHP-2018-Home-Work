@@ -2,8 +2,8 @@
 
 namespace App\Entity;
 
-use App\Entity\Interfaces\CreatedUpdatedInterface;
-use App\Entity\Traits\CreatedUpdatedTrait;
+use App\Entity\Resources\CreatedUpdatedInterface;
+use App\Entity\Resources\CreatedUpdatedTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**

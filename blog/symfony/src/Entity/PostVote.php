@@ -2,13 +2,13 @@
 
 namespace App\Entity;
 
-use App\Entity\Interfaces\CreatedUpdatedInterface;
-use App\Entity\Traits\CreatedUpdatedTrait;
+use App\Entity\Resources\CreatedUpdatedInterface;
+use App\Entity\Resources\CreatedUpdatedTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="posts_votes")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="App\Repository\PostVoteRepository")
  */
 class PostVote implements CreatedUpdatedInterface
 {
@@ -56,34 +56,26 @@ class PostVote implements CreatedUpdatedInterface
     /* Getters / Setters */
 
     /**
-     * @return mixed
+     * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
     /**
-     * @param mixed $id
+     * @return int
      */
-    public function setId($id): void
-    {
-        $this->id = $id;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getValue()
+    public function getValue(): int
     {
         return $this->value;
     }
 
     /**
-     * @param mixed $value
+     * @param int $value
      * @return PostVote
      */
-    public function setValue($value): self
+    public function setValue(int $value): self
     {
         $this->value = $value;
 
@@ -99,10 +91,10 @@ class PostVote implements CreatedUpdatedInterface
     }
 
     /**
-     * @param mixed $user
+     * @param User $user
      * @return PostVote
      */
-    public function setUser($user): self
+    public function setUser(User $user): self
     {
         $this->user = $user;
 
@@ -110,18 +102,18 @@ class PostVote implements CreatedUpdatedInterface
     }
 
     /**
-     * @return mixed
+     * @return Post | null
      */
-    public function getPost()
+    public function getPost(): ?Post
     {
         return $this->post;
     }
 
     /**
-     * @param mixed $post
+     * @param Post | null $post
      * @return PostVote
      */
-    public function setPost($post): self
+    public function setPost(?Post $post): self
     {
         $this->post = $post;
 

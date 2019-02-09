@@ -3,7 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Comment;
-use App\Repository\CommentRepository;
+use App\Repository\App\Controllers;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -60,11 +60,11 @@ class CommentFixture extends Fixture implements OrderedFixtureInterface
     /**
      * Возвращает id первого коммента.
      *
-     * @param CommentRepository $repo
+     * @param App\Controllers $repo
      * @throws \Doctrine\ORM\NonUniqueResultException
      * @return int|null
      */
-    private function getFirstCommentId(CommentRepository $repo): ?int
+    private function getFirstCommentId(App\Controllers $repo): ?int
     {
         $first = $repo->getFirst();
 
