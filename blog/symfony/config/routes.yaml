@@ -38,7 +38,7 @@ register:
   controller: App\Controllers\RESTful\Auth\AuthController::register
   methods: POST
 
-res:
+user:
   path: /api/user
   controller: App\Controllers\RESTful\Auth\AuthController::getUser
 
