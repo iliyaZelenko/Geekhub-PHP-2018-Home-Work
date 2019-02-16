@@ -28,6 +28,7 @@ class UserRESTNormalizer implements NormalizerInterface
      */
     public function normalize($object, $format = null, array $context = []): array
     {
+        // TODO отдает пароль, правда он всеравно хешированный
         return $this->normalizer->normalize($object);
     }
 

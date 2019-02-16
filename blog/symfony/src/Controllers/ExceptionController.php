@@ -27,10 +27,13 @@ class ExceptionController
     {
         $code = $this->getStatusCode($exception);
 
+        // TODO Норм вывод ошибок
         return new Response(
             json_encode(
                 [
                     'error' => $exception->getMessage(),
+                    'file' => $exception->getFile(),
+                    'line' => $exception->getLine(),
                     'statusCode' => $code,
                 ],
                 JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES

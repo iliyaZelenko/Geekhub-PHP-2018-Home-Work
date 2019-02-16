@@ -38,9 +38,14 @@ register:
   controller: App\Controllers\RESTful\Auth\AuthController::register
   methods: POST
 
+signin:
+    path: /api/signin
+    controller: App\Controllers\RESTful\Auth\AuthController::signIn
+    methods: POST
+
 user:
   path: /api/user
-  controller: App\Controllers\RESTful\Auth\AuthController::getUser
+  controller: App\Controllers\RESTful\Auth\AuthController::user
 
 api:
   path: /api

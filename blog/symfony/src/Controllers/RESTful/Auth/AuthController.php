@@ -2,8 +2,11 @@
 
 namespace App\Controllers\RESTful\Auth;
 
+use App\Entity\Factories\UserFactoryInterface;
 use App\Entity\User;
 use App\Entity\UserInterface;
+use App\Exceptions\AppException;
+use App\Form\DataObjects\User\UserCreationData;
 use App\Repository\UserRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
@@ -12,6 +15,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Validator\ConstraintViolation;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class AuthController extends AbstractController
 {
@@ -42,8 +47,9 @@ class AuthController extends AbstractController
 
     public function register(
         Request $request,
-        UserPasswordEncoderInterface $encoder,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        ValidatorInterface $validator,
+        UserFactoryInterface $userFactory
     )
     {
         [
@@ -52,17 +58,48 @@ class AuthController extends AbstractController
             'email' => $email
         ] = $request->request->all();
 
-        // TODO validation
-        $user = new User($username, $email);
-        $user->setPassword(
-            $encoder->encodePassword($user, $password)
-        );
+        $userData = (new UserCreationData())
+            ->setUsername($username)
+            ->setPlainPassword($password)
+            ->setEmail($email)
+        ;
 
-        $em->persist($user);
+        $errors = $validator->validate($userData);
+
+        try {
+            $createdUser = $userFactory->createNew($userData);
+        } catch (AppException $e) {
+            $error = new ConstraintViolation(
+                $e->getMessage(), '', [], $userData, '[user factory]', null
+            );
+            $errors[] = $error;
+            /* TODO create error */
+            // $message = $e->getMessage()
+//             $errors->add($error);
+        }
+
+        if (count($errors)) {
+            $errorMessages = [];
+            /** @var ConstraintViolation $e */
+            foreach ($errors as $e) {
+                $errorMessages[$e->getPropertyPath()] = $e->getMessage();
+            }
+            // Так не работает
+            // $errorMessages = array_map(function ($e) {
+            //    return $e->getMessage();
+            // }, $errors);
+
+            // TODO Сделать централизованную систему ошибок
+            return new JsonResponse([
+                'errors' => $errorMessages
+            ]);
+        }
+
+        $em->persist($createdUser);
         $em->flush();
 
         return new JsonResponse(
-            $this->getAuthResponseData($user)
+            $this->getAuthResponseData($createdUser)
         );
     }
 
@@ -70,7 +107,7 @@ class AuthController extends AbstractController
         Request $request,
         UserRepositoryInterface $userRepo,
         UserPasswordEncoderInterface $encoder
-    )
+    ): JsonResponse
     {
         [
             'username' => $username,
@@ -95,7 +132,7 @@ class AuthController extends AbstractController
             ]);
         }
 
-        if(!$encoder->isPasswordValid($user->getPassword(), $password)) {
+        if(!$encoder->isPasswordValid($user, $password)) {
             return new JsonResponse(
                 'Password is not valid.',
                 Response::HTTP_UNAUTHORIZED
@@ -116,7 +153,7 @@ class AuthController extends AbstractController
         );
     }
 
-    public function getUser()
+    public function user(): JsonResponse
     {
         return new JsonResponse([
             'user' => $this->resource->toArray(
