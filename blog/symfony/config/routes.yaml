@@ -29,18 +29,19 @@ routes:
     path: /routes/
     controller: App\Controllers\BlogController::routes
 
-#api_login_check:
-#  path: /api/login_check
-#
-#register:
-#  path: /api/register
-#  controller: App\Controllers\RESTful\Auth\AuthController::register
-#  methods: POST
-#
-#res:
-#  path: /api/res
-#  controller: App\Controller\RESTful\Auth\AuthController::res
-#
-#api:
-#  path: /api
-#  controller: App\Controller\RESTful\Auth\AuthController::api
+# REST Auth
+api_login_check:
+  path: /api/login_check
+
+register:
+  path: /api/register
+  controller: App\Controllers\RESTful\Auth\AuthController::register
+  methods: POST
+
+res:
+  path: /api/user
+  controller: App\Controllers\RESTful\Auth\AuthController::getUser
+
+api:
+  path: /api
+  controller: App\Controllers\RESTful\Auth\AuthController::api

@@ -3,7 +3,7 @@
 namespace App\Controllers\RESTful\Auth;
 
 use App\Entity\User;
-use App\Resources\UserResource;
+use Doctrine\ORM\EntityManagerInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -12,32 +12,49 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class AuthController extends AbstractController
 {
-    public function register(Request $request, UserPasswordEncoderInterface $encoder, JWTTokenManagerInterface $JWTManager)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $username = $request->request->get('username');
-        $password = $request->request->get('password');
+    /**
+     * @var \App\RESTResources\User\UserResource
+     */
+    private $resource;
 
-        $user = new User($username);
+    public function __construct(\App\RESTResources\User\UserResource $resource)
+    {
+        $this->resource = $resource;
+    }
+
+    public function register(
+        Request $request,
+        UserPasswordEncoderInterface $encoder,
+        JWTTokenManagerInterface $JWTManager,
+        EntityManagerInterface $em
+    )
+    {
+        [
+            'username' => $username,
+            'password' => $password,
+            'email' => $email
+        ] = $request->request->all();
+
+        $user = new User($username, $email);
         $user->setPassword(
             $encoder->encodePassword($user, $password)
         );
+
         $em->persist($user);
         $em->flush();
 
         $token = $JWTManager->create($user);
 
-        // $JWTManager->create($user)
         return new JsonResponse([
             'message' => sprintf('User %s successfully created.', $user->getUsername()),
-            'user' => (new UserResource($user))->toArray(),
+            'user' => $this->resource->toArray($user),
             'tokenInfo' => [
               'accessToken' => $token,
               // timestamp
               'expiresIn' => '',
               // timestamp
-              'refreshTokenExpiresIn' => '',
-            ],
+              'refreshTokenExpiresIn' => ''
+            ]
         ]);
     }
 
@@ -47,17 +64,19 @@ class AuthController extends AbstractController
         // возвращать токен и все остальное
     }
 
-    public function api()
+    public function api(): JsonResponse
     {
         return new JsonResponse(
             sprintf('Logged in as %s', $this->getUser()->getUsername())
         );
     }
 
-    public function res()
+    public function getUser()
     {
         return new JsonResponse([
-            'user' => (new UserResource($this->getUser()))->toArray(),
+            'user' => $this->resource->toArray(
+                $this->getUser()
+            )
         ]);
     }
 }
