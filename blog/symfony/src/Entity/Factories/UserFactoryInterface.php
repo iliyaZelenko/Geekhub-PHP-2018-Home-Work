@@ -3,6 +3,7 @@
 namespace App\Entity\Factories;
 
 use App\Entity\UserInterface;
+use App\Exceptions\AppException;
 use App\Form\DataObjects\User\UserCreationData;
 
 /**
@@ -10,5 +11,10 @@ use App\Form\DataObjects\User\UserCreationData;
  */
 interface UserFactoryInterface
 {
+    /**
+     * @param UserCreationData $data
+     * @return UserInterface
+     * @throws AppException
+     */
     public function createNew(UserCreationData $data): UserInterface;
 }

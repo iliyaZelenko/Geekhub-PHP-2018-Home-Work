@@ -34,9 +34,7 @@ class UserFactory implements UserFactoryInterface
     }
 
     /**
-     * @param UserCreationData $data
-     * @return UserInterface
-     * @throws AppException
+     * @inheritdoc
      */
     public function createNew(UserCreationData $data): UserInterface
     {

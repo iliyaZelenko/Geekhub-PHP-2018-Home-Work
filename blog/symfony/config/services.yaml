@@ -47,6 +47,11 @@ services:
         resource: '../src/Controllers'
         tags: ['controller.service_arguments']
 
+
+    App\Controllers\RESTful\Auth\AuthController:
+        arguments:
+            $tokenTTL: '%lexik_jwt_authentication.token_ttl%'
+
     App\Twig\AlgoliaExtension:
         arguments:
             $indexes: '%app.algolia.indexes%'

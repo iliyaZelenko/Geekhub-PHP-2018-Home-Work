@@ -5,7 +5,7 @@ twig:
 
     form_themes: ['bootstrap_4_layout.html.twig']
     # поставил кастомный абработчик ошибок
-#    exception_controller: App\Controller\ExceptionController::showAction
+    exception_controller: App\Controllers\ExceptionController::showAction
     globals:
         flag:
             en: 'https://www.countryflags.io/us/shiny/32.png'

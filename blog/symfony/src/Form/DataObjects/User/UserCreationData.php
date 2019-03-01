@@ -42,10 +42,13 @@ final class UserCreationData
 
     /**
      * @param mixed $username
+     * @return UserCreationData
      */
-    public function setUsername($username): void
+    public function setUsername($username): self
     {
         $this->username = $username;
+
+        return $this;
     }
 
     /**
@@ -58,10 +61,13 @@ final class UserCreationData
 
     /**
      * @param mixed $email
+     * @return UserCreationData
      */
-    public function setEmail($email): void
+    public function setEmail($email): self
     {
         $this->email = $email;
+
+        return $this;
     }
 
     /**
@@ -74,9 +80,12 @@ final class UserCreationData
 
     /**
      * @param mixed $plainPassword
+     * @return UserCreationData
      */
-    public function setPlainPassword($plainPassword): void
+    public function setPlainPassword($plainPassword): self
     {
         $this->plainPassword = $plainPassword;
+
+        return $this;
     }
 }
