@@ -1,0 +1,11 @@
+{
+  "groups": {
+    "default": {
+      "packages": [
+        "blog/symfony/package.json",
+        "lesson3/RedHouseDemoStateless/frontend/package.json",
+        "lesson6/symfony_first_project/package.json"
+      ]
+    }
+  }
+}
